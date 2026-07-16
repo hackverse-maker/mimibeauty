@@ -1,58 +1,104 @@
-'use client'
-
-import { useState } from 'react'
-import Navbar from '@/components/Navbar'
+import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import ProductFilters from '@/components/ProductFilters'
-import ProductGrid from '@/components/ProductGrid'
-import { Filter } from 'lucide-react'
+import ProductCard from '@/components/ProductCard'
+import AnimatedSection from '@/components/AnimatedSection'
+
+const ALL_PRODUCTS = [
+  {
+    id: '1',
+    name: 'Gentle Cleanser',
+    price: 32,
+    originalPrice: 42,
+    image: '/images/hero-skincare.png',
+    rating: 4.8,
+    reviews: 245,
+    badge: 'Best Seller',
+  },
+  {
+    id: '2',
+    name: 'Vitamin C Serum',
+    price: 48,
+    image: '/images/hero-skincare.png',
+    rating: 4.9,
+    reviews: 189,
+  },
+  {
+    id: '3',
+    name: 'Hydrating Moisturizer',
+    price: 54,
+    originalPrice: 64,
+    image: '/images/hero-skincare.png',
+    rating: 4.7,
+    reviews: 312,
+  },
+  {
+    id: '4',
+    name: 'SPF 50 Sunscreen',
+    price: 38,
+    image: '/images/hero-skincare.png',
+    rating: 4.9,
+    reviews: 456,
+    badge: 'New',
+  },
+  {
+    id: '5',
+    name: 'Retinol Eye Cream',
+    price: 52,
+    image: '/images/hero-skincare.png',
+    rating: 4.8,
+    reviews: 178,
+  },
+  {
+    id: '6',
+    name: 'Hydrating Toner',
+    price: 28,
+    image: '/images/hero-skincare.png',
+    rating: 4.6,
+    reviews: 234,
+  },
+  {
+    id: '7',
+    name: 'Clay Face Mask',
+    price: 36,
+    image: '/images/hero-skincare.png',
+    rating: 4.7,
+    reviews: 156,
+  },
+  {
+    id: '8',
+    name: 'Gentle Exfoliant',
+    price: 34,
+    image: '/images/hero-skincare.png',
+    rating: 4.8,
+    reviews: 289,
+  },
+]
 
 export default function ProductsPage() {
-  const [showMobileFilters, setShowMobileFilters] = useState(false)
-
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen pt-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Header */}
-          <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-luxury-charcoal mb-4">
-              Our Products
-            </h1>
-            <p className="text-lg text-luxury-charcoal/60">
-              Discover our full collection of premium skincare products, carefully curated for your skin's needs.
-            </p>
+      <Header />
+      <main>
+        <section className="bg-beige pt-32 pb-12">
+          <div className="container-premium">
+            <AnimatedSection className="text-center">
+              <h1 className="text-5xl font-serif text-charcoal mb-4">Our Products</h1>
+              <p className="text-charcoal/70 max-w-2xl mx-auto">
+                Discover our complete collection of science-backed skincare products formulated for every skin type.
+              </p>
+            </AnimatedSection>
           </div>
+        </section>
 
-          {/* Products Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Filters - Desktop */}
-            <div className="hidden lg:block">
-              <ProductFilters />
-            </div>
-
-            {/* Mobile Filter Button */}
-            <div className="lg:hidden mb-6">
-              <button
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="flex items-center gap-2 px-4 py-3 border border-luxury-rose/20 rounded-lg text-luxury-charcoal hover:bg-luxury-cream transition-all duration-300 ease-out w-full justify-center"
-              >
-                <Filter size={20} />
-                Filters
-              </button>
-              <ProductFilters
-                showMobile={showMobileFilters}
-                onClose={() => setShowMobileFilters(false)}
-              />
-            </div>
-
-            {/* Product Grid */}
-            <div className="lg:col-span-3">
-              <ProductGrid />
+        <section className="section-padding bg-white">
+          <div className="container-premium">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {ALL_PRODUCTS.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
             </div>
           </div>
-        </div>
+        </section>
       </main>
       <Footer />
     </>
