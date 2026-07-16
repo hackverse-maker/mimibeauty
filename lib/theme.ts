@@ -1,64 +1,51 @@
 /**
- * Premium Minimal Skincare eCommerce - Design System & Theme Constants
+ * Luxury Skincare Website - Design System & Theme Constants
  * Central repository for colors, animations, and design tokens
  */
 
-/* Color Palette - Clean, Minimal, Premium */
+/* Color Palette */
 export const colors = {
-  // Primary Colors
-  white: '#FFFFFF',
-  beige: '#F8F6F3',
-  pink: '#F6D9E2',
-  sage: '#DDE7DF',
-  charcoal: '#222222',
+  // Luxury palette
+  cream: '#faf9f7',
+  gold: '#d4a574',
+  rose: '#e8d5d0',
+  sage: '#a8b5a3',
+  charcoal: '#2d2d2d',
+  white: '#ffffff',
   black: '#000000',
   
   // Neutrals
-  gray: '#EAEAEA',
-  lightGray: '#F5F5F5',
-  darkGray: '#888888',
+  lightGray: '#f5f3f0',
+  mediumGray: '#e0dcd8',
+  darkGray: '#7a7a7a',
   
   // Semantic
-  primary: '#222222',
-  secondary: '#F6D9E2',
-  accent: '#DDE7DF',
-  background: '#FFFFFF',
-  surface: '#F8F6F3',
-  border: '#EAEAEA',
-  text: '#222222',
-  textMuted: 'rgba(34, 34, 34, 0.6)',
-  textLight: 'rgba(34, 34, 34, 0.4)',
+  error: '#ef4444',
+  success: '#22c55e',
+  warning: '#f59e0b',
+  info: '#3b82f6',
 }
 
-/* Typography System */
+/* Typography Scale */
 export const typography = {
-  fontFamily: {
-    serif: "'Playfair Display', serif",
-    sans: "'Inter', sans-serif",
-    accent: "'Poppins', sans-serif",
+  heading: {
+    xl: 'text-4xl md:text-5xl font-bold',
+    lg: 'text-3xl md:text-4xl font-bold',
+    md: 'text-2xl md:text-3xl font-semibold',
+    sm: 'text-xl md:text-2xl font-semibold',
+    xs: 'text-lg font-semibold',
   },
-  sizes: {
-    xs: '0.75rem',
-    sm: '0.875rem',
-    base: '1rem',
-    lg: '1.125rem',
-    xl: '1.25rem',
-    '2xl': '1.5rem',
-    '3xl': '1.875rem',
-    '4xl': '2.25rem',
-    '5xl': '3rem',
-    '6xl': '3.75rem',
-  },
-  lineHeight: {
-    tight: '1.2',
-    normal: '1.5',
-    relaxed: '1.625',
-    loose: '1.875',
+  body: {
+    lg: 'text-lg leading-relaxed',
+    md: 'text-base leading-relaxed',
+    sm: 'text-sm leading-relaxed',
+    xs: 'text-xs leading-relaxed',
   },
 }
 
 /* Framer Motion Animation Variants */
 export const animationVariants = {
+  // Container animations
   container: {
     hidden: { opacity: 0 },
     visible: {
@@ -70,12 +57,16 @@ export const animationVariants = {
     },
   },
 
+  // Item animations
   fadeUp: {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
     },
   },
 
@@ -83,7 +74,10 @@ export const animationVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { duration: 0.5, ease: 'easeOut' },
+      transition: {
+        duration: 0.5,
+        ease: 'easeOut',
+      },
     },
   },
 
@@ -92,7 +86,10 @@ export const animationVariants = {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
     },
   },
 
@@ -101,7 +98,10 @@ export const animationVariants = {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
     },
   },
 
@@ -110,30 +110,76 @@ export const animationVariants = {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, ease: 'easeOut' },
+      transition: {
+        duration: 0.5,
+        ease: 'easeOut',
+      },
     },
   },
 
+  // Hover effects
   hoverScale: {
     whileHover: {
       scale: 1.05,
-      transition: { duration: 0.3 },
+      transition: {
+        duration: 0.3,
+      },
     },
   },
 
   hoverLift: {
     whileHover: {
       y: -8,
-      transition: { duration: 0.3 },
+      shadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+      transition: {
+        duration: 0.3,
+      },
     },
   },
 
+  // Tap effects
   tap: {
     whileTap: {
       scale: 0.95,
-      transition: { duration: 0.2 },
+      transition: {
+        duration: 0.2,
+      },
     },
   },
+
+  // Floating animation
+  floating: {
+    animate: {
+      y: [-10, 10, -10],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  },
+
+  // Rotate animation
+  rotate: {
+    animate: {
+      rotate: 360,
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: 'linear',
+      },
+    },
+  },
+}
+
+/* Breakpoints */
+export const breakpoints = {
+  xs: 0,
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  '2xl': 1536,
 }
 
 /* Spacing Scale */
@@ -149,29 +195,42 @@ export const spacing = {
   '5xl': '8rem',
 }
 
-/* Shadows */
+/* Box Shadows */
 export const shadows = {
-  sm: '0 1px 3px rgba(34, 34, 34, 0.08)',
-  md: '0 4px 12px rgba(34, 34, 34, 0.1)',
-  lg: '0 12px 24px rgba(34, 34, 34, 0.12)',
-  xl: '0 16px 32px rgba(34, 34, 34, 0.15)',
-  hover: '0 20px 40px rgba(34, 34, 34, 0.18)',
+  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+  luxury: '0 20px 40px rgba(45, 45, 45, 0.08)',
+  luxuryLg: '0 30px 60px rgba(45, 45, 45, 0.12)',
+  hover: '0 15px 35px rgba(212, 165, 116, 0.15)',
 }
 
-/* Transitions */
+/* Border Radius */
+export const borderRadius = {
+  none: '0',
+  sm: '0.25rem',
+  md: '0.5rem',
+  lg: '0.75rem',
+  xl: '1rem',
+  '2xl': '1.5rem',
+  '3xl': '2rem',
+  full: '9999px',
+}
+
+/* Transition Durations */
 export const transitions = {
-  fast: '150ms ease-in-out',
-  normal: '300ms ease-in-out',
-  slow: '500ms ease-in-out',
+  fast: '150ms',
+  base: '300ms',
+  slow: '500ms',
+  slower: '700ms',
 }
 
-/* Layout Constants */
-export const layout = {
-  maxWidth: '1280px',
-  containerPadding: {
-    mobile: '1rem',
-    tablet: '1.5rem',
-    desktop: '2rem',
-  },
-  headerHeight: '72px',
+/* Easing Functions */
+export const easing = {
+  easeIn: [0.4, 0, 1, 1],
+  easeOut: [0, 0, 0.2, 1],
+  easeInOut: [0.4, 0, 0.2, 1],
+  easeInQuad: [0.55, 0.085, 0.68, 0.53],
+  easeOutQuad: [0.25, 0.46, 0.45, 0.94],
 }

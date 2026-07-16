@@ -1,136 +1,189 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { Mail, Phone, MapPin } from 'lucide-react'
-import { motion } from 'framer-motion'
+import {
+  Share2,
+  Heart,
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+} from 'lucide-react'
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [subscribed, setSubscribed] = useState(false)
+  const currentYear = new Date().getFullYear()
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (email) {
-      setSubscribed(true)
-      setEmail('')
-      setTimeout(() => setSubscribed(false), 3000)
-    }
-  }
+  const footerSections = [
+    {
+      title: 'Shop',
+      links: [
+        { label: 'Cleansers', href: '/products?category=cleansers' },
+        { label: 'Serums', href: '/products?category=serums' },
+        { label: 'Moisturizers', href: '/products?category=moisturizers' },
+        { label: 'Sunscreens', href: '/products?category=sunscreens' },
+        { label: 'Masks', href: '/products?category=masks' },
+      ],
+    },
+    {
+      title: 'Support',
+      links: [
+        { label: 'Contact Us', href: '/contact' },
+        { label: 'FAQ', href: '/faq' },
+        { label: 'Shipping Info', href: '/shipping' },
+        { label: 'Returns', href: '/returns' },
+        { label: 'Track Order', href: '/track' },
+      ],
+    },
+    {
+      title: 'Company',
+      links: [
+        { label: 'About Us', href: '/about' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Careers', href: '/careers' },
+        { label: 'Press', href: '/press' },
+        { label: 'Sustainability', href: '/sustainability' },
+      ],
+    },
+  ]
 
   return (
-    <footer className="bg-charcoal text-white">
+    <footer className="bg-luxury-charcoal text-white">
       {/* Newsletter Section */}
-      <div className="border-b border-white/10">
-        <div className="container-premium py-12">
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-serif mb-3 text-white">Join Our Skin Community</h3>
-            <p className="text-white/70 mb-6">Get expert skincare tips, new product launches, and exclusive offers delivered to your inbox.</p>
-            <form onSubmit={handleSubscribe} className="flex gap-2">
+      <div className="bg-luxury-gold py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h3 className="text-2xl md:text-3xl font-bold mb-2">
+              Join Our Glow Club
+            </h3>
+            <p className="text-white/80 mb-6">
+              Subscribe for exclusive deals, skincare tips, and early access to new launches.
+            </p>
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-premium flex-1 bg-white/10 border-white/20 text-white placeholder-white/50"
+                className="flex-1 px-4 py-3 rounded-lg text-luxury-charcoal focus:outline-none focus:ring-2 focus:ring-luxury-charcoal"
                 required
               />
               <button
                 type="submit"
-                className="btn-primary bg-pink text-charcoal hover:bg-white"
+                className="px-6 py-3 bg-luxury-charcoal text-luxury-gold font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-300 ease-out"
               >
                 Subscribe
               </button>
             </form>
-            {subscribed && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-pink mt-2 text-sm"
-              >
-                Thanks for subscribing!
-              </motion.p>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Main Footer */}
-      <div className="container-premium py-12">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
-          {/* Company */}
-          <div>
-            <h4 className="font-serif text-lg mb-4 text-white">SkinScience</h4>
-            <p className="text-white/60 text-sm mb-4">Premium, science-backed skincare for every skin type.</p>
-            <div className="space-y-2 text-sm text-white/60">
-              <div className="flex items-center gap-2">
-                <Phone size={16} />
-                <span>1-800-SKINCARE</span>
+      {/* Main Footer Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+          {/* Brand Info */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center space-x-2 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-luxury-gold to-luxury-rose rounded-lg flex items-center justify-center">
+                <span className="text-luxury-charcoal font-bold">LG</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail size={16} />
-                <span>hello@skinscience.com</span>
-              </div>
-              <div className="flex items-center gap-2">
+              <span className="text-xl font-bold">Luxe Glow</span>
+            </div>
+            <p className="text-white/70 text-sm mb-4">
+              Premium skincare crafted with natural ingredients for your most radiant skin.
+            </p>
+            <div className="space-y-2 text-sm text-white/70">
+              <div className="flex items-center space-x-2">
                 <MapPin size={16} />
-                <span>Los Angeles, CA</span>
+                <span>Los Angeles, CA 90001</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Phone size={16} />
+                <span>+1 (555) 123-4567</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Mail size={16} />
+                <span>hello@luxeglow.com</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock size={16} />
+                <span>Mon-Fri 9AM-6PM PST</span>
               </div>
             </div>
           </div>
 
-          {/* Products */}
-          <div>
-            <h4 className="font-semibold mb-4 text-white">Products</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li><Link href="/products?category=cleansers" className="hover:text-white transition-premium">Cleansers</Link></li>
-              <li><Link href="/products?category=serums" className="hover:text-white transition-premium">Serums</Link></li>
-              <li><Link href="/products?category=moisturizers" className="hover:text-white transition-premium">Moisturizers</Link></li>
-              <li><Link href="/products?category=sunscreen" className="hover:text-white transition-premium">Sunscreen</Link></li>
-              <li><Link href="/products" className="hover:text-white transition-premium">All Products</Link></li>
-            </ul>
-          </div>
-
-          {/* Company Info */}
-          <div>
-            <h4 className="font-semibold mb-4 text-white">Company</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li><Link href="/about" className="hover:text-white transition-premium">About Us</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Our Story</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Research</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Sustainability</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-premium">Contact</Link></li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="font-semibold mb-4 text-white">Support</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li><Link href="/" className="hover:text-white transition-premium">Help Center</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Shipping Info</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Returns</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">FAQs</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Track Order</Link></li>
-            </ul>
-          </div>
-
-          {/* Policies */}
-          <div>
-            <h4 className="font-semibold mb-4 text-white">Policies</h4>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li><Link href="/" className="hover:text-white transition-premium">Privacy Policy</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Terms of Service</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Cookie Policy</Link></li>
-              <li><Link href="/" className="hover:text-white transition-premium">Accessibility</Link></li>
-            </ul>
-          </div>
+          {/* Footer Links */}
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-luxury-gold">
+                {section.title}
+              </h4>
+              <ul className="space-y-2">
+                {section.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-white/70 hover:text-luxury-gold transition-all duration-300 ease-out text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom Footer */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-white/60 text-sm mb-4 md:mb-0">
-            © 2024 SkinScience. All rights reserved.
-          </p>
+        {/* Divider */}
+        <div className="border-t border-white/10 pt-8 mt-8">
+          {/* Social Links */}
+          <div className="flex items-center justify-center space-x-6 mb-6">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 hover:text-luxury-gold transition-all duration-300 ease-out"
+              aria-label="Instagram"
+            >
+              <Heart size={20} />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 hover:text-luxury-gold transition-all duration-300 ease-out"
+              aria-label="Twitter"
+            >
+              <Share2 size={20} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 hover:text-luxury-gold transition-all duration-300 ease-out"
+              aria-label="LinkedIn"
+            >
+              <Mail size={20} />
+            </a>
+          </div>
+
+          {/* Certifications & Copyright */}
+          <div className="text-center text-white/60 text-xs">
+            <div className="flex items-center justify-center space-x-4 mb-3 flex-wrap">
+              <span>✓ Dermatologist Tested</span>
+              <span>✓ Cruelty Free</span>
+              <span>✓ Vegan</span>
+              <span>✓ Natural Ingredients</span>
+            </div>
+            <p>
+              Copyright © {currentYear} Luxe Glow. All rights reserved. |{' '}
+              <Link href="/privacy" className="hover:text-luxury-gold transition-all duration-300 ease-out">
+                Privacy Policy
+              </Link>{' '}
+              |{' '}
+              <Link href="/terms" className="hover:text-luxury-gold transition-all duration-300 ease-out">
+                Terms of Service
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

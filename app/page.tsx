@@ -1,19 +1,25 @@
-import Header from '@/components/Header'
+import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
-import FeaturedProducts from '@/components/FeaturedProducts'
+import FeaturedCategories from '@/components/FeaturedCategories'
+import BestSeller from '@/components/BestSeller'
 import WhyChooseUs from '@/components/WhyChooseUs'
-import IngredientEducation from '@/components/IngredientEducation'
+import Testimonials from '@/components/Testimonials'
+import InstagramGallery from '@/components/InstagramGallery'
+import Newsletter from '@/components/Newsletter'
 
 export default function Page() {
   return (
     <>
-      <Header />
+      <Navbar />
       <main>
         <Hero />
-        <FeaturedProducts />
+        <FeaturedCategories />
+        <BestSeller />
         <WhyChooseUs />
-        <IngredientEducation />
+        <Testimonials />
+        <InstagramGallery />
+        <Newsletter />
       </main>
       <Footer />
     </>
