@@ -7,21 +7,18 @@ import WhyChooseUs from '@/components/WhyChooseUs'
 import Testimonials from '@/components/Testimonials'
 import InstagramGallery from '@/components/InstagramGallery'
 import Newsletter from '@/components/Newsletter'
+import PageTransition from '@/components/PageTransition'
 
 export default function Page() {
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero />
-        <FeaturedCategories />
-        <BestSeller />
-        <WhyChooseUs />
-        <Testimonials />
-        <InstagramGallery />
-        <Newsletter />
-      </main>
-      <Footer />
-    </>
+    <PageTransition>
+      <Hero />
+      <FeaturedCategories />
+      <BestSeller />
+      <WhyChooseUs />
+      <Testimonials />
+      <InstagramGallery />
+      <Newsletter />
+    </PageTransition>
   )
 }
