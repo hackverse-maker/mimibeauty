@@ -50,7 +50,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
 
           {/* Discount badge */}
           {hasDiscount && (
-            <span className="absolute left-3 top-3 z-10 rounded-full bg-[oklch(0.45_0.18_15)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-lg">
+            <span className="absolute left-3 top-3 z-10 rounded-full bg-[oklch(0.45_0.18_15)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-white shadow-lg">
               -{discountPct}%
             </span>
           )}
@@ -61,7 +61,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             <motion.button
               whileTap={{ scale: 0.85 }}
               onClick={handleToggleWishlist}
-              className={`flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-colors duration-200 ${
+              className={`flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-full backdrop-blur-md transition-colors duration-200 ${
                 wishlisted
                   ? "bg-[oklch(0.55_0.22_15)] text-white shadow-lg shadow-[oklch(0.55_0.22_15/0.3)]"
                   : "bg-white/70 text-neutral-700 hover:bg-white hover:text-[oklch(0.55_0.22_15)]"
@@ -75,7 +75,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             <motion.button
               whileTap={{ scale: 0.85 }}
               onClick={handleAddToCart}
-              className={`flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 ${
+              className={`flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 ${
                 justAdded
                   ? "bg-[oklch(0.55_0.16_145)] text-white shadow-lg shadow-[oklch(0.55_0.16_145/0.3)]"
                   : "bg-white/70 text-neutral-700 hover:bg-white hover:text-gold"
@@ -110,7 +110,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         </div>
         <div className="mt-4 flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{product.category}</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">{product.category}</p>
             <h3 className="mt-1 truncate font-display text-xl">{product.name}</h3>
             <p className="mt-1 truncate text-xs text-muted-foreground">{product.tagline}</p>
           </div>

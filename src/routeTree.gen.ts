@@ -14,19 +14,10 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CookiesRouteImport } from './routes/cookies'
-import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IngredientsRouteImport } from './routes/ingredients'
-import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QuizRouteImport } from './routes/quiz'
-import { Route as ReturnsRouteImport } from './routes/returns'
-import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as StoryRouteImport } from './routes/story'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as WishlistRouteImport } from './routes/wishlist'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -54,39 +45,14 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CookiesRoute = CookiesRouteImport.update({
-  id: '/cookies',
-  path: '/cookies',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IngredientsRoute = IngredientsRouteImport.update({
   id: '/ingredients',
   path: '/ingredients',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReturnsRoute = ReturnsRouteImport.update({
-  id: '/returns',
-  path: '/returns',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ShippingRoute = ShippingRouteImport.update({
-  id: '/shipping',
-  path: '/shipping',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -99,26 +65,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StoryRoute = StoryRouteImport.update({
-  id: '/story',
-  path: '/story',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WishlistRoute = WishlistRouteImport.update({
-  id: '/wishlist',
-  path: '/wishlist',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
-} as any)
 const ProductSlugRoute = ProductSlugRouteImport.update({
   id: '/product/$slug',
   path: '/product/$slug',
@@ -128,65 +74,38 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
-  '/cookies': typeof CookiesRoute
-  '/faq': typeof FaqRoute
   '/ingredients': typeof IngredientsRoute
-  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
-  '/returns': typeof ReturnsRoute
-  '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/story': typeof StoryRoute
-  '/terms': typeof TermsRoute
-  '/wishlist': typeof WishlistRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
-  '/cookies': typeof CookiesRoute
-  '/faq': typeof FaqRoute
   '/ingredients': typeof IngredientsRoute
-  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
-  '/returns': typeof ReturnsRoute
-  '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/story': typeof StoryRoute
-  '/terms': typeof TermsRoute
-  '/wishlist': typeof WishlistRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
-  '/cookies': typeof CookiesRoute
-  '/faq': typeof FaqRoute
   '/ingredients': typeof IngredientsRoute
-  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
-  '/returns': typeof ReturnsRoute
-  '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/story': typeof StoryRoute
-  '/terms': typeof TermsRoute
-  '/wishlist': typeof WishlistRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRouteTypes {
@@ -197,19 +116,10 @@ export interface FileRouteTypes {
     | '/blog'
     | '/collections'
     | '/contact'
-    | '/cookies'
-    | '/faq'
     | '/ingredients'
-    | '/privacy'
     | '/quiz'
-    | '/returns'
-    | '/shipping'
     | '/shop'
     | '/sitemap.xml'
-    | '/story'
-    | '/terms'
-    | '/wishlist'
-    | '/blog/$slug'
     | '/product/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -218,19 +128,10 @@ export interface FileRouteTypes {
     | '/blog'
     | '/collections'
     | '/contact'
-    | '/cookies'
-    | '/faq'
     | '/ingredients'
-    | '/privacy'
     | '/quiz'
-    | '/returns'
-    | '/shipping'
     | '/shop'
     | '/sitemap.xml'
-    | '/story'
-    | '/terms'
-    | '/wishlist'
-    | '/blog/$slug'
     | '/product/$slug'
   id:
     | '__root__'
@@ -239,40 +140,23 @@ export interface FileRouteTypes {
     | '/blog'
     | '/collections'
     | '/contact'
-    | '/cookies'
-    | '/faq'
     | '/ingredients'
-    | '/privacy'
     | '/quiz'
-    | '/returns'
-    | '/shipping'
     | '/shop'
     | '/sitemap.xml'
-    | '/story'
-    | '/terms'
-    | '/wishlist'
-    | '/blog/$slug'
     | '/product/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRouteWithChildren
+  BlogRoute: typeof BlogRoute
   CollectionsRoute: typeof CollectionsRoute
   ContactRoute: typeof ContactRoute
-  CookiesRoute: typeof CookiesRoute
-  FaqRoute: typeof FaqRoute
   IngredientsRoute: typeof IngredientsRoute
-  PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
-  ReturnsRoute: typeof ReturnsRoute
-  ShippingRoute: typeof ShippingRoute
   ShopRoute: typeof ShopRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  StoryRoute: typeof StoryRoute
-  TermsRoute: typeof TermsRoute
-  WishlistRoute: typeof WishlistRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
@@ -313,20 +197,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cookies': {
-      id: '/cookies'
-      path: '/cookies'
-      fullPath: '/cookies'
-      preLoaderRoute: typeof CookiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/ingredients': {
       id: '/ingredients'
       path: '/ingredients'
@@ -334,32 +204,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IngredientsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/quiz': {
       id: '/quiz'
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/returns': {
-      id: '/returns'
-      path: '/returns'
-      fullPath: '/returns'
-      preLoaderRoute: typeof ReturnsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/shipping': {
-      id: '/shipping'
-      path: '/shipping'
-      fullPath: '/shipping'
-      preLoaderRoute: typeof ShippingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -376,34 +225,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/story': {
-      id: '/story'
-      path: '/story'
-      fullPath: '/story'
-      preLoaderRoute: typeof StoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/wishlist': {
-      id: '/wishlist'
-      path: '/wishlist'
-      fullPath: '/wishlist'
-      preLoaderRoute: typeof WishlistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
-    }
     '/product/$slug': {
       id: '/product/$slug'
       path: '/product/$slug'
@@ -414,34 +235,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRouteWithChildren,
+  BlogRoute: BlogRoute,
   CollectionsRoute: CollectionsRoute,
   ContactRoute: ContactRoute,
-  CookiesRoute: CookiesRoute,
-  FaqRoute: FaqRoute,
   IngredientsRoute: IngredientsRoute,
-  PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
-  ReturnsRoute: ReturnsRoute,
-  ShippingRoute: ShippingRoute,
   ShopRoute: ShopRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  StoryRoute: StoryRoute,
-  TermsRoute: TermsRoute,
-  WishlistRoute: WishlistRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport

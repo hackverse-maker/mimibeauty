@@ -141,12 +141,12 @@ export const collections = [
 ];
 
 export const ingredientsShowcase = [
-  { name: "Niacinamide", note: "Even tone · Refine pores" },
-  { name: "Vitamin C", note: "Brighten · Antioxidant shield" },
-  { name: "Retinol", note: "Renew · Smooth texture" },
-  { name: "Ceramides", note: "Restore barrier · Comfort" },
-  { name: "Peptides", note: "Firm · Rebuild collagen" },
-  { name: "Hyaluronic Acid", note: "Plump · Deep hydration" },
+  { name: "Niacinamide", note: "Even tone · Refine pores", category: "Brightening" },
+  { name: "Vitamin C", note: "Brighten · Antioxidant shield", category: "Antioxidant" },
+  { name: "Retinol", note: "Renew · Smooth texture", category: "Renewal" },
+  { name: "Ceramides", note: "Restore barrier · Comfort", category: "Barrier" },
+  { name: "Peptides", note: "Firm · Rebuild collagen", category: "Firming" },
+  { name: "Hyaluronic Acid", note: "Plump · Deep hydration", category: "Hydration" },
 ];
 
 export function findProduct(slug: string) {

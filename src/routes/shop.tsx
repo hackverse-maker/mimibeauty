@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { products, categories } from "@/lib/products";
 import { ProductCard } from "@/components/site/product-card";
-import { Search } from "lucide-react";
-import { motion } from "framer-motion";
+import { Search, SlidersHorizontal } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -21,6 +21,7 @@ function Shop() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("All");
   const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "rating">("featured");
+  const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
     let list = [...products];
@@ -37,44 +38,105 @@ function Shop() {
   const chips = ["All", ...Array.from(new Set(products.map((p) => p.category))), ...categories.filter((c) => !products.some((p) => p.category === c))];
 
   return (
-    <>
-      <section className="mx-auto max-w-[1400px] px-4 sm:px-6 pt-24 pb-10 md:pt-32">
-        <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="text-[11px] uppercase tracking-[0.3em] sm:tracking-[0.4em] text-gold">The Wardrobe</motion.p>
-        <motion.h1 initial={{ opacity: 0, y: 20, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0)" }} transition={{ duration: 0.9 }} className="mt-3 font-display text-[clamp(2.5rem,6vw,4rem)] sm:text-[clamp(2.5rem,7vw,6rem)] leading-[1] tracking-tight">
+    <div className="relative min-h-screen bg-black text-white selection:bg-gold/20 selection:text-gold">
+      {/* Page Title & Intro */}
+      <section className="mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 pt-28 pb-10">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-4">
+          <span className="h-[1px] w-12 bg-gold/60" />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-gold">The Collection</span>
+        </motion.div>
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.15 }} className="mt-6 font-display text-[clamp(2.5rem,6.5vw,6rem)] leading-[0.95] tracking-tighter">
           Shop the ritual
         </motion.h1>
-        <p className="mt-4 max-w-lg text-sm sm:text-base text-muted-foreground">Four objects. Endless combinations. Every formula clinically dosed and small-batch bottled.</p>
+        <p className="mt-4 max-w-lg text-lg text-foreground/60 font-light leading-relaxed">
+          Four objects. Endless combinations. Every formula clinically dosed and small-batch bottled.
+        </p>
       </section>
 
-      <section className="sticky top-[73px] z-30 border-y border-border/60 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-3 px-4 sm:px-6 py-4">
-          <div className="flex flex-1 items-center gap-2 rounded-full border border-border bg-secondary/40 px-4 py-2">
-            <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products…" className="w-full bg-transparent text-sm outline-none min-w-0" />
+      {/* Premium Filters Bar */}
+      <section className="sticky top-[68px] z-30 border-y border-white/5 bg-black/80 backdrop-blur-xl md:top-[76px] py-4">
+        <div className="mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            {/* Minimalist Search & Filter Toggle */}
+            <div className="flex items-center gap-4 flex-1 max-w-xl">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                <input 
+                  type="text"
+                  value={q} 
+                  onChange={(e) => setQ(e.target.value)} 
+                  placeholder="Search products..." 
+                  className="w-full rounded-full border border-white/10 bg-white/[0.02] py-3.5 pl-11 pr-6 text-sm outline-none placeholder:text-white/30 focus:border-gold/40 transition-colors" 
+                />
+              </div>
+              <button 
+                onClick={() => setShowFilters(!showFilters)} 
+                className={`flex h-12 items-center justify-center gap-2 rounded-full border px-5 text-xs font-semibold uppercase tracking-wider transition ${showFilters ? "border-gold bg-gold text-black" : "border-white/10 bg-white/[0.02] text-white hover:border-white/30"}`}
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" />
+                <span>Categories</span>
+              </button>
+            </div>
+
+            {/* Custom Premium Sort Dropdown */}
+            <div className="flex items-center gap-3 self-end md:self-auto">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">Sort By</span>
+              <div className="relative">
+                <select 
+                  value={sort} 
+                  onChange={(e) => setSort(e.target.value as typeof sort)} 
+                  className="appearance-none rounded-full border border-white/10 bg-white/[0.02] py-3.5 pl-6 pr-12 text-xs font-medium uppercase tracking-widest text-white outline-none cursor-pointer focus:border-gold/40 transition-colors"
+                >
+                  <option value="featured" className="bg-black text-white">Featured</option>
+                  <option value="price-asc" className="bg-black text-white">Price · Low to High</option>
+                  <option value="price-desc" className="bg-black text-white">Price · High to Low</option>
+                  <option value="rating" className="bg-black text-white">Rating</option>
+                </select>
+                <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-white/50 text-[8px]">▼</div>
+              </div>
+            </div>
           </div>
-          <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className="rounded-full border border-border bg-secondary/40 px-4 py-2 text-sm">
-            <option value="featured">Featured</option>
-            <option value="price-asc">Price · Low</option>
-            <option value="price-desc">Price · High</option>
-            <option value="rating">Rating</option>
-          </select>
-        </div>
-        <div className="mx-auto flex max-w-[1400px] gap-2 overflow-x-auto px-4 sm:px-6 pb-4 text-xs scrollbar-hide">
-          {chips.map((c) => (
-            <button key={c} onClick={() => setCat(c)} className={`shrink-0 rounded-full border px-4 py-1.5 uppercase tracking-widest transition ${cat === c ? "border-gold bg-gold text-background" : "border-border hover:border-gold/60"}`}>{c}</button>
-          ))}
+
+          {/* Animate-in premium category chips */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="flex flex-wrap gap-2 pt-6 pb-2">
+                  {chips.map((c) => (
+                    <button 
+                      key={c} 
+                      onClick={() => setCat(c)} 
+                      className={`shrink-0 rounded-full border px-5 py-3 text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${cat === c ? "border-gold bg-gold text-black shadow-[0_4px_20px_-5px_rgba(201,168,106,0.3)]" : "border-white/5 bg-white/[0.01] text-foreground/75 hover:border-white/20 hover:text-white"}`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-4 sm:px-6 py-14">
+      {/* Product Grid */}
+      <section className="mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 py-16">
         {filtered.length === 0 ? (
-          <p className="py-24 text-center text-muted-foreground">No products match this ritual — yet.</p>
+          <div className="py-32 text-center">
+            <p className="text-lg text-foreground/40 font-light">No products match this ritual — yet.</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-14 sm:gap-x-6">
-            {filtered.map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-16 md:grid-cols-3 lg:grid-cols-4">
+            {filtered.map((p, i) => (
+              <ProductCard key={p.slug} product={p} index={i} />
+            ))}
           </div>
         )}
       </section>
-    </>
+    </div>
   );
 }

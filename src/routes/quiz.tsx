@@ -29,7 +29,7 @@ function Quiz() {
   const done = step >= steps.length;
 
   return (
-    <section className="mx-auto flex min-h-[80vh] max-w-3xl flex-col justify-center px-6 pt-32 pb-24">
+    <section className="mx-auto flex min-h-[80vh] max-w-3xl flex-col justify-center px-6 pt-20 pb-16 md:pt-32 md:pb-24">
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Skin Quiz</p>
 
       <div className="mt-8 h-1 w-full overflow-hidden rounded-full bg-secondary">
@@ -38,9 +38,9 @@ function Quiz() {
 
       <AnimatePresence mode="wait">
         {!done ? (
-          <motion.div key={step} initial={{ opacity: 0, y: 30, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0)" }} exit={{ opacity: 0, y: -20, filter: "blur(8px)" }} transition={{ duration: 0.6 }} className="mt-12">
+          <motion.div key={step} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.45 }} className="mt-12">
             <p className="text-sm text-muted-foreground">Question {step + 1} of {steps.length}</p>
-            <h2 className="mt-3 font-display text-4xl md:text-5xl leading-tight">{steps[step].q}</h2>
+            <h2 className="mt-3 font-display text-2xl leading-tight sm:text-4xl md:text-5xl">{steps[step].q}</h2>
             <div className="mt-10 grid gap-3 md:grid-cols-2">
               {steps[step].opts.map((o) => (
                 <button
@@ -57,7 +57,7 @@ function Quiz() {
         ) : (
           <motion.div key="done" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="mt-12 text-center">
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-gold text-gold"><Check className="h-6 w-6" /></div>
-            <h2 className="mt-6 font-display text-5xl leading-tight">Your ritual is ready.</h2>
+            <h2 className="mt-6 font-display text-3xl leading-tight md:text-5xl">Your ritual is ready.</h2>
             <p className="mt-3 text-muted-foreground">We've built a routine based on your answers.</p>
             <ul className="mx-auto mt-6 max-w-md text-left text-sm text-muted-foreground">
               {answers.map((a, i) => <li key={i} className="flex justify-between border-b border-border py-2">{steps[i].q.replace("?", "")} <span className="text-foreground">{a}</span></li>)}
