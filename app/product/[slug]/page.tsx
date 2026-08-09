@@ -130,7 +130,7 @@ function CinematicStage({ image }: { image: string }) {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex min-h-[60vh] w-full items-center justify-center overflow-hidden rounded-[2.5rem] bg-background shadow-2xl lg:min-h-[680px]"
+      className="relative flex min-h-[60vh] w-full items-center justify-center overflow-hidden rounded-[2.5rem] bg-background shadow-2xl lg:h-[calc(100vh-4rem)] lg:min-h-0"
       style={{ perspective: "1500px" }}
     >
       {/* Noise Grain Background */}
@@ -234,7 +234,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const wishlisted = has(product.slug);
   
-  const gallery = product.gallery?.length ? product.gallery : [product.image, product.hoverImage].filter(Boolean);
+  const gallery = [product.image, product.hoverImage].filter(Boolean);
   const related = products.filter((p) => p.slug !== product.slug);
 
   const handleAddToCart = () => {
@@ -299,9 +299,9 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
             </div>
           </div>
 
-          {/* Right Column: Typography & Details */}
+          {/* Right Column: Sticky Typography & Details */}
           <div className="relative mt-12 px-6 lg:mt-0 lg:pr-12 xl:pr-20">
-            <div>
+            <div className="lg:sticky lg:top-12 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}>
                 <div className="flex items-center gap-4">

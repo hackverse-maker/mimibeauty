@@ -36,7 +36,6 @@ export type Product = {
   directions: string;
   skinType: string[];
   description: string;
-  gallery: string[];
 };
 
 export const products: Product[] = [
@@ -49,9 +48,8 @@ export const products: Product[] = [
     price: 3500,
     originalPrice: 4500,
     size: "30ml",
-    image: "/products/dew-hero.png",
-    hoverImage: "/products/dew-detail.png",
-    gallery: ["/products/dew-hero.png", "/products/dew-detail.png", "/products/dew-texture.png", assets.water],
+    image: assets.dew,
+    hoverImage: assets.water,
     rating: 4.9,
     reviews: 428,
     benefits: ["Hydrate", "Repair", "Glow"],
@@ -70,9 +68,8 @@ export const products: Product[] = [
     price: 3500,
     originalPrice: 4500,
     size: "30ml",
-    image: "/products/veil-hero.png",
-    hoverImage: "/products/veil-detail.png",
-    gallery: ["/products/veil-hero.png", "/products/veil-detail.png", "/products/veil-texture.png", assets.lineup],
+    image: assets.veil,
+    hoverImage: assets.lineup,
     rating: 4.8,
     reviews: 312,
     benefits: ["Smooth", "Protect", "Shine"],
@@ -91,9 +88,8 @@ export const products: Product[] = [
     price: 4500,
     originalPrice: 5500,
     size: "50ml",
-    image: "/products/herbe-hero.png",
-    hoverImage: "/products/herbe-detail.png",
-    gallery: ["/products/herbe-hero.png", "/products/herbe-detail.png", "/products/herbe-texture.png", assets.stone],
+    image: assets.herbe,
+    hoverImage: assets.stone,
     rating: 4.9,
     reviews: 271,
     benefits: ["Nourish", "Strengthen", "Balance"],
@@ -112,9 +108,8 @@ export const products: Product[] = [
     price: 5000,
     originalPrice: 6500,
     size: "100ml",
-    image: "/products/halo-hero.png",
-    hoverImage: "/products/halo-detail.png",
-    gallery: ["/products/halo-hero.png", "/products/halo-detail.png", "/products/halo-texture.png", assets.water],
+    image: assets.halo,
+    hoverImage: assets.water,
     rating: 5.0,
     reviews: 542,
     benefits: ["Radiance", "Hydrate", "Replenish"],
@@ -123,33 +118,6 @@ export const products: Product[] = [
     skinType: ["All"],
     description:
       "A luminous, fast-absorbing body oil layered with rose absolute for a soft-focus satin finish that lingers.",
-  },
-];
-
-export const ingredientsShowcase = [
-  {
-    name: "Niacinamide",
-    note: "Evens tone, refines pores, and supports a stronger skin barrier.",
-  },
-  {
-    name: "Vitamin C",
-    note: "Brightens dullness, protects against oxidative stress, and supports radiance.",
-  },
-  {
-    name: "Retinol",
-    note: "Encourages cell renewal, improves texture, and supports smoother skin.",
-  },
-  {
-    name: "Jojoba Oil",
-    note: "Balances oil production, hydrates deeply, and supports a healthy barrier.",
-  },
-  {
-    name: "Rosehip Oil",
-    note: "Nourishes dry skin, softens texture, and restores a healthy-looking glow.",
-  },
-  {
-    name: "Hyaluronic Acid",
-    note: "Draws in lasting hydration for a plumper, softer, more supple finish.",
   },
 ];
 
