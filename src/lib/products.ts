@@ -121,6 +121,33 @@ export const products: Product[] = [
   },
 ];
 
+export const ingredientsShowcase = [
+  {
+    name: "Niacinamide",
+    note: "Evens tone, refines pores, and supports a stronger skin barrier.",
+  },
+  {
+    name: "Vitamin C",
+    note: "Brightens dullness, protects against oxidative stress, and supports radiance.",
+  },
+  {
+    name: "Retinol",
+    note: "Encourages cell renewal, improves texture, and supports smoother skin.",
+  },
+  {
+    name: "Jojoba Oil",
+    note: "Balances oil production, hydrates deeply, and supports a healthy barrier.",
+  },
+  {
+    name: "Rosehip Oil",
+    note: "Nourishes dry skin, softens texture, and restores a healthy-looking glow.",
+  },
+  {
+    name: "Hyaluronic Acid",
+    note: "Draws in lasting hydration for a plumper, softer, more supple finish.",
+  },
+];
+
 export const categories = [
   "Cleanser",
   "Serum",
