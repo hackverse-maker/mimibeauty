@@ -36,6 +36,7 @@ export type Product = {
   directions: string;
   skinType: string[];
   description: string;
+  gallery: string[];
 };
 
 export const products: Product[] = [
@@ -48,8 +49,9 @@ export const products: Product[] = [
     price: 3500,
     originalPrice: 4500,
     size: "30ml",
-    image: assets.dew,
-    hoverImage: assets.water,
+    image: "/products/dew-hero.png",
+    hoverImage: "/products/dew-detail.png",
+    gallery: ["/products/dew-hero.png", "/products/dew-detail.png", "/products/dew-texture.png", assets.water],
     rating: 4.9,
     reviews: 428,
     benefits: ["Hydrate", "Repair", "Glow"],
@@ -68,8 +70,9 @@ export const products: Product[] = [
     price: 3500,
     originalPrice: 4500,
     size: "30ml",
-    image: assets.veil,
-    hoverImage: assets.lineup,
+    image: "/products/veil-hero.png",
+    hoverImage: "/products/veil-detail.png",
+    gallery: ["/products/veil-hero.png", "/products/veil-detail.png", "/products/veil-texture.png", assets.lineup],
     rating: 4.8,
     reviews: 312,
     benefits: ["Smooth", "Protect", "Shine"],
@@ -88,8 +91,9 @@ export const products: Product[] = [
     price: 4500,
     originalPrice: 5500,
     size: "50ml",
-    image: assets.herbe,
-    hoverImage: assets.stone,
+    image: "/products/herbe-hero.png",
+    hoverImage: "/products/herbe-detail.png",
+    gallery: ["/products/herbe-hero.png", "/products/herbe-detail.png", "/products/herbe-texture.png", assets.stone],
     rating: 4.9,
     reviews: 271,
     benefits: ["Nourish", "Strengthen", "Balance"],
@@ -108,8 +112,9 @@ export const products: Product[] = [
     price: 5000,
     originalPrice: 6500,
     size: "100ml",
-    image: assets.halo,
-    hoverImage: assets.water,
+    image: "/products/halo-hero.png",
+    hoverImage: "/products/halo-detail.png",
+    gallery: ["/products/halo-hero.png", "/products/halo-detail.png", "/products/halo-texture.png", assets.water],
     rating: 5.0,
     reviews: 542,
     benefits: ["Radiance", "Hydrate", "Replenish"],
