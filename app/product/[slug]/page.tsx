@@ -34,7 +34,7 @@ function AccordionItem({ title, children, open, onClick }: { title: string; chil
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="pb-8 text-sm leading-relaxed text-foreground/70 md:text-base">
+            <div className="pb-4 text-sm leading-relaxed text-foreground/70 md:text-base">
               {children}
             </div>
           </motion.div>
@@ -93,6 +93,7 @@ function CinematicStage({ image }: { image: string }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   const mouseXSpring = useSpring(x, { stiffness: 40, damping: 25 });
   const mouseYSpring = useSpring(y, { stiffness: 40, damping: 25 });
@@ -125,6 +126,10 @@ function CinematicStage({ image }: { image: string }) {
   // Create an array for particles without relying on window on first render
   const particles = Array.from({ length: 12 });
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <div 
       ref={ref}
@@ -146,29 +151,31 @@ function CinematicStage({ image }: { image: string }) {
       />
       
       {/* Floating Particles */}
-      <div className="absolute inset-0 z-0">
-        {particles.map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ 
-              opacity: 0, 
-              x: `${Math.random() * 100}%`,
-              y: "110%" 
-            }}
-            animate={{ 
-              opacity: [0, Math.random() * 0.4 + 0.1, 0],
-              y: ["110%", "-10%"]
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              ease: "linear",
-              delay: Math.random() * 10
-            }}
-            className="absolute h-1 w-1 rounded-full bg-gold blur-[2px]"
-          />
-        ))}
-      </div>
+      {isMounted && (
+        <div className="absolute inset-0 z-0">
+          {particles.map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ 
+                opacity: 0, 
+                x: `${Math.random() * 100}%`,
+                y: "110%" 
+              }}
+              animate={{ 
+                opacity: [0, Math.random() * 0.4 + 0.1, 0],
+                y: ["110%", "-10%"]
+              }}
+              transition={{
+                duration: Math.random() * 10 + 10,
+                repeat: Infinity,
+                ease: "linear",
+                delay: Math.random() * 10
+              }}
+              className="absolute h-1 w-1 rounded-full bg-gold blur-[2px]"
+            />
+          ))}
+        </div>
+      )}
       
       {/* 3D Bottle */}
       <motion.div 
@@ -277,9 +284,9 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
           {/* Left Column: Cinematic Stage */}
           <div className="relative px-6 lg:pl-12 xl:pl-20">
             <CinematicStage image={gallery[active]} />
-            
+
             {/* Premium Glass Thumbnails */}
-            <div className="absolute bottom-10 left-1/2 flex -translate-x-1/2 gap-4 lg:bottom-16">
+            <div className="mt-8 flex justify-center gap-4">
               {gallery.map((src, i) => (
                 <button 
                   key={i} 
@@ -297,6 +304,41 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 </button>
               ))}
             </div>
+
+            {/* Accordion Details */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }} className="mt-16 pb-16">
+              <AccordionItem title="Ingredients" open={activeTab === "ingredients"} onClick={() => setActiveTab(activeTab === "ingredients" ? "" : "ingredients")}>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {product.ingredients.map((i: string) => (
+                    <div key={i} className="rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 backdrop-blur-sm transition hover:bg-white/[0.05]">
+                      <span className="text-foreground/90">{i}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 flex gap-6">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">Clean</span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">Vegan</span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">Cruelty-Free</span>
+                </div>
+              </AccordionItem>
+              
+              <AccordionItem title="Benefits" open={activeTab === "benefits"} onClick={() => setActiveTab(activeTab === "benefits" ? "" : "benefits")}>
+                <ul className="space-y-6">
+                  {product.benefits.map((b: string) => (
+                    <li key={b} className="flex items-start gap-5">
+                      <span className="mt-1.5 grid h-3 w-3 shrink-0 place-items-center rounded-full bg-gold/20">
+                        <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                      </span> 
+                      <span className="text-lg text-foreground/80">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionItem>
+              
+              <AccordionItem title="The Ritual" open={activeTab === "directions"} onClick={() => setActiveTab(activeTab === "directions" ? "" : "directions")}>
+                <p className="text-lg leading-loose text-foreground/80">{product.directions}</p>
+              </AccordionItem>
+            </motion.div>
           </div>
 
           {/* Right Column: Typography & Details */}
@@ -387,41 +429,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                     <Share2 className="h-4 w-4 transition-transform group-hover:scale-110" strokeWidth={1.5} /> Share
                   </button>
                 </div>
-              </motion.div>
-
-              {/* Accordion Details */}
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }} className="mt-16 pb-32">
-                <AccordionItem title="Ingredients" open={activeTab === "ingredients"} onClick={() => setActiveTab(activeTab === "ingredients" ? "" : "ingredients")}>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {product.ingredients.map((i: string) => (
-                      <div key={i} className="rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 backdrop-blur-sm transition hover:bg-white/[0.05]">
-                        <span className="text-foreground/90">{i}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-8 flex gap-6">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">Clean</span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">Vegan</span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">Cruelty-Free</span>
-                  </div>
-                </AccordionItem>
-                
-                <AccordionItem title="Benefits" open={activeTab === "benefits"} onClick={() => setActiveTab(activeTab === "benefits" ? "" : "benefits")}>
-                  <ul className="space-y-6">
-                    {product.benefits.map((b: string) => (
-                      <li key={b} className="flex items-start gap-5">
-                        <span className="mt-1.5 grid h-3 w-3 shrink-0 place-items-center rounded-full bg-gold/20">
-                          <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                        </span> 
-                        <span className="text-lg text-foreground/80">{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionItem>
-                
-                <AccordionItem title="The Ritual" open={activeTab === "directions"} onClick={() => setActiveTab(activeTab === "directions" ? "" : "directions")}>
-                  <p className="text-lg leading-loose text-foreground/80">{product.directions}</p>
-                </AccordionItem>
               </motion.div>
             </div>
           </div>

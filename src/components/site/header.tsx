@@ -73,7 +73,6 @@ export function Header() {
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
-  const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { count, setOpen: setCartOpen } = useCart();
   const { items: wishItems, count: wishCount, remove } = useWishlist();
@@ -143,14 +142,6 @@ export function Header() {
     return () => window.removeEventListener("mousedown", onPointer);
   }, [wishlistOpen]);
 
-  const openMega = () => {
-    if (megaTimeout.current) clearTimeout(megaTimeout.current);
-    setMegaOpen(true);
-  };
-  const closeMega = () => {
-    megaTimeout.current = setTimeout(() => setMegaOpen(false), 140);
-  };
-
   const closeOverlays = () => {
     setMobileOpen(false);
     setSearchOpen(false);
@@ -167,14 +158,14 @@ export function Header() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="relative mx-auto grid h-[4.25rem] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-5 md:h-[4.75rem] md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
+        <div className="relative mx-auto grid h-[120px] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-5 md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
           {/* Logo — left */}
           <Link
             href="/"
             onClick={closeOverlays}
-            className="z-10 justify-self-start font-script text-[clamp(1.4rem,4.2vw,2.15rem)] leading-none tracking-tight text-gold no-underline"
+            className="z-10 justify-self-start no-underline"
           >
-            Mimi Beauty.
+            <img src="/logo.png" alt="Mimi Beauty" className="h-[100px] w-[110px]" />
           </Link>
 
           {/* Desktop nav — center */}
@@ -184,8 +175,6 @@ export function Header() {
                 <div
                   key={item.href}
                   className="relative"
-                  onMouseEnter={openMega}
-                  onMouseLeave={closeMega}
                 >
                   <button
                     type="button"
@@ -303,8 +292,6 @@ export function Header() {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.35, ease }}
               className="absolute inset-x-0 top-full hidden border-b border-gold/25 bg-[#0a110c] shadow-[0_30px_80px_-40px_oklch(0_0_0/0.6)] lg:block"
-              onMouseEnter={openMega}
-              onMouseLeave={closeMega}
             >
               <div className="mx-auto max-w-[1500px]">
                 {/* Top Section */}
@@ -656,9 +643,9 @@ export function Header() {
               <Link
                 href="/"
                 onClick={closeOverlays}
-                className="font-script text-3xl text-gold no-underline"
+                className="no-underline"
               >
-                Mimi Beauty.
+                <img src="/logo.png" alt="Mimi Beauty" className="h-[100px] w-[110px]" />
               </Link>
               <button
                 type="button"
