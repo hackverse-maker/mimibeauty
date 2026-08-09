@@ -1,67 +1,74 @@
-import { Link, ClientOnly } from "@tanstack/react-router";
-import { ArrowRight, Leaf, Rabbit, ShieldCheck, Heart, Recycle } from "lucide-react";
-import { useRef, type MouseEvent } from "react";
-import { products } from "@/lib/products";
+"use client";
+import Link from "next/link";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { useRef, type MouseEvent } from "react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const GOLD = "#C9A86A";
 
-const features = [
-  { icon: Leaf, title: "Natural Ingredients" },
-  { icon: Rabbit, title: "Cruelty Free" },
-  { icon: ShieldCheck, title: "Paraben Free" },
-  { icon: Heart, title: "Handmade With Care" },
-  { icon: Recycle, title: "Sustainable Beauty" },
-];
-
-const productGallery = [
+const rituals = [
   {
-    products: [products[0], products[1]], // Dew, Veil
-    labels: ["NOURISH", "RENEW"],
-    shape: "rounded-rectangle",
-    className: "md:col-span-1 md:row-span-1 min-h-[280px] md:min-h-[340px]",
+    src: "/media__1784439898596.jpg",
+    name: "Dew",
+    description: "Barrier repair in morning light.",
+    slug: "dew",
+    className: "md:col-span-2 md:row-span-2 min-h-[320px] md:min-h-[560px]",
   },
   {
-    products: [products[3]], // Hálo
-    labels: ["REVIVE"],
-    shape: "circular",
-    className: "md:col-span-1 md:row-span-1 aspect-square max-w-[280px] mx-auto",
+    src: "/media__1784439898491.jpg",
+    name: "Veil",
+    description: "Silken finish for every length.",
+    slug: "veil",
+    className: "min-h-[300px] aspect-[3/4] md:translate-y-8",
   },
   {
-    products: [products[2], products[0]], // Herbé, Dew
-    labels: ["BALANCE", "GLOW"],
-    shape: "rounded-rectangle",
-    className: "md:col-span-1 md:row-span-1 min-h-[280px] md:min-h-[340px]",
+    src: "/media__1784439898781.jpg",
+    name: "Herbé",
+    description: "Scalp ritual, rooted in botanicals.",
+    slug: "herbe",
+    className: "min-h-[320px] aspect-[4/5] md:-translate-y-4",
   },
   {
-    products: [products[1], products[3]], // Veil, Hálo
-    labels: ["RENEW", "REVIVE"],
-    shape: "rounded-rectangle",
-    className: "md:col-span-1 md:row-span-1 min-h-[280px] md:min-h-[340px]",
+    src: "/media__1784439898541.jpg",
+    name: "Hálo",
+    description: "Satin glow for body & air.",
+    slug: "halo",
+    className: "md:col-span-2 min-h-[260px] aspect-[16/10] md:translate-y-6",
   },
   {
-    products: [products[0]], // Dew
-    labels: ["NOURISH"],
-    shape: "circular",
-    className: "md:col-span-1 md:row-span-1 aspect-square max-w-[280px] mx-auto",
+    src: "/videos/scene_hands.png",
+    name: "The Hold",
+    description: "Every gesture, intentional.",
+    slug: "dew",
+    className: "min-h-[300px] aspect-[3/4] md:-translate-y-10",
   },
   {
-    products: [products[2], products[1]], // Herbé, Veil
-    labels: ["BALANCE", "RENEW"],
-    shape: "rounded-rectangle",
-    className: "md:col-span-1 md:row-span-1 min-h-[280px] md:min-h-[340px]",
+    src: "/videos/hero-openair.png",
+    name: "Open Air",
+    description: "Glow carried into the day.",
+    slug: "halo",
+    className: "min-h-[320px] aspect-[4/5] md:translate-y-4",
+  },
+  {
+    src: "/media__1784439898181.jpg",
+    name: "The Wardrobe",
+    description: "Four formulas. Endless rituals.",
+    slug: "dew",
+    className: "md:col-span-2 min-h-[220px] aspect-[21/9]",
   },
 ] as const;
 
-function ProductGalleryCard({
+function RitualCard({
   item,
   index,
+  forceClass,
 }: {
-  item: (typeof productGallery)[number];
+  item: (typeof rituals)[number];
   index: number;
+  forceClass?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLAnchorElement>(null);
   const mx = useMotionValue(50);
   const my = useMotionValue(50);
   const glow = useMotionTemplate`radial-gradient(380px circle at ${mx}% ${my}%, ${GOLD}28, transparent 55%)`;
@@ -81,22 +88,19 @@ function ProductGalleryCard({
     });
   };
 
-  const isCircular = item.shape === "circular";
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px", amount: 0.2 }}
-      transition={{ duration: 0.7, delay: Math.min(index * 0.08, 0.4), ease }}
-      className={item.className}
+      transition={{ duration: 0.7, delay: Math.min(index * 0.06, 0.36), ease }}
+      className={forceClass ?? item.className}
     >
-      <div
+      <Link
         ref={ref}
+        href={`/product/${item.slug}`}
         onMouseMove={onMove}
-        className={`ritual-card group relative h-full min-h-[280px] overflow-hidden ${
-          isCircular ? "rounded-full" : "rounded-[32px]"
-        }`}
+        className="ritual-card group relative block h-full min-h-[280px] overflow-hidden rounded-[28px]"
       >
         <motion.div
           aria-hidden
@@ -104,34 +108,14 @@ function ProductGalleryCard({
           style={{ background: glow }}
         />
 
-        {/* Product images */}
-        <div className="absolute inset-0 flex items-center justify-center gap-3 p-6">
-          {item.products.map((product, i) => (
-            <Link
-              key={product.slug}
-              to="/product/$slug"
-              params={{ slug: product.slug }}
-              className="relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                loading="lazy"
-                decoding="async"
-                className={`object-cover ${
-                  isCircular
-                    ? "h-full w-full rounded-full"
-                    : "h-full w-auto max-h-[200px] rounded-2xl"
-                }`}
-              />
-              {item.labels[i] && (
-                <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] font-medium uppercase tracking-[0.3em] text-white/90 bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm">
-                  {item.labels[i]}
-                </p>
-              )}
-            </Link>
-          ))}
-        </div>
+        <img
+          src={item.src}
+          alt={item.name}
+          loading="lazy"
+          decoding="async"
+          // Hover zoom via CSS transform — no continuous JS animation
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+        />
 
         <div
           aria-hidden
@@ -139,150 +123,35 @@ function ProductGalleryCard({
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/75 via-black/10 to-transparent"
+          className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-background/75 via-background/10 to-transparent"
         />
-      </div>
+
+        <div className="absolute inset-0 z-30 flex flex-col justify-end p-6 md:p-8">
+          <div className="translate-y-0 opacity-100 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
+            <p className="font-display text-2xl text-white md:text-3xl">{item.name}</p>
+            <p className="mt-1 max-w-xs text-sm text-white/65">{item.description}</p>
+            <span className="mt-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-gold">
+              Discover Ritual <ArrowRight className="h-3.5 w-3.5" />
+            </span>
+          </div>
+        </div>
+      </Link>
     </motion.div>
   );
 }
 
 export function RitualsGallery() {
   return (
-    <ClientOnly fallback={<RitualsGalleryFallback />}>
-      {() => <RitualsGalleryAnimated />}
-    </ClientOnly>
-  );
-}
-
-function RitualsGalleryFallback() {
-  return (
-    <section id="rituals" className="section-cv relative overflow-hidden bg-[#0a1a0f] py-20 md:py-40">
+    <section
+      id="rituals"
+      className="section-cv relative overflow-hidden bg-background py-20 md:py-40"
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 50% 40% at 70% 30%, rgba(201,168,106,0.06), transparent 65%)",
-        }}
-      />
-
-      <div className="relative z-10 mx-auto max-w-[1400px] px-6 md:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.5em] text-[#C9A86A]">
-            MINIHAUTY
-          </p>
-          <h2 className="mt-6 font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-tight text-[#F5F0E8]">
-            Rituals, in the Wild.
-          </h2>
-          <p className="mx-auto mt-6 max-w-md text-[15px] leading-relaxed text-[#C9A86A]/80">
-            Skincare inspired by nature.
-          </p>
-        </div>
-
-        {/* Product Gallery Grid */}
-        <div className="mt-20 hidden gap-6 md:mt-28 md:grid md:grid-cols-3 md:gap-8">
-          {productGallery.map((item, i) => (
-            <div key={`gallery-${i}`} className={item.className}>
-              <div className={`ritual-card group relative h-full min-h-[280px] overflow-hidden ${
-                item.shape === "circular" ? "rounded-full" : "rounded-[32px]"
-              }`}>
-                <div className="absolute inset-0 flex items-center justify-center gap-3 p-6">
-                  {item.products.map((product, i) => (
-                    <Link
-                      key={product.slug}
-                      to="/product/$slug"
-                      params={{ slug: product.slug }}
-                      className="relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
-                    >
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        loading="lazy"
-                        decoding="async"
-                        className={`object-cover ${
-                          item.shape === "circular"
-                            ? "h-full w-full rounded-full"
-                            : "h-full w-auto max-h-[200px] rounded-2xl"
-                        }`}
-                      />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile Product Gallery */}
-        <div className="mt-14 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {productGallery.map((item, i) => (
-            <div key={`m-gallery-${i}`} className="w-[85vw] shrink-0 snap-center">
-              <div className={`ritual-card group relative h-full min-h-[280px] overflow-hidden ${
-                item.shape === "circular" ? "rounded-full" : "rounded-[32px]"
-              }`}>
-                <div className="absolute inset-0 flex items-center justify-center gap-3 p-6">
-                  {item.products.map((product, i) => (
-                    <Link
-                      key={product.slug}
-                      to="/product/$slug"
-                      params={{ slug: product.slug }}
-                      className="relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
-                    >
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        loading="lazy"
-                        decoding="async"
-                        className={`object-cover ${
-                          item.shape === "circular"
-                            ? "h-full w-full rounded-full"
-                            : "h-full w-auto max-h-[200px] rounded-2xl"
-                        }`}
-                      />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Features */}
-        <div className="mt-24 md:mt-32">
-          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {features.map((feature, i) => (
-              <div key={feature.title} className="flex flex-col items-center text-center">
-                <div className="grid h-14 w-14 place-items-center rounded-full border border-[#C9A86A]/40 text-[#C9A86A]">
-                  <feature.icon className="h-5 w-5" strokeWidth={1.5} />
-                </div>
-                <p className="mt-5 text-[10px] font-medium uppercase tracking-[0.3em] text-[#C9A86A]/90">
-                  {feature.title}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* M Logo */}
-        <div className="mt-20 flex justify-center md:mt-24">
-          <div className="grid h-20 w-20 place-items-center rounded-full border-2 border-[#C9A86A]/30 bg-[#C9A86A]/5">
-            <span className="font-display text-3xl text-[#C9A86A]">M</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function RitualsGalleryAnimated() {
-  return (
-    <section id="rituals" className="section-cv relative overflow-hidden bg-[#0a1a0f] py-20 md:py-40">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 50% 40% at 70% 30%, rgba(201,168,106,0.06), transparent 65%)",
+            "radial-gradient(ellipse 50% 40% at 70% 30%, rgba(201,168,106,0.08), transparent 65%)",
         }}
       />
 
@@ -292,81 +161,44 @@ function RitualsGalleryAnimated() {
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[11px] font-medium uppercase tracking-[0.5em] text-[#C9A86A]"
+            className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold"
           >
-            MINIHAUTY
+            Rituals
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.75, ease }}
-            className="mt-6 font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-tight text-[#F5F0E8]"
+            className="mt-5 font-display text-[clamp(3rem,6vw,5rem)] leading-[1.05] tracking-tight text-[#F6F2EB]"
+            style={{ fontFamily: "var(--font-cormorant)" }}
           >
-            Rituals, in the Wild.
+            Rituals, <em className="italic text-gold">in the Wild.</em>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.08, duration: 0.7, ease }}
-            className="mx-auto mt-6 max-w-md text-[15px] leading-relaxed text-[#C9A86A]/80"
+            className="mx-auto mt-6 max-w-md text-[16px] leading-relaxed text-white/80 font-light"
           >
-            Skincare inspired by nature.
+            Experience skincare as a daily ritual, inspired by nature and crafted with science.
           </motion.p>
         </div>
 
-        {/* Product Gallery Grid */}
-        <div className="mt-20 hidden gap-6 md:mt-28 md:grid md:grid-cols-3 md:gap-8">
-          {productGallery.map((item, i) => (
-            <ProductGalleryCard key={`gallery-${i}`} item={item} index={i} />
+        <div className="mt-20 hidden gap-5 md:mt-24 md:grid md:grid-cols-4 md:gap-6">
+          {rituals.map((item, i) => (
+            <RitualCard key={`${item.src}-${i}`} item={item} index={i} />
           ))}
         </div>
 
-        {/* Mobile Product Gallery */}
         <div className="mt-14 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {productGallery.map((item, i) => (
-            <div key={`m-gallery-${i}`} className="w-[85vw] shrink-0 snap-center">
-              <ProductGalleryCard item={item} index={i} />
+          {rituals.map((item, i) => (
+            <div key={`m-${item.src}-${i}`} className="w-[78vw] shrink-0 snap-center">
+              <RitualCard item={item} index={i} forceClass="aspect-[3/4] min-h-[360px]" />
             </div>
           ))}
         </div>
-
-        {/* Features */}
-        <div className="mt-24 md:mt-32">
-          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {features.map((feature, i) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease }}
-                className="flex flex-col items-center text-center"
-              >
-                <div className="grid h-14 w-14 place-items-center rounded-full border border-[#C9A86A]/40 text-[#C9A86A]">
-                  <feature.icon className="h-5 w-5" strokeWidth={1.5} />
-                </div>
-                <p className="mt-5 text-[10px] font-medium uppercase tracking-[0.3em] text-[#C9A86A]/90">
-                  {feature.title}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* M Logo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3, ease }}
-          className="mt-20 flex justify-center md:mt-24"
-        >
-          <div className="grid h-20 w-20 place-items-center rounded-full border-2 border-[#C9A86A]/30 bg-[#C9A86A]/5">
-            <span className="font-display text-3xl text-[#C9A86A]">M</span>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingBag, Star, Check } from "lucide-react";
 import { useState } from "react";
@@ -33,24 +34,24 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay: index * 0.06, ease: [0.2, 0.7, 0.2, 1] }}
-      className="group relative"
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.2, 0.7, 0.2, 1] }}
+      className="group relative rounded-[24px] border border-transparent transition-all duration-[500ms] ease-out hover:-translate-y-2 hover:border-gold/40 hover:bg-white/5 hover:shadow-[0_0_50px_rgba(201,168,106,0.15)]"
     >
-      <Link to="/product/$slug" params={{ slug: product.slug }} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-white">
+      <Link href={`/product/${product.slug}`} className="block p-4">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#F3EBDC]">
           <img
             src={product.image}
             alt={product.name}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[450ms] ease-out group-hover:scale-[1.05]"
             loading="lazy"
           />
 
           {/* Discount badge */}
           {hasDiscount && (
-            <span className="absolute left-3 top-3 z-10 rounded-full bg-[oklch(0.45_0.18_15)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-white shadow-lg">
+            <span className="absolute left-4 top-4 z-10 rounded-full bg-[#1A271D] px-3 py-1.5 text-[10px] font-medium tracking-wide text-white">
               -{discountPct}%
             </span>
           )}
@@ -108,24 +109,31 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             </motion.button>
           </div>
         </div>
-        <div className="mt-4 flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">{product.category}</p>
-            <h3 className="mt-1 truncate font-display text-xl">{product.name}</h3>
-            <p className="mt-1 truncate text-xs text-muted-foreground">{product.tagline}</p>
-          </div>
-          <div className="text-right">
-            <div className="flex items-center gap-1.5">
+        <div className="mt-6 flex flex-col gap-1">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold/80">
+            {product.category}
+          </p>
+          <h3
+            className="mt-1 font-display text-[34px] leading-none text-[#F5F2EC]"
+            style={{ fontFamily: "var(--font-cormorant)" }}
+          >
+            {product.name}
+          </h3>
+          <p className="mt-1 text-[17px] text-[#A3A3A3]">{product.tagline}</p>
+
+          <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
+            <div className="flex items-center gap-2.5">
               {hasDiscount && (
-                <p className="text-xs text-muted-foreground line-through">${product.originalPrice}</p>
+                <span className="text-[14px] text-gray-500 line-through">
+                  Rs. {product.originalPrice}
+                </span>
               )}
-              <p className={`text-sm font-medium ${hasDiscount ? "text-[oklch(0.55_0.18_15)]" : ""}`}>
-                ${product.price}
-              </p>
+              <span className="text-[16px] font-semibold text-gold">Rs. {product.price}</span>
             </div>
-            <p className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-              <Star className="h-3 w-3 fill-gold text-gold" /> {product.rating}
-            </p>
+            <div className="flex items-center gap-1.5 text-[14px] text-white">
+              <Star className="h-4 w-4 fill-gold text-gold" strokeWidth={0} />{" "}
+              {product.rating?.toFixed(1) || "5.0"}
+            </div>
           </div>
         </div>
       </Link>

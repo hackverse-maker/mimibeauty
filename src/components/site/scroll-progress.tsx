@@ -1,3 +1,4 @@
+"use client";
 import { motion, useScroll, useSpring } from "framer-motion";
 
 /** Lightweight top progress — spring is cheap vs layout thrash */

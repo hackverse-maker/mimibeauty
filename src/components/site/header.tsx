@@ -1,4 +1,6 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowRight,
@@ -8,6 +10,10 @@ import {
   Search,
   ShoppingBag,
   X,
+  Sparkles,
+  Wind,
+  Droplet,
+  Star,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ThemeToggle } from "./theme-toggle";
@@ -16,10 +22,10 @@ import { useWishlist } from "@/lib/wishlist";
 import { collections, products } from "@/lib/products";
 
 const nav = [
-  { to: "/", label: "Home" },
-  { to: "/shop", label: "Products", mega: true },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/shop", label: "Products", mega: true },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -59,6 +65,7 @@ function IconButton({
 }
 
 export function Header() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -66,7 +73,7 @@ export function Header() {
   const [wishlistOpen, setWishlistOpen] = useState(false);
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
-  const megaRef = useRef<HTMLDivElement>(null);
+  const megaTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { count, setOpen: setCartOpen } = useCart();
   const { items: wishItems, count: wishCount, remove } = useWishlist();
@@ -136,21 +143,13 @@ export function Header() {
     return () => window.removeEventListener("mousedown", onPointer);
   }, [wishlistOpen]);
 
-  // Click-outside listener for Product dropdown menu
-  useEffect(() => {
-    if (!megaOpen) return;
-    const onPointerDownOutside = (e: MouseEvent | TouchEvent) => {
-      if (megaRef.current && !megaRef.current.contains(e.target as Node)) {
-        setMegaOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", onPointerDownOutside);
-    document.addEventListener("touchstart", onPointerDownOutside);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDownOutside);
-      document.removeEventListener("touchstart", onPointerDownOutside);
-    };
-  }, [megaOpen]);
+  const openMega = () => {
+    if (megaTimeout.current) clearTimeout(megaTimeout.current);
+    setMegaOpen(true);
+  };
+  const closeMega = () => {
+    megaTimeout.current = setTimeout(() => setMegaOpen(false), 140);
+  };
 
   const closeOverlays = () => {
     setMobileOpen(false);
@@ -161,24 +160,6 @@ export function Header() {
 
   return (
     <>
-      {/* Announcement marquee */}
-      <div className="relative z-50 overflow-hidden border-b border-gold/20 bg-foreground text-background">
-        <div className="flex animate-marquee whitespace-nowrap py-2 text-[11px] uppercase tracking-[0.32em] md:text-[11px]">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="flex shrink-0 gap-16 px-8">
-              <span>Complimentary shipping over $75</span>
-              <span aria-hidden>·</span>
-              <span>Dermatologist tested</span>
-              <span aria-hidden>·</span>
-              <span>Cruelty free & vegan</span>
-              <span aria-hidden>·</span>
-              <span>New: Hálo body oil</span>
-              <span aria-hidden>·</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <header
         className={`sticky top-0 z-40 transition-[background,box-shadow,border-color] duration-500 ${
           scrolled
@@ -189,35 +170,11 @@ export function Header() {
         <div className="relative mx-auto grid h-[4.25rem] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-5 md:h-[4.75rem] md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
           {/* Logo — left */}
           <Link
-            to="/"
+            href="/"
             onClick={closeOverlays}
-            className="group z-10 flex min-w-0 max-w-[58vw] items-center gap-2 justify-self-start sm:max-w-none sm:gap-2.5"
+            className="z-10 justify-self-start font-script text-[clamp(1.4rem,4.2vw,2.15rem)] leading-none tracking-tight text-gold no-underline"
           >
-            <motion.span
-              className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full sm:h-9 sm:w-9 md:h-10 md:w-10"
-              whileHover={{ scale: 1.06 }}
-              transition={{ type: "spring", stiffness: 380, damping: 22 }}
-            >
-              <img
-                src="/logo.png"
-                alt=""
-                className="h-full w-full rounded-full object-cover"
-              />
-              <motion.span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-full"
-                style={{
-                  background:
-                    "linear-gradient(120deg, transparent 30%, color-mix(in oklab, var(--gold) 55%, transparent) 50%, transparent 70%)",
-                  backgroundSize: "200% 100%",
-                }}
-                animate={{ backgroundPosition: ["200% 0", "-200% 0"] }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: "linear" }}
-              />
-            </motion.span>
-            <span className="truncate font-script text-[clamp(1.2rem,4.2vw,2.15rem)] leading-none tracking-tight text-gold transition-opacity duration-300 group-hover:opacity-90">
-              Mimi Beauty.
-            </span>
+            Mimi Beauty.
           </Link>
 
           {/* Desktop nav — center */}
@@ -225,9 +182,10 @@ export function Header() {
             {nav.map((item) =>
               "mega" in item && item.mega ? (
                 <div
-                  key={item.to}
+                  key={item.href}
                   className="relative"
-                  ref={megaRef}
+                  onMouseEnter={openMega}
+                  onMouseLeave={closeMega}
                 >
                   <button
                     type="button"
@@ -244,13 +202,14 @@ export function Header() {
                 </div>
               ) : (
                 <Link
-                  key={item.to}
-                  to={item.to}
-                  className="group relative py-2 text-[12px] font-medium uppercase tracking-[0.22em] text-foreground/75 transition-colors hover:text-foreground"
-                  activeProps={{ className: "text-foreground" }}
+                  key={item.href}
+                  href={item.href}
+                  className={`group relative py-2 text-[12px] font-medium uppercase tracking-[0.22em] transition-colors hover:text-foreground ${
+                    pathname === item.href ? "text-foreground" : "text-foreground/75"
+                  }`}
                 >
                   {item.label}
-                  <NavUnderline />
+                  <NavUnderline active={pathname === item.href} />
                 </Link>
               ),
             )}
@@ -318,7 +277,7 @@ export function Header() {
             </IconButton>
 
             <Link
-              to="/shop"
+              href="/shop"
               className="ml-2 hidden items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-5 py-2 text-[11px] font-medium uppercase tracking-[0.2em] text-foreground transition-all duration-400 hover:border-gold hover:bg-gold hover:text-background md:inline-flex"
             >
               Shop Now
@@ -343,61 +302,245 @@ export function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.35, ease }}
-              className="absolute inset-x-0 top-full hidden border-b border-gold/25 bg-background/92 shadow-[0_30px_80px_-40px_oklch(0_0_0/0.4)] backdrop-blur-md lg:block"
+              className="absolute inset-x-0 top-full hidden border-b border-gold/25 bg-[#0a110c] shadow-[0_30px_80px_-40px_oklch(0_0_0/0.6)] lg:block"
+              onMouseEnter={openMega}
+              onMouseLeave={closeMega}
             >
-              <div className="mx-auto grid max-w-[1400px] grid-cols-[1fr_1.4fr] gap-10 px-8 py-10">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-gold">Collections</p>
-                  <ul className="mt-5 space-y-1">
-                    {collections.map((c) => (
-                      <li key={c.slug}>
+              <div className="mx-auto max-w-[1500px]">
+                {/* Top Section */}
+                <div className="grid grid-cols-[300px_1fr] border-b border-gold/10">
+                  {/* Sidebar Collections */}
+                  <div className="border-r border-gold/10 p-10 pr-12 text-white">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] mb-8">
+                      COLLECTIONS
+                    </p>
+
+                    <ul className="space-y-8">
+                      <li className="group cursor-pointer">
                         <Link
-                          to="/collections"
-                          onClick={() => setMegaOpen(false)}
-                          className="group flex items-center justify-between border-b border-border/40 py-3 text-sm text-foreground/80 transition-colors hover:text-gold"
+                          href="/coming-soon/body-lava-collection"
+                          className="flex items-start gap-4"
                         >
-                          <span className="font-display text-lg tracking-tight">{c.name}</span>
-                          <ArrowRight className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+                          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
+                            <Sparkles className="h-4 w-4" />
+                          </div>
+                          <div className="flex-1 border-b border-transparent pb-3 group-hover:border-gold/20">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="font-display text-[17px] text-[#F5F2EC]">
+                                Body Lava Collection
+                              </span>
+                              <ChevronDown className="h-3.5 w-3.5 -rotate-90 opacity-50 group-hover:opacity-100 group-hover:text-[#C9A86A] transition-all" />
+                            </div>
+                            <span className="text-xs text-white/50 leading-relaxed font-light block">
+                              Luminous body oils in 4 radiant shades.
+                            </span>
+                          </div>
                         </Link>
                       </li>
-                    ))}
-                  </ul>
-                  <Link
-                    to="/shop"
-                    onClick={() => setMegaOpen(false)}
-                    className="mt-6 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-muted-foreground transition-colors hover:text-gold"
-                  >
-                    View all products <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+
+                      <li className="group cursor-pointer">
+                        <Link
+                          href="/coming-soon/hair-collection"
+                          className="flex items-start gap-4"
+                        >
+                          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
+                            <Wind className="h-4 w-4" />
+                          </div>
+                          <div className="flex-1 border-b border-transparent pb-3 group-hover:border-gold/20">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="font-display text-[17px] text-[#F5F2EC]">
+                                Hair Collection
+                              </span>
+                              <ChevronDown className="h-3.5 w-3.5 -rotate-90 opacity-50 group-hover:opacity-100 group-hover:text-[#C9A86A] transition-all" />
+                            </div>
+                            <span className="text-xs text-white/50 leading-relaxed font-light block">
+                              Nourish, strengthen & restore.
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+
+                      <li className="group cursor-pointer">
+                        <Link href="/coming-soon/face-serum" className="flex items-start gap-4">
+                          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
+                            <Droplet className="h-4 w-4" />
+                          </div>
+                          <div className="flex-1 border-b border-transparent pb-3 group-hover:border-gold/20">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="font-display text-[17px] text-[#F5F2EC]">
+                                Face Serum
+                              </span>
+                              <ChevronDown className="h-3.5 w-3.5 -rotate-90 opacity-50 group-hover:opacity-100 group-hover:text-[#C9A86A] transition-all" />
+                            </div>
+                            <span className="text-xs text-white/50 leading-relaxed font-light block">
+                              Targeted care for healthy, balanced skin.
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+
+                    <div className="mt-10">
+                      <Link
+                        href="/shop"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] hover:text-white transition-colors flex items-center gap-2"
+                      >
+                        VIEW ALL PRODUCTS <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Right Product Grid */}
+                  <div className="p-10 flex flex-col justify-between">
+                    {/* Row 1 */}
+                    <div className="border-b border-gold/10 pb-6 mb-6">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] mb-4">
+                        BODY LAVA COLLECTION
+                      </p>
+                      <div className="grid grid-cols-4 gap-8">
+                        {["Dewy Bronze", "Golden Glow", "Pearl Radiance", "Rosegold Shimmer"].map(
+                          (n) => (
+                            <Link href="/shop" key={n} className="group text-white">
+                              <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                                {n}
+                              </p>
+                              <p className="text-xs text-white/50 mt-2 mb-1">100ml</p>
+                              <p className="text-xs text-white/80">$78</p>
+                            </Link>
+                          ),
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Row 2 */}
+                    <div className="border-b border-gold/10 pb-6 mb-6">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] mb-4">
+                        HAIR COLLECTION
+                      </p>
+                      <div className="grid grid-cols-4 gap-8">
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Herbé
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Pre-Wash Hair Oil</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">50ml</p>
+                          <p className="text-xs text-white/80">$62</p>
+                        </Link>
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Veil
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Post-Wash Hair Serum</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
+                          <p className="text-xs text-white/80">$54</p>
+                        </Link>
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Nourish
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Hair Oil</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">50ml</p>
+                          <p className="text-xs text-white/80">$58</p>
+                        </Link>
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Halo Mist
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Hair Perfume</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">100ml</p>
+                          <p className="text-xs text-white/80">$48</p>
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Row 3 */}
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] mb-4">
+                        FACE SERUM
+                      </p>
+                      <div className="grid grid-cols-4 gap-8">
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Dew
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Daily Glow Face Serum</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
+                          <p className="text-xs text-white/80">$68</p>
+                        </Link>
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Clarity
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Balancing Face Serum</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
+                          <p className="text-xs text-white/80">$68</p>
+                        </Link>
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Restore
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Barrier Repair Serum</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
+                          <p className="text-xs text-white/80">$68</p>
+                        </Link>
+                        <Link href="/shop" className="group text-white">
+                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
+                            Radiance
+                          </p>
+                          <p className="text-[11px] text-white/60 mt-1">Brightening Face Serum</p>
+                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
+                          <p className="text-xs text-white/80">$68</p>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-gold">Featured rituals</p>
-                  <div className="mt-5 grid grid-cols-2 gap-4 xl:grid-cols-4">
-                    {products.map((p) => (
+                {/* Bottom Banner */}
+                <div className="relative h-64 overflow-hidden bg-[#070b09] flex items-center px-10 border-t border-gold/10">
+                  <div className="absolute inset-0 z-0">
+                    <img
+                      src="/hero_dew_collection.jpg"
+                      alt="Collection lineup"
+                      className="h-full w-full object-cover object-right opacity-80 mix-blend-overlay"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0a110c] via-[#0a110c]/80 to-transparent" />
+                  </div>
+
+                  <div className="relative z-10 max-w-xl">
+                    <h3 className="font-display text-5xl text-[#F5F2EC]">
+                      Natural <span className="italic text-[#C9A86A]">Glow</span>
+                    </h3>
+                    <p className="mt-3 text-[14px] leading-relaxed text-white/80 font-light max-w-md">
+                      Discover scientifically formulated skincare that hydrates, nourishes and
+                      restores radiant skin with every application.
+                    </p>
+
+                    <div className="mt-6 flex items-center gap-4">
                       <Link
-                        key={p.slug}
-                        to="/product/$slug"
-                        params={{ slug: p.slug }}
-                        onClick={() => setMegaOpen(false)}
-                        className="group"
+                        href="/shop"
+                        className="rounded-full bg-[#E8D7BE] px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-black transition hover:bg-white flex items-center gap-2"
                       >
-                        <div className="relative aspect-[4/5] overflow-hidden bg-secondary/40">
-                          <img
-                            src={p.image}
-                            alt={p.name}
-                            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-80" />
-                          <div className="absolute inset-x-0 bottom-0 p-3">
-                            <p className="font-display text-base text-foreground">{p.name}</p>
-                            <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                              ${p.price}
-                            </p>
-                          </div>
-                        </div>
+                        SHOP COLLECTION <ArrowRight className="h-3 w-3" />
                       </Link>
-                    ))}
+                      <Link
+                        href="/shop"
+                        className="rounded-full border border-white/30 bg-transparent px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white transition hover:border-[#C9A86A] hover:text-[#C9A86A]"
+                      >
+                        WATCH ROUTINE
+                      </Link>
+                    </div>
+
+                    <div className="mt-6 flex items-center gap-3">
+                      <div className="flex gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-3.5 w-3.5 fill-[#C9A86A] text-[#C9A86A]" />
+                        ))}
+                      </div>
+                      <span className="text-xs text-white/60">
+                        Trusted by 25,000+ Happy Customers
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -459,19 +602,15 @@ export function Header() {
                   searchResults.map((p) => (
                     <Link
                       key={p.slug}
-                      to="/product/$slug"
-                      params={{ slug: p.slug }}
+                      href={`/product/${p.slug}`}
+
                       onClick={() => {
                         setSearchOpen(false);
                         setQuery("");
                       }}
                       className="flex items-center gap-4 rounded-sm px-3 py-3 transition-colors hover:bg-gold/10"
                     >
-                      <img
-                        src={p.image}
-                        alt=""
-                        className="h-14 w-14 object-cover"
-                      />
+                      <img src={p.image} alt="" className="h-14 w-14 object-cover" />
                       <div className="min-w-0 flex-1">
                         <p className="font-display text-lg">{p.name}</p>
                         <p className="truncate text-xs text-muted-foreground">{p.tagline}</p>
@@ -483,11 +622,7 @@ export function Header() {
               </div>
               <div className="flex items-center justify-between border-t border-border/50 px-5 py-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 <span>⌘K to search</span>
-                <Link
-                  to="/shop"
-                  onClick={() => setSearchOpen(false)}
-                  className="hover:text-gold"
-                >
+                <Link href="/shop" onClick={() => setSearchOpen(false)} className="hover:text-gold">
                   Shop all
                 </Link>
               </div>
@@ -518,7 +653,11 @@ export function Header() {
             />
 
             <div className="relative flex items-center justify-between px-5 py-4">
-              <Link to="/" onClick={closeOverlays} className="font-script text-3xl text-gold">
+              <Link
+                href="/"
+                onClick={closeOverlays}
+                className="font-script text-3xl text-gold no-underline"
+              >
                 Mimi Beauty.
               </Link>
               <button
@@ -541,14 +680,14 @@ export function Header() {
             >
               {nav.map((item) => (
                 <motion.div
-                  key={item.to}
+                  key={item.href}
                   variants={{
                     hidden: { opacity: 0, y: 36 },
                     visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
                   }}
                 >
                   <Link
-                    to={item.to}
+                    href={item.href}
                     onClick={closeOverlays}
                     className="block font-display text-4xl tracking-tight text-foreground/90 transition-colors hover:text-gold sm:text-5xl"
                   >
@@ -565,7 +704,7 @@ export function Header() {
                 className="mt-4"
               >
                 <Link
-                  to="/shop"
+                  href="/shop"
                   onClick={closeOverlays}
                   className="inline-flex items-center gap-2 rounded-full border border-gold bg-gold px-8 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-background"
                 >
@@ -609,7 +748,7 @@ export function Header() {
               </button>
               <ThemeToggle />
               <Link
-                to="/collections"
+                href="/coming-soon/body-lava-collection"
                 onClick={closeOverlays}
                 className="min-h-11 px-2 text-xs uppercase tracking-[0.3em] text-muted-foreground hover:text-gold inline-flex items-center"
               >
@@ -692,8 +831,7 @@ function WishlistPanel({
               className="flex items-center gap-3 border-b border-border/40 px-4 py-3"
             >
               <Link
-                to="/product/$slug"
-                params={{ slug: p.slug }}
+                href={`/product/${p.slug}`}
                 onClick={onClose}
                 className="flex min-w-0 flex-1 items-center gap-3"
               >
@@ -718,7 +856,7 @@ function WishlistPanel({
       {list.length > 0 && (
         <div className="border-t border-border/50 p-3">
           <Link
-            to="/shop"
+            href="/shop"
             onClick={onClose}
             className="flex w-full items-center justify-center gap-2 rounded-full border border-gold/40 py-2.5 text-xs uppercase tracking-[0.22em] transition-colors hover:border-gold hover:bg-gold/10"
           >

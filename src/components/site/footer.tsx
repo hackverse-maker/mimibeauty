@@ -1,30 +1,33 @@
+"use client";
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Instagram, Facebook, Youtube, Check } from "lucide-react";
+import Link from "next/link";
+import { Instagram, Facebook, Youtube } from "lucide-react";
 import type { SVGProps } from "react";
 
 const Tiktok = (props: SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
     <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
   </svg>
 );
 
 const shop = [
-  { label: "Shop All", to: "/shop" as const },
-  { label: "Collections", to: "/collections" as const },
-  { label: "Ingredients", to: "/ingredients" as const },
-  { label: "Skin Quiz", to: "/quiz" as const },
+  { label: "Shop All", href: "/shop" },
+  { label: "Collections", href: "/collections" },
+  { label: "Skin Quiz", href: "/quiz" },
 ];
 
 const house = [
-  { label: "About", to: "/about" as const },
-  { label: "Journal", to: "/blog" as const },
-  { label: "Contact", to: "/contact" as const },
-];
-
-const legal = [
-  { label: "Privacy", href: "#" },
-  { label: "Terms", href: "#" },
+  { label: "About", href: "/about" },
+  { label: "Journal", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function Footer() {
@@ -42,139 +45,228 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative overflow-hidden bg-[#050505] text-white">
-      {/* Hairline gold rule */}
-      <div
-        aria-hidden
-        className="h-px w-full bg-gradient-to-r from-transparent via-[#C9A86A]/50 to-transparent"
-      />
+    <footer className="relative w-full bg-[#08140E]">
+      {/* ── Masthead background ── */}
+      <div className="absolute inset-0 z-0 overflow-hidden bg-[#08140E]">
+        {/* Base image — bottle right, botanicals left */}
+        <img
+          src="/dew-serum-hero.jpg"
+          alt="MimiBeauty DEW serum"
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{
+            objectPosition: "center 85%",
+            filter: "brightness(0.85) saturate(1.1)",
+          }}
+        />
 
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        {/* Premium typographic masthead */}
-        <div className="border-b border-white/[0.08] py-16 md:py-24">
-          <p className="text-center text-xs uppercase tracking-[0.45em] text-[#C9A86A]">
-            MIMIbeauty · Est. 2026
-          </p>
-          <h2 className="mt-6 text-center font-display text-[clamp(3.5rem,14vw,11rem)] font-normal leading-[0.85] tracking-[-0.04em] text-white">
-            Mimi<span className="italic text-[#C9A86A]">Beauty</span>
-          </h2>
-          <p className="mx-auto mt-8 max-w-md text-center text-sm leading-relaxed text-white/45 md:text-[15px]">
+        {/* Top & bottom subtle vignette to blend edges */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(8,20,14,0.4) 0%, rgba(8,20,14,0.0) 25%, rgba(8,20,14,0.0) 75%, #08140E 100%)",
+          }}
+        />
+
+        {/* Left side subtle dark gradient for text legibility */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(8,20,14,0.8) 0%, rgba(8,20,14,0.4) 40%, rgba(8,20,14,0.0) 60%)",
+          }}
+        />
+
+        {/* Fallback solid */}
+        <div className="absolute inset-0 bg-[#08140E] -z-10" />
+      </div>
+
+      <div className="relative z-10 flex flex-col pt-4 md:pt-10">
+        {/* Top Masthead */}
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col items-start justify-start px-6 text-left md:px-10 pb-28 md:pb-40">
+          <Link href="/" className="no-underline">
+            <h2 className="text-[4rem] sm:text-[6rem] md:text-[8rem] leading-[0.85] tracking-tight text-[#F5F2EC]">
+              Mimi<span className="italic text-[#C9A86A]">Beauty</span>
+            </h2>
+          </Link>
+          <p className="mt-8 text-[16px] leading-relaxed text-[#F5F2EC] opacity-90">
             Ritualistic skincare. Botanical actives. Clinical quiet luxury.
           </p>
-          <div className="mt-10 flex justify-center">
-            <Link
-              to="/shop"
-              className="inline-flex items-center gap-3 border-b border-[#C9A86A]/50 pb-1 text-[11px] uppercase tracking-[0.28em] text-[#C9A86A] transition-colors hover:border-[#C9A86A] hover:text-white"
+
+          <div className="mt-14 flex flex-col items-start gap-5">
+            {/* Botanical Icon */}
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="text-[#C9A86A]"
             >
-              Begin the ritual
+              <path d="M12 2C12 2 12 7 15 9C15 9 12 9 12 14C12 9 9 9 9 9C12 7 12 2 12 2Z" />
+              <path
+                d="M12 14L12 22"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path d="M12 18C12 18 16 18 18 15C18 15 15 15 12 18Z" />
+              <path d="M12 16C12 16 8 16 6 13C6 13 9 13 12 16Z" />
+            </svg>
+
+            <Link
+              href="/shop"
+              className="text-[12px] uppercase tracking-[0.3em] text-[#C9A86A] transition-colors hover:text-white font-medium border-b border-[#C9A86A]/40 pb-1"
+            >
+              BEGIN THE RITUAL
             </Link>
           </div>
         </div>
 
-        {/* Link columns — type-led, minimal */}
-        <div className="grid gap-8 py-14 md:grid-cols-12 md:gap-8 md:py-20">
-          <div className="md:col-span-5">
-            <p className="font-script text-3xl text-[#C9A86A]">Mimi Beauty.</p>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/40">
-              Small-batch formulas for the considered. Never noise — only ritual.
-            </p>
-            <form
-              className="mt-8 flex max-w-sm border-b border-white/15 pb-2"
-              onSubmit={handleSubscribe}
-            >
-              <input
-                required
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={joined ? "Added to the list" : "Email for quiet news"}
-                disabled={joined}
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/30 disabled:text-gold"
-                aria-label="Email"
-              />
-              <button
-                type="submit"
-                disabled={joined}
-                className="shrink-0 text-xs uppercase tracking-[0.25em] text-[#C9A86A] transition-colors hover:text-white flex items-center gap-1.5"
-              >
-                {joined ? <><Check className="h-3 w-3 text-gold" /> Subscribed</> : "Join"}
-              </button>
-            </form>
-          </div>
-
-          <nav className="md:col-span-2" aria-label="Shop">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/35">Shop</p>
-            <ul className="mt-5 space-y-3">
-              {shop.map((l) => (
-                <li key={l.label}>
-                  <Link
-                    to={l.to}
-                    className="font-display text-xl tracking-tight text-white/70 transition-colors hover:text-[#C9A86A] md:text-2xl"
+        {/* Footer Navigation Section */}
+        <div className="border-t border-[#C9A86A]/20 bg-[#0A100C]/80 backdrop-blur-sm">
+          <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+            <div className="grid gap-12 py-16 md:grid-cols-12 md:gap-0">
+              {/* Newsletter Section */}
+              <div className="md:col-span-4 md:pr-12">
+                <Link href="/" className="no-underline">
+                  <p
+                    className="text-3xl text-[#C9A86A]"
+                    style={{ fontFamily: "var(--font-script, cursive)" }}
                   >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <nav className="md:col-span-2" aria-label="House">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/35">House</p>
-            <ul className="mt-5 space-y-3">
-              {house.map((l) => (
-                <li key={l.label}>
-                  <Link
-                    to={l.to}
-                    className="font-display text-xl tracking-tight text-white/70 transition-colors hover:text-[#C9A86A] md:text-2xl"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="md:col-span-3 md:text-right">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/35">Contact & Follow</p>
-            <p className="mt-4 text-sm font-light text-white/60">
-              Direct Care: <a href="tel:03274984584" className="hover:text-[#C9A86A] transition-colors">03274984584</a>
-            </p>
-            <div className="mt-5 flex gap-4 md:justify-end">
-              {[
-                { Icon: Instagram, label: "Instagram", href: "https://www.instagram.com/mimibeauty.pk?igsh=MTBmMHB3NGVyZ2Iydw==" },
-                { Icon: Facebook, label: "Facebook", href: "#" },
-                { Icon: Tiktok, label: "TikTok", href: "#" },
-                { Icon: Youtube, label: "YouTube", href: "#" },
-              ].map(({ Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  aria-label={label}
-                  className="grid h-11 w-11 place-items-center text-white/40 transition-colors hover:text-[#C9A86A]"
+                    Mimi Beauty.
+                  </p>
+                </Link>
+                <p className="mt-5 max-w-xs text-[13px] leading-relaxed text-[#D8D2C8] opacity-80">
+                  Small-batch formulas for the considered.
+                  <br />
+                  Never noise — only ritual.
+                </p>
+                <form
+                  className="mt-8 flex w-full max-w-sm overflow-hidden rounded-[4px] border border-[#C9A86A]/30 bg-transparent transition-colors focus-within:border-[#C9A86A]"
+                  onSubmit={handleSubscribe}
                 >
-                  <Icon className="h-4 w-4" strokeWidth={1.4} />
-                </a>
-              ))}
-            </div>
-            <p className="mt-10 text-[11px] leading-relaxed text-white/30 md:ml-auto md:max-w-[200px]">
-              Dermatologist tested · Vegan · Cruelty free
-            </p>
-          </div>
-        </div>
+                  <input
+                    required
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email for quiet news"
+                    disabled={joined}
+                    className="flex-1 bg-transparent px-4 py-3 text-xs text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A]"
+                    aria-label="Email"
+                  />
+                  <button
+                    type="submit"
+                    disabled={joined}
+                    className="bg-[#C9A86A] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
+                  >
+                    {joined ? "JOINED" : "JOIN"}
+                  </button>
+                </form>
+              </div>
 
-        {/* Colophon */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/[0.08] py-8 text-[11px] text-white/30 md:flex-row">
-          <p>© {new Date().getFullYear()} Mimi Beauty. All rights reserved.</p>
-          <div className="flex gap-6">
-            {legal.map((l) => (
-              <a key={l.label} href={l.href} className="transition-colors hover:text-[#C9A86A]">
-                {l.label}
-              </a>
-            ))}
+              {/* Vertical Divider 1 */}
+              <div className="hidden md:block md:col-span-1 border-l border-[#C9A86A]/20" />
+
+              {/* SHOP Section */}
+              <nav className="md:col-span-2 md:pl-6" aria-label="Shop">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A]">
+                  SHOP
+                </p>
+                <ul className="mt-6 space-y-4">
+                  {shop.map((l) => (
+                    <li key={l.label}>
+                      <Link
+                        href={l.href}
+                        className="text-[14px] text-[#F5F2EC] transition-colors hover:text-[#C9A86A]"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Vertical Divider 2 */}
+              <div className="hidden md:block md:col-span-1 border-l border-[#C9A86A]/20" />
+
+              {/* HOUSE Section */}
+              <nav className="md:col-span-1 md:pl-6" aria-label="House">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A]">
+                  HOUSE
+                </p>
+                <ul className="mt-6 space-y-4">
+                  {house.map((l) => (
+                    <li key={l.label}>
+                      <Link
+                        href={l.href}
+                        className="text-[14px] text-[#F5F2EC] transition-colors hover:text-[#C9A86A]"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Vertical Divider 3 */}
+              <div className="hidden md:block md:col-span-1 border-l border-[#C9A86A]/20" />
+
+              {/* CONTACT Section */}
+              <div className="md:col-span-2 md:pl-6">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A]">
+                  CONTACT & FOLLOW
+                </p>
+                <p className="mt-6 text-[13px] text-[#F5F2EC]">
+                  Direct Care:{" "}
+                  <a href="tel:03274984584" className="hover:text-[#C9A86A] transition-colors">
+                    03274984584
+                  </a>
+                </p>
+                <div className="mt-6 flex gap-4">
+                  {[
+                    {
+                      Icon: Instagram,
+                      label: "Instagram",
+                      href: "https://www.instagram.com/mimibeauty.pk",
+                    },
+                    { Icon: Facebook, label: "Facebook", href: "#" },
+                    { Icon: Tiktok, label: "TikTok", href: "#" },
+                    { Icon: Youtube, label: "YouTube", href: "#" },
+                  ].map(({ Icon, label, href }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-label={label}
+                      className="grid h-8 w-8 place-items-center text-[#C9A86A] transition-colors hover:text-white"
+                    >
+                      <Icon className="h-4 w-4" strokeWidth={1.5} />
+                    </a>
+                  ))}
+                </div>
+                <p className="mt-8 text-[12px] text-[#D8D2C8] opacity-80">
+                  Dermatologist tested · Vegan · Cruelty free
+                </p>
+              </div>
+            </div>
+
+            {/* Colophon */}
+            <div className="flex flex-col items-center justify-between gap-4 border-t border-[#C9A86A]/20 py-8 text-[11px] text-[#D8D2C8] opacity-70 md:flex-row">
+              <p>© {new Date().getFullYear()} Mimi Beauty. All rights reserved.</p>
+              <div className="flex gap-6">
+                <a href="#" className="transition-colors hover:text-[#C9A86A]">
+                  Privacy
+                </a>
+                <span>|</span>
+                <a href="#" className="transition-colors hover:text-[#C9A86A]">
+                  Terms
+                </a>
+              </div>
+              <p className="tracking-[0.2em] uppercase text-[#C9A86A]">DESIGNED WITH ELEGANCE</p>
+            </div>
           </div>
-          <p className="tracking-[0.2em] uppercase">Designed with elegance</p>
         </div>
       </div>
     </footer>

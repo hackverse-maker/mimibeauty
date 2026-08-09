@@ -35,9 +35,10 @@
   --color-gold-soft: var(--gold-soft);
   --color-forest: var(--forest);
 
-  --font-display: "Playfair Display", ui-serif, Georgia, serif;
-  --font-script: "Dancing Script", "Playfair Display", cursive;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel", ui-serif, Georgia, serif;
+  --font-cormorant: "Cinzel", ui-serif, Georgia, serif;
+  --font-script: "Cinzel", ui-serif, Georgia, serif;
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
   --shadow-luxe: 0 30px 80px -30px color-mix(in oklab, var(--gold) 35%, transparent);
   --shadow-soft: 0 20px 60px -25px oklch(0 0 0 / 0.25);
@@ -46,54 +47,53 @@
 :root {
   --radius: 0.75rem;
 
-  /* Light — warm ivory + gold */
-  --background: oklch(0.985 0.008 60);         /* #FFF9F7 */
-  --foreground: oklch(0.18 0.005 60);          /* #1C1C1C */
-  --card: oklch(0.975 0.012 60);
-  --card-foreground: oklch(0.18 0.005 60);
-  --popover: oklch(0.985 0.008 60);
-  --popover-foreground: oklch(0.18 0.005 60);
-  --primary: oklch(0.18 0.005 60);
-  --primary-foreground: oklch(0.985 0.008 60);
-  --secondary: oklch(0.945 0.018 55);          /* #F6EEE9 */
-  --secondary-foreground: oklch(0.18 0.005 60);
-  --muted: oklch(0.945 0.015 55);
-  --muted-foreground: oklch(0.45 0.02 55);
-  --accent: oklch(0.74 0.09 78);               /* gold #C9A96E */
-  --accent-foreground: oklch(0.18 0.005 60);
-  --gold: oklch(0.74 0.09 78);
-  --gold-soft: oklch(0.86 0.06 78);
-  --forest: oklch(0.28 0.06 145);
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.9 0.015 60);
-  --input: oklch(0.9 0.015 60);
-  --ring: oklch(0.74 0.09 78);
+  --background: #08140E;
+  --foreground: #F6F2EB;
+  --card: #0D1C14;
+  --card-foreground: #F6F2EB;
+  --popover: #08140E;
+  --popover-foreground: #F6F2EB;
+  --primary: #CFA76A;
+  --primary-foreground: #08140E;
+  --secondary: #0D1C14;
+  --secondary-foreground: #F6F2EB;
+  --muted: #0D1C14;
+  --muted-foreground: rgba(246, 242, 235, 0.65);
+  --accent: #CFA76A;
+  --accent-foreground: #08140E;
+  --gold: #CFA76A;
+  --gold-soft: #D8B67B;
+  --forest: #0D1C14;
+  --destructive: #5f1515;
+  --destructive-foreground: #F6F2EB;
+  --border: rgba(207, 167, 106, 0.18);
+  --input: rgba(207, 167, 106, 0.18);
+  --ring: #CFA76A;
 }
 
 .dark {
-  --background: #000000;                        /* Deep Dark Black */
-  --foreground: oklch(0.965 0 0);               /* #F5F5F5 */
-  --card: #000000;                              /* Keep card black to match background */
-  --card-foreground: oklch(0.965 0 0);
-  --popover: #0c162c;                           /* Deep Midnight Blue */
-  --popover-foreground: oklch(0.965 0 0);
-  --primary: oklch(0.965 0 0);
-  --primary-foreground: #000000;
-  --secondary: #0c162c;                         /* Deep Midnight Blue */
-  --secondary-foreground: oklch(0.965 0 0);
-  --muted: #1c1c1c;                             /* Clean dark gray */
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: #111111;                            /* Deep Dark Gray */
-  --accent-foreground: oklch(0.965 0 0);
-  --gold: oklch(0.8 0.09 82);
-  --gold-soft: oklch(0.7 0.08 82);
-  --forest: #1c1c1c;
-  --destructive: #2D070B;
-  --destructive-foreground: oklch(0.965 0 0);
-  --border: oklch(1 0 0 / 0.1);
-  --input: oklch(1 0 0 / 0.14);
-  --ring: oklch(0.8 0.09 82);
+  --background: #08140E;
+  --foreground: #F6F2EB;
+  --card: #0D1C14;
+  --card-foreground: #F6F2EB;
+  --popover: #08140E;
+  --popover-foreground: #F6F2EB;
+  --primary: #CFA76A;
+  --primary-foreground: #08140E;
+  --secondary: #0D1C14;
+  --secondary-foreground: #F6F2EB;
+  --muted: #0D1C14;
+  --muted-foreground: rgba(246, 242, 235, 0.65);
+  --accent: #CFA76A;
+  --accent-foreground: #08140E;
+  --gold: #CFA76A;
+  --gold-soft: #D8B67B;
+  --forest: #0D1C14;
+  --destructive: #5f1515;
+  --destructive-foreground: #F6F2EB;
+  --border: rgba(207, 167, 106, 0.18);
+  --input: rgba(207, 167, 106, 0.18);
+  --ring: #CFA76A;
 }
 
 @layer base {
@@ -128,6 +128,15 @@
     letter-spacing: -0.02em;
   }
   ::selection { background: var(--gold); color: var(--background); }
+  
+  /* Remove unwanted link artifacts */
+  a {
+    text-decoration: none;
+    position: relative;
+  }
+  a:hover {
+    text-decoration: none;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

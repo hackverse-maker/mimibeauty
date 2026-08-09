@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Product } from "./products";
 
@@ -52,7 +53,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLines((p) =>
           p.map((l) => (l.product.slug === slug ? { ...l, qty: Math.max(1, qty) } : l)),
         ),
-      clear: () => setLines([]),
+      clear: () => setLines((prev) => (prev.length === 0 ? prev : [])),
       count: lines.reduce((n, l) => n + l.qty, 0),
       subtotal: lines.reduce((n, l) => n + l.qty * l.product.price, 0),
       open,

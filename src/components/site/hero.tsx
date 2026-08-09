@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+import Link from "next/link";
 import {
   motion,
   useMotionTemplate,
@@ -7,7 +8,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { ArrowRight, Check, Star } from "lucide-react";
+import { ArrowRight, Star, Leaf, Rabbit } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -18,13 +19,13 @@ import {
   type RefObject,
 } from "react";
 
-const GOLD = "#D4AF37";
+const GOLD = "#CFA76A";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const features = [
-  "Dermatologist Tested",
-  "Natural Ingredients",
-  "Cruelty Free",
+  { title: "Dermatologist", subtitle: "Tested", icon: Leaf },
+  { title: "Naturally Derived", subtitle: "Ingredients", icon: Leaf },
+  { title: "Cruelty Free", subtitle: "Always", icon: Rabbit },
 ] as const;
 
 const FILM = [
@@ -64,11 +65,11 @@ function useMagnetic() {
 }
 
 function MagneticLink({
-  to,
+  href,
   className,
   children,
 }: {
-  to: "/shop";
+  href: string;
   className?: string;
   children: ReactNode;
 }) {
@@ -77,7 +78,7 @@ function MagneticLink({
     <motion.div style={{ x: springX, y: springY }} className="inline-flex w-full sm:w-auto">
       <Link
         ref={ref as RefObject<HTMLAnchorElement>}
-        to={to}
+        href={href}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         className={className}
@@ -116,7 +117,12 @@ function MagneticAction({
 
 /** CSS particles — no Framer Motion per-dot RAF cost */
 function Particles() {
-  return <div className="hero-particles pointer-events-none absolute inset-0 overflow-hidden" aria-hidden />;
+  return (
+    <div
+      className="hero-particles pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden
+    />
+  );
 }
 
 function HeroVideo({
@@ -138,10 +144,9 @@ function HeroVideo({
   useEffect(() => {
     const el = rootRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(
-      ([entry]) => setActive(entry.isIntersecting),
-      { threshold: 0.15 },
-    );
+    const io = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting), {
+      threshold: 0.15,
+    });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -171,8 +176,8 @@ function HeroVideo({
           }}
         />
 
-        <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-1.5 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.85)] transition-[border-color] duration-500 group-hover:border-[#D4AF37]/55">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[26px] bg-[#0a0a0a]">
+        <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-1.5 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.85)] transition-[border-color] duration-500 group-hover:border-gold/55">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[26px] bg-background">
             {FILM.map((f, i) => (
               <img
                 key={f.src}
@@ -190,12 +195,12 @@ function HeroVideo({
               />
             ))}
 
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/25" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-background/25" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#D4AF37]/12 via-transparent to-transparent" />
 
             <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
               <div>
-                <p className="text-[9px] uppercase tracking-[0.35em] text-[#D4AF37]/90">
+                <p className="text-[9px] uppercase tracking-[0.35em] text-gold/90">
                   The Ritual · Film
                 </p>
                 <p className="mt-1 font-display text-lg text-white/90">{FILM[scene].caption}</p>
@@ -207,7 +212,7 @@ function HeroVideo({
                     type="button"
                     aria-label={`Scene ${i + 1}`}
                     onClick={() => setScene(i)}
-                    className={`h-1 rounded-full transition-all duration-500 ${i === scene ? "w-6 bg-[#D4AF37]" : "w-1.5 bg-white/40"}`}
+                    className={`h-1 rounded-full transition-all duration-500 ${i === scene ? "w-6 bg-gold" : "w-1.5 bg-white/40"}`}
                   />
                 ))}
               </div>
@@ -273,15 +278,15 @@ export function Hero() {
   };
 
   const btnPrimary =
-    "inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#D4AF37] px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.18em] text-[#050505] transition-[filter] duration-300 hover:brightness-110 sm:w-auto";
+    "inline-flex w-full items-center justify-center gap-3 rounded-full bg-gold px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#050505] transition-[filter] duration-300 hover:brightness-110 sm:w-auto";
   const btnSecondary =
-    "inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-white/20 bg-white/[0.04] px-8 py-3.5 text-[12px] font-medium uppercase tracking-[0.18em] text-white/90 transition-colors duration-300 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] sm:w-auto";
+    "inline-flex w-full items-center justify-center gap-3 rounded-full border border-gold/40 bg-transparent px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:border-gold hover:text-gold sm:w-auto";
 
   return (
     <section
       ref={sectionRef}
       onMouseMove={onMove}
-      className="relative isolate min-h-[100svh] overflow-hidden bg-[#050505] text-white"
+      className="relative isolate min-h-[100svh] overflow-hidden bg-background text-white"
     >
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <motion.div className="absolute inset-0" style={{ background: glowBackground }} />
@@ -302,77 +307,79 @@ export function Hero() {
           <HeroVideo parallaxX={parallaxX} parallaxY={parallaxY} />
         </div>
 
-        <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-left">
+        <div className="order-2 flex flex-col items-start text-left lg:order-1">
           <motion.span
             {...fadeUp(0.05)}
-            className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-4 py-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-[#D4AF37]"
+            className="inline-flex items-center rounded-full border border-gold/40 bg-transparent px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold"
           >
-            <span className="h-1 w-1 rounded-full bg-[#D4AF37]" />
-            Luxury Skincare Collection
+            NATURE LED • RESULTS DRIVEN
           </motion.span>
 
           <motion.h1
             {...fadeUp(0.12)}
-            className="mt-7 max-w-[14ch] font-display text-[clamp(2.75rem,7.5vw,5.75rem)] font-normal leading-[1.05] tracking-[-0.02em] text-balance text-white"
+            className="mt-6 font-display text-[clamp(2.75rem,6vw,4.5rem)] font-normal leading-[1.1] tracking-normal text-white"
           >
-            Reveal Your <em className="italic text-[#D4AF37]">Natural Glow</em>
+            Real Ingredients.
+            <br />
+            Real Results.
+            <br />
+            <em className="italic text-gold">Naturally You.</em>
           </motion.h1>
+
+          <motion.div {...fadeUp(0.18)} className="mt-8 flex items-center gap-3">
+            <div className="h-px w-12 bg-gold/70" />
+            <Leaf className="h-4 w-4 text-gold/70" />
+          </motion.div>
 
           <motion.p
             {...fadeUp(0.22)}
-            className="mt-6 max-w-md text-[15px] leading-relaxed text-white/55 md:text-base lg:max-w-lg"
+            className="mt-6 max-w-md font-display text-[15px] leading-relaxed text-white/80 md:text-[17px] lg:max-w-lg"
           >
-            Discover scientifically formulated skincare that hydrates, nourishes and restores
-            radiant skin with every application.
+            Scientifically formulated skincare that hydrates deeply, nourishes intensely, and brings
+            out your natural glow with every use.
           </motion.p>
 
           <motion.div
             {...fadeUp(0.32)}
-            className="mt-9 flex w-full max-w-md flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center lg:justify-start"
+            className="mt-9 flex w-full max-w-md flex-col items-stretch gap-4 sm:max-w-none sm:flex-row sm:items-center sm:justify-start lg:justify-start"
           >
-            <MagneticLink to="/shop" className={btnPrimary}>
-              Shop Collection
+            <MagneticLink href="/shop" className={btnPrimary}>
+              SHOP COLLECTION
               <ArrowRight className="h-4 w-4" />
             </MagneticLink>
             <MagneticAction onClick={scrollToRituals} className={btnSecondary}>
-              Watch Routine
+              EXPLORE PRODUCTS
             </MagneticAction>
           </motion.div>
 
-          <motion.div
-            {...fadeUp(0.4)}
-            className="mt-8 flex flex-col items-center gap-2 sm:flex-row sm:gap-3"
-          >
-            <div className="flex items-center gap-0.5" aria-label="5 star rating">
+          <motion.div {...fadeUp(0.4)} className="mt-10 flex items-center gap-3">
+            <div className="flex items-center gap-1" aria-label="5 star rating">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-3.5 w-3.5 fill-[#D4AF37] text-[#D4AF37]"
-                  strokeWidth={0}
-                />
+                <Star key={i} className="h-3.5 w-3.5 fill-[#D4AF37] text-gold" strokeWidth={0} />
               ))}
             </div>
-            <p className="text-[12px] tracking-wide text-white/45">
-              Trusted by <span className="text-white/75">25,000+</span> Happy Customers
+            <p className="text-[12px] tracking-wide text-white/80">
+              Trusted by 25,000+ Happy Customers
             </p>
           </motion.div>
 
           <motion.ul
             {...fadeUp(0.48)}
-            className="mt-10 grid w-full max-w-lg grid-cols-1 gap-2.5 sm:grid-cols-3 lg:max-w-none"
+            className="mt-10 grid w-full max-w-lg grid-cols-1 gap-6 sm:grid-cols-3 lg:max-w-[600px]"
           >
-            {features.map((label) => (
+            {features.map((feature, i) => (
               <li
-                key={label}
-                className="flex items-center justify-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-3.5 text-[11px] tracking-wide text-white/70 sm:flex-col sm:gap-2 sm:text-center"
+                key={i}
+                className={`flex items-center gap-3 ${i !== 0 ? "sm:border-l sm:border-white/10 sm:pl-6" : ""}`}
               >
-                <span
-                  className="grid h-6 w-6 shrink-0 place-items-center rounded-full"
-                  style={{ background: `${GOLD}22`, color: GOLD }}
-                >
-                  <Check className="h-3 w-3" strokeWidth={2.5} />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold">
+                  <feature.icon className="h-4 w-4" strokeWidth={1.5} />
                 </span>
-                <span>{label}</span>
+                <span className="text-[11px] leading-snug tracking-wider text-white/80">
+                  {feature.title}
+                  <br />
+                  {feature.subtitle}
+                </span>
               </li>
             ))}
           </motion.ul>

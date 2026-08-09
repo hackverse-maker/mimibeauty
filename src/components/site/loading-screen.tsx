@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { assets } from "@/lib/products";
@@ -30,9 +31,16 @@ export function LoadingScreen() {
           >
             <img src={assets.logo} className="h-16 w-16 rounded-full object-cover" alt="" />
             <div className="h-px w-24 overflow-hidden bg-border">
-              <motion.div className="h-full w-full bg-gold" initial={{ x: "-100%" }} animate={{ x: "100%" }} transition={{ duration: 1.1, ease: "easeInOut" }} />
+              <motion.div
+                className="h-full w-full bg-gold"
+                initial={{ x: "-100%" }}
+                animate={{ x: "100%" }}
+                transition={{ duration: 1.1, ease: "easeInOut" }}
+              />
             </div>
-            <p className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground">MIMIbeauty</p>
+            <p className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground">
+              MIMIbeauty
+            </p>
           </motion.div>
         </motion.div>
       )}

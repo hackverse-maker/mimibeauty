@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext, useEffect, useMemo, useState, useCallback, type ReactNode } from "react";
 
 type WishlistCtx = {
