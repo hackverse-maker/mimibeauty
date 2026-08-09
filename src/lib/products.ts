@@ -36,6 +36,7 @@ export type Product = {
   directions: string;
   skinType: string[];
   description: string;
+  gallery: string[];
 };
 
 export const products: Product[] = [
@@ -50,6 +51,7 @@ export const products: Product[] = [
     size: "30ml",
     image: assets.dew,
     hoverImage: assets.water,
+    gallery: [assets.dew, assets.water, assets.lineup, assets.stone],
     rating: 4.9,
     reviews: 428,
     benefits: ["Hydrate", "Repair", "Glow"],
@@ -70,6 +72,7 @@ export const products: Product[] = [
     size: "30ml",
     image: assets.veil,
     hoverImage: assets.lineup,
+    gallery: [assets.veil, assets.lineup, assets.water, assets.stone],
     rating: 4.8,
     reviews: 312,
     benefits: ["Smooth", "Protect", "Shine"],
@@ -90,6 +93,7 @@ export const products: Product[] = [
     size: "50ml",
     image: assets.herbe,
     hoverImage: assets.stone,
+    gallery: [assets.herbe, assets.stone, assets.water, assets.lineup],
     rating: 4.9,
     reviews: 271,
     benefits: ["Nourish", "Strengthen", "Balance"],
@@ -110,6 +114,7 @@ export const products: Product[] = [
     size: "100ml",
     image: assets.halo,
     hoverImage: assets.water,
+    gallery: [assets.halo, assets.water, assets.lineup, assets.stone],
     rating: 5.0,
     reviews: 542,
     benefits: ["Radiance", "Hydrate", "Replenish"],
@@ -118,6 +123,33 @@ export const products: Product[] = [
     skinType: ["All"],
     description:
       "A luminous, fast-absorbing body oil layered with rose absolute for a soft-focus satin finish that lingers.",
+  },
+];
+
+export const ingredientsShowcase = [
+  {
+    name: "Niacinamide",
+    note: "Evens tone, refines pores, and supports a stronger skin barrier.",
+  },
+  {
+    name: "Vitamin C",
+    note: "Brightens dullness, protects against oxidative stress, and supports radiance.",
+  },
+  {
+    name: "Retinol",
+    note: "Encourages cell renewal, improves texture, and supports smoother skin.",
+  },
+  {
+    name: "Jojoba Oil",
+    note: "Balances oil production, hydrates deeply, and supports a healthy barrier.",
+  },
+  {
+    name: "Rosehip Oil",
+    note: "Nourishes dry skin, softens texture, and restores a healthy-looking glow.",
+  },
+  {
+    name: "Hyaluronic Acid",
+    note: "Draws in lasting hydration for a plumper, softer, more supple finish.",
   },
 ];
 
