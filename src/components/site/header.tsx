@@ -172,13 +172,9 @@ export function Header() {
           <Link
             href="/"
             onClick={closeOverlays}
-            className="z-10 flex items-center justify-self-start no-underline"
+            className="z-10 justify-self-start font-script text-[clamp(1.4rem,4.2vw,2.15rem)] leading-none tracking-tight text-gold no-underline"
           >
-            <img
-              src="/references/mimi-logo.png"
-              alt="Mimi Beauty"
-              className="h-12 w-44 object-cover object-center mix-blend-screen md:h-14 md:w-52"
-            />
+            Mimi Beauty.
           </Link>
 
           {/* Desktop nav — center */}
