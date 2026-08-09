@@ -26,37 +26,37 @@ const newIngredients = [
     name: "Niacinamide",
     note: "Evens tone, refines pores,\nand supports a stronger\nskin barrier.",
     category: "BRIGHTENING",
-    image: "/images/ingredients/niacinamide.jpg",
+    image: "/references/ingredient-cards.png",
   },
   {
     name: "Vitamin C",
     note: "Brightens dullness, protects\nagainst oxidative stress,\nand supports radiance.",
     category: "ANTIOXIDANT",
-    image: "/images/ingredients/vitaminc.jpg",
+    image: "/references/ingredient-cards.png",
   },
   {
     name: "Retinol",
     note: "Encourages cell renewal,\nimproves texture, and\nsupports smoother skin.",
     category: "RENEWAL",
-    image: "/images/ingredients/retinol.jpg",
+    image: "/references/ingredient-cards.png",
   },
   {
     name: "Jojoba Oil",
     note: "Balances oil production,\nhydrates deeply, and\nsupports a healthy barrier.",
     category: "BALANCING",
-    image: "/images/ingredients/jojoba.jpg",
+    image: "/references/ingredient-cards.png",
   },
   {
     name: "Rosehip Oil",
     note: "Rich in essential fatty acids\nand antioxidants for\nnourished, healthy skin.",
     category: "NOURISHING",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&q=80",
+    image: "/references/ingredient-cards.png",
   },
   {
     name: "Cyperus Rotundus",
     note: "Soothes irritation,\nsupports even skin tone,\nand promotes comfort.",
     category: "SOOTHING",
-    image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80",
+    image: "/references/ingredient-cards.png",
   },
 ];
 
@@ -108,6 +108,7 @@ function IngredientCard({ item, index }: { item: (typeof newIngredients)[0]; ind
 export function IngredientsSection() {
   return (
     <section className="relative overflow-hidden bg-[#0A100C] py-24 md:py-32">
+      <img src="/references/molecular-poetry.png" alt="" aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[22rem] w-full object-cover object-center opacity-20 mix-blend-screen" />
       <div className="relative z-10 mx-auto max-w-[1400px] px-6">
         <div className="mx-auto max-w-4xl text-center">
           <motion.p
