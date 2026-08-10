@@ -1,76 +1,593 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, Clock3, Mail, MapPin, Phone, Sprout } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
-const topics = ["General Inquiry", "Product Question", "Order Support", "Skin Consultation", "Wholesale", "Collaboration", "Other"];
-const details = [
-  { icon: MapPin, label: "Our studio", value: "12 rue de Sévigné, Paris 75004, France" },
-  { icon: Mail, label: "Email us", value: "concierge@mimibeauty.com", href: "mailto:concierge@mimibeauty.com" },
-  { icon: Phone, label: "Direct care line", value: "03274984584", href: "tel:03274984584" },
-  { icon: Clock3, label: "Hours", value: "Monday – Friday\n10:00 AM – 6:00 PM (PKT)" },
+import { Variants } from "framer-motion";
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 36 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.72, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const TOPICS = [
+  "Product Recommendations",
+  "Order & Shipping Inquiry",
+  "Wholesale & Partnerships",
+  "Press & Media",
+  "General Inquiry",
+  "Other",
 ];
-type FormState = { firstName: string; lastName: string; email: string; topic: string; message: string };
-type Errors = Partial<Record<keyof FormState, string>>;
-const initialForm: FormState = { firstName: "", lastName: "", email: "", topic: "", message: "" };
-function validate(form: FormState): Errors {
-  const errors: Errors = {};
-  if (!form.firstName.trim()) errors.firstName = "Please add your first name.";
-  if (!form.lastName.trim()) errors.lastName = "Please add your last name.";
-  if (!/^\S+@\S+\.\S+$/.test(form.email)) errors.email = "Please enter a valid email.";
-  if (!form.topic) errors.topic = "Please choose a topic.";
-  if (form.message.trim().length < 10) errors.message = "Please share a little more with us.";
-  return errors;
-}
+
+const CONTACT_ITEMS = [
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    ),
+    label: "Our Studio",
+    value: "12 Rue de Sévigné\nParis 75004, France",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+        <polyline points="22,6 12,13 2,6" />
+      </svg>
+    ),
+    label: "Concierge Email",
+    value: "concierge@mimibeauty.com",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l1.27-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+      </svg>
+    ),
+    label: "Direct Care Line",
+    value: "+33 1 45 67 89 00",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+    ),
+    label: "Working Hours",
+    value: "Mon – Fri  ·  9:00 – 18:00 CET\nSaturday  ·  10:00 – 15:00 CET",
+  },
+];
 
 export default function ContactPage() {
-  const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState<Errors>({});
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    topic: "",
+    message: "",
+  });
   const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const update = (key: keyof FormState, value: string) => {
-    setForm((current) => ({ ...current, [key]: value }));
-    setErrors((current) => ({ ...current, [key]: undefined }));
-    setSent(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSent(true);
+    setTimeout(() => setSent(false), 4500);
   };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const nextErrors = validate(form);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) return;
-    setSubmitting(true);
-    window.setTimeout(() => { setSubmitting(false); setSent(true); setForm(initialForm); }, 700);
-  };
+
   return (
-    <main className="relative isolate overflow-hidden bg-[#08140E]">
-      <section className="relative min-h-[calc(100vh-4.75rem)]">
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-16 sm:px-8 md:px-12 md:pb-32 md:pt-24 lg:px-16">
-          <div className="rounded-[2rem] bg-[#0D1C14] p-8 sm:p-12 md:p-16 lg:p-20">
-            <div className="grid gap-12 md:grid-cols-[0.45fr_0.55fr] md:gap-16 lg:gap-24">
-          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="flex flex-col justify-center">
-            <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.36em] text-gold">We&apos;re here for you</p>
-            <h1 className="max-w-xl text-balance text-[clamp(3.25rem,7vw,6.7rem)] leading-[0.94] text-foreground">Let&apos;s care<br />for your skin,<br /><em className="text-gold">together.</em></h1>
-            <div className="my-8 h-px w-28 bg-gold/60" />
-            <p className="max-w-md text-pretty font-serif text-lg leading-relaxed text-foreground/80">Have a question, need guidance, or want to collaborate? Our team is here to help you with anything you need.</p>
-            <div className="mt-10 flex flex-col gap-5">{details.map(({ icon: Icon, label, value, href }) => <div key={label} className="flex items-start gap-4"><span className="grid size-11 shrink-0 place-items-center rounded-full border border-gold/20 bg-forest/80 text-gold"><Icon size={18} strokeWidth={1.3} /></span><div className="pt-0.5"><p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-gold">{label}</p>{href ? <a href={href} className="mt-1 block whitespace-pre-line text-sm leading-relaxed text-foreground/80 transition-colors hover:text-gold">{value}</a> : <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-foreground/80">{value}</p>}</div></div>)}</div>
-            <p className="mt-9 flex items-center gap-3 font-serif text-base text-gold/90"><Sprout size={20} strokeWidth={1.2} /> We typically respond within 24 hours.</p>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.12 }} className="rounded-[1.5rem] border border-gold/20 bg-[#0D1C14]/90 p-6 shadow-2xl backdrop-blur-md sm:p-9 lg:p-11">
-            <div className="mb-8 flex items-center gap-3"><Sprout className="text-gold" size={26} strokeWidth={1.2} /><h2 className="text-3xl text-foreground sm:text-4xl">Send us a message</h2></div>
-            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
-              <div className="grid gap-6 sm:grid-cols-2">{(["firstName", "lastName"] as const).map((key) => <label key={key} className="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/85">{key === "firstName" ? "First name" : "Last name"}<input value={form[key]} onChange={(e) => update(key, e.target.value)} placeholder={key === "firstName" ? "Your first name" : "Your last name"} aria-invalid={Boolean(errors[key])} className="h-14 rounded-xl border border-foreground/15 bg-transparent px-5 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-foreground/35 focus:border-gold" />{errors[key] && <span className="text-[10px] font-normal normal-case tracking-normal text-red-300">{errors[key]}</span>}</label>)}</div>
-              <label className="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/85">Email address<input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="Your email address" aria-invalid={Boolean(errors.email)} className="h-14 rounded-xl border border-foreground/15 bg-transparent px-5 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-foreground/35 focus:border-gold" />{errors.email && <span className="text-[10px] font-normal normal-case tracking-normal text-red-300">{errors.email}</span>}</label>
-              <label className="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/85">Topic / subject<select value={form.topic} onChange={(e) => update("topic", e.target.value)} aria-invalid={Boolean(errors.topic)} className="h-14 rounded-xl border border-foreground/15 bg-card px-5 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors focus:border-gold"><option value="">Choose a topic</option>{topics.map((topic) => <option key={topic} value={topic}>{topic}</option>)}</select>{errors.topic && <span className="text-[10px] font-normal normal-case tracking-normal text-red-300">{errors.topic}</span>}</label>
-              <label className="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/85">Message<textarea value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="Write your message here..." aria-invalid={Boolean(errors.message)} className="min-h-40 resize-y rounded-xl border border-foreground/15 bg-transparent px-5 py-4 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-foreground/35 focus:border-gold" />{errors.message && <span className="text-[10px] font-normal normal-case tracking-normal text-red-300">{errors.message}</span>}</label>
-              <button type="submit" disabled={submitting} className="mt-1 flex h-14 items-center justify-center gap-3 rounded-xl bg-[#E8D7BE] px-6 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#08140E] transition-all hover:bg-[#F5F2EC] hover:translate-x-1 disabled:cursor-wait disabled:opacity-70">{submitting ? "SENDING..." : "SEND MESSAGE"}<ArrowRight size={17} /></button>
-              <AnimatePresence mode="wait">{sent && <motion.p initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} role="status" className="flex items-center justify-center gap-2 text-center text-sm text-gold"><Check size={16} /> Thank you for reaching out. We&apos;ll be in touch shortly.</motion.p>}</AnimatePresence>
-            </form>
-          </motion.div>
-            </div>
+    <>
+      {/* ─── Google Fonts ─── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+        .contact-font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+        .contact-font-sans  { font-family: 'Inter', system-ui, sans-serif; }
+
+        .contact-input {
+          background: rgba(255,255,255,0.035);
+          border: 1px solid rgba(229,212,192,0.14);
+          border-radius: 10px;
+          color: #EDE5D8;
+          font-family: 'Inter', system-ui, sans-serif;
+          font-size: 14px;
+          padding: 14px 16px;
+          width: 100%;
+          outline: none;
+          transition: border-color 0.25s, background 0.25s;
+          appearance: none;
+          -webkit-appearance: none;
+        }
+        .contact-input::placeholder { color: rgba(229,212,192,0.28); }
+        .contact-input:focus {
+          border-color: rgba(229,212,192,0.45);
+          background: rgba(255,255,255,0.055);
+        }
+        .contact-input option { background: #182F24; color: #EDE5D8; }
+
+        .contact-textarea {
+          resize: none;
+          min-height: 130px;
+        }
+
+        /* Custom select arrow */
+        .contact-select-wrap { position: relative; }
+        .contact-select-arrow {
+          pointer-events: none;
+          position: absolute;
+          right: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(229,212,192,0.45);
+        }
+
+        /* Leaf glow orbs */
+        .glow-orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          pointer-events: none;
+        }
+
+        /* Scrollbar */
+        .contact-scroll::-webkit-scrollbar { width: 4px; }
+        .contact-scroll::-webkit-scrollbar-track { background: transparent; }
+        .contact-scroll::-webkit-scrollbar-thumb { background: rgba(229,212,192,0.2); border-radius: 4px; }
+      `}</style>
+
+      <main
+        className="contact-font-sans"
+        style={{
+          minHeight: "100vh",
+          background: "#0F1F17",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* ─── Background image + overlay ─── */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+          }}
+        >
+          <img
+            src="/contact_organic_bg.jpg"
+            alt=""
+            aria-hidden
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              filter: "saturate(0.7) brightness(0.5)",
+            }}
+          />
+          {/* dark overlay */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(135deg, rgba(10,22,15,0.90) 0%, rgba(15,31,23,0.82) 50%, rgba(12,25,18,0.92) 100%)",
+            }}
+          />
+          {/* vignette */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(ellipse at center, transparent 40%, rgba(6,14,10,0.65) 100%)",
+            }}
+          />
+        </div>
+
+        {/* ─── Ambient glow orbs ─── */}
+        <div className="glow-orb" style={{ width: 480, height: 480, top: -120, left: -140, background: "rgba(38,85,55,0.22)" }} />
+        <div className="glow-orb" style={{ width: 320, height: 320, bottom: 40, right: -80, background: "rgba(229,212,192,0.06)" }} />
+        <div className="glow-orb" style={{ width: 220, height: 220, top: "40%", right: "30%", background: "rgba(28,68,42,0.18)" }} />
+
+        {/* ─── Content ─── */}
+        <div
+          ref={ref}
+          style={{
+            position: "relative",
+            zIndex: 10,
+            maxWidth: 1360,
+            margin: "0 auto",
+            padding: "clamp(80px, 10vw, 110px) clamp(24px, 5vw, 72px) clamp(80px, 10vw, 110px)",
+          }}
+        >
+          {/* ─── Two-column grid ─── */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "minmax(0,42%) minmax(0,58%)",
+              gap: "clamp(40px,5vw,80px)",
+              alignItems: "start",
+            }}
+            className="contact-grid"
+          >
+            {/* ══════════ LEFT COLUMN ══════════ */}
+            <motion.div
+              variants={fadeUp}
+              custom={0}
+              initial="hidden"
+              animate={inView ? "show" : "hidden"}
+              style={{ display: "flex", flexDirection: "column", gap: 32 }}
+            >
+              {/* Top label */}
+              <motion.p
+                variants={fadeUp}
+                custom={0}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.28em",
+                  textTransform: "uppercase",
+                  color: "rgba(229,212,192,0.55)",
+                  fontWeight: 500,
+                }}
+              >
+                WE'RE HERE FOR YOU
+              </motion.p>
+
+              {/* Main heading */}
+              <motion.h1
+                variants={fadeUp}
+                custom={1}
+                className="contact-font-serif"
+                style={{
+                  fontSize: "clamp(38px, 4.5vw, 60px)",
+                  fontWeight: 300,
+                  lineHeight: 1.1,
+                  color: "#EDE5D8",
+                  letterSpacing: "-0.01em",
+                  marginTop: -8,
+                }}
+              >
+                Let's care for{" "}
+                <em style={{ color: "#E5D4C0", fontStyle: "italic" }}>
+                  your skin,
+                </em>
+                <br />
+                <em style={{ color: "#C9A86A", fontStyle: "italic" }}>together.</em>
+              </motion.h1>
+
+              {/* Paragraph */}
+              <motion.p
+                variants={fadeUp}
+                custom={2}
+                style={{
+                  fontSize: 15,
+                  lineHeight: 1.78,
+                  color: "rgba(220,210,195,0.68)",
+                  fontWeight: 300,
+                  maxWidth: 380,
+                }}
+              >
+                Have a question, need guidance, or want to collaborate? Our concierge team is here to help you with anything you need — from product rituals to bespoke recommendations.
+              </motion.p>
+
+              {/* Contact detail list */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 22, marginTop: 4 }}>
+                {CONTACT_ITEMS.map((item, i) => (
+                  <motion.div
+                    key={item.label}
+                    variants={fadeUp}
+                    custom={3 + i}
+                    initial="hidden"
+                    animate={inView ? "show" : "hidden"}
+                    style={{ display: "flex", alignItems: "flex-start", gap: 16 }}
+                  >
+                    {/* Icon badge */}
+                    <div
+                      style={{
+                        flexShrink: 0,
+                        width: 36,
+                        height: 36,
+                        borderRadius: "50%",
+                        background: "rgba(229,212,192,0.07)",
+                        border: "1px solid rgba(229,212,192,0.18)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#C9A86A",
+                        marginTop: 2,
+                      }}
+                    >
+                      {item.icon}
+                    </div>
+
+                    <div>
+                      <p
+                        style={{
+                          fontSize: 10,
+                          letterSpacing: "0.2em",
+                          textTransform: "uppercase",
+                          color: "rgba(201,168,106,0.7)",
+                          fontWeight: 500,
+                          marginBottom: 5,
+                        }}
+                      >
+                        {item.label}
+                      </p>
+                      <p
+                        style={{
+                          fontSize: 14,
+                          lineHeight: 1.65,
+                          color: "rgba(237,229,216,0.82)",
+                          fontWeight: 300,
+                          whiteSpace: "pre-line",
+                        }}
+                      >
+                        {item.value}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Footer note */}
+              <motion.div
+                variants={fadeUp}
+                custom={8}
+                initial="hidden"
+                animate={inView ? "show" : "hidden"}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginTop: 8,
+                  paddingTop: 24,
+                  borderTop: "1px solid rgba(229,212,192,0.1)",
+                }}
+              >
+                {/* Leaf icon */}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9A86A" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" opacity="0.75">
+                  <path d="M2 22s4-2 8-8 10-12 12-12c0 0-2 8-8 12S2 22 2 22z" />
+                  <path d="M2 22 12 12" />
+                </svg>
+                <p style={{ fontSize: 12.5, color: "rgba(201,168,106,0.65)", fontStyle: "italic" }}>
+                  We typically respond within 24 hours.
+                </p>
+              </motion.div>
+            </motion.div>
+
+            {/* ══════════ RIGHT COLUMN — FORM CARD ══════════ */}
+            <motion.div
+              variants={fadeUp}
+              custom={1}
+              initial="hidden"
+              animate={inView ? "show" : "hidden"}
+            >
+              <div
+                style={{
+                  background: "rgba(18,36,26,0.82)",
+                  backdropFilter: "blur(28px)",
+                  WebkitBackdropFilter: "blur(28px)",
+                  border: "1px solid rgba(229,212,192,0.13)",
+                  borderRadius: 22,
+                  padding: "clamp(28px,4vw,46px)",
+                  boxShadow:
+                    "0 32px 80px rgba(0,0,0,0.45), 0 0 0 0.5px rgba(229,212,192,0.07) inset, 0 1px 0 rgba(229,212,192,0.1) inset",
+                }}
+              >
+                {/* Card header */}
+                <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 30 }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A86A" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 22s4-2 8-8 10-12 12-12c0 0-2 8-8 12S2 22 2 22z" />
+                    <path d="M2 22 12 12" />
+                  </svg>
+                  <h2
+                    className="contact-font-serif"
+                    style={{
+                      fontSize: 22,
+                      fontWeight: 400,
+                      fontStyle: "italic",
+                      color: "#EDE5D8",
+                      letterSpacing: "0.01em",
+                    }}
+                  >
+                    Send us a message
+                  </h2>
+                </div>
+
+                {/* Form */}
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
+                  {/* Row: First + Last Name */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    {[
+                      { name: "firstName", label: "First Name", placeholder: "Amara" },
+                      { name: "lastName", label: "Last Name", placeholder: "Laurent" },
+                    ].map((field) => (
+                      <div key={field.name} style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                        <label
+                          htmlFor={field.name}
+                          style={{
+                            fontSize: 10,
+                            letterSpacing: "0.2em",
+                            textTransform: "uppercase",
+                            color: "rgba(142,159,148,0.85)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {field.label}
+                        </label>
+                        <input
+                          id={field.name}
+                          name={field.name}
+                          required
+                          placeholder={field.placeholder}
+                          value={(form as Record<string, string>)[field.name]}
+                          onChange={handleChange}
+                          className="contact-input"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Email */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                    <label
+                      htmlFor="email"
+                      style={{
+                        fontSize: 10,
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "rgba(142,159,148,0.85)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="you@example.com"
+                      value={form.email}
+                      onChange={handleChange}
+                      className="contact-input"
+                    />
+                  </div>
+
+                  {/* Topic dropdown */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                    <label
+                      htmlFor="topic"
+                      style={{
+                        fontSize: 10,
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "rgba(142,159,148,0.85)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Topic / Subject
+                    </label>
+                    <div className="contact-select-wrap">
+                      <select
+                        id="topic"
+                        name="topic"
+                        required
+                        value={form.topic}
+                        onChange={handleChange}
+                        className="contact-input"
+                        style={{ cursor: "pointer", paddingRight: 40 }}
+                      >
+                        <option value="" disabled>
+                          Select a topic…
+                        </option>
+                        {TOPICS.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="contact-select-arrow">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                    <label
+                      htmlFor="message"
+                      style={{
+                        fontSize: 10,
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: "rgba(142,159,148,0.85)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      placeholder="Write your message here…"
+                      value={form.message}
+                      onChange={handleChange}
+                      className="contact-input contact-textarea"
+                    />
+                  </div>
+
+                  {/* Submit */}
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.012 }}
+                    whileTap={{ scale: 0.985 }}
+                    disabled={sent}
+                    style={{
+                      marginTop: 4,
+                      width: "100%",
+                      padding: "16px 24px",
+                      borderRadius: 100,
+                      background: sent ? "rgba(201,168,106,0.18)" : "#E5D4C0",
+                      color: sent ? "#C9A86A" : "#0F1F17",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      letterSpacing: "0.2em",
+                      textTransform: "uppercase",
+                      border: sent ? "1px solid rgba(201,168,106,0.35)" : "none",
+                      cursor: sent ? "default" : "pointer",
+                      fontFamily: "'Inter', system-ui, sans-serif",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    {sent ? "✓  Message Sent" : "SEND MESSAGE →"}
+                  </motion.button>
+
+                  {/* Privacy note */}
+                  <p
+                    style={{
+                      textAlign: "center",
+                      fontSize: 11.5,
+                      color: "rgba(142,159,148,0.5)",
+                      marginTop: -4,
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Your information is handled with complete discretion and respect.
+                  </p>
+                </form>
+              </div>
+            </motion.div>
           </div>
         </div>
-      </section>
-    </main>
+
+        {/* ─── Responsive overrides ─── */}
+        <style>{`
+          @media (max-width: 820px) {
+            .contact-grid {
+              grid-template-columns: 1fr !important;
+              gap: 56px !important;
+            }
+          }
+        `}</style>
+      </main>
+    </>
   );
 }
