@@ -278,6 +278,14 @@ Please confirm my order.`;
     }
   };
 
+  const handlePaymentMethodChange = (method: string) => {
+    if (method.includes('coming soon')) return; // Prevent selecting disabled methods
+    setCustomerInfo((prev) => ({ ...prev, paymentMethod: method }));
+    if (errors.paymentMethod) {
+      setErrors((prev) => ({ ...prev, paymentMethod: undefined }));
+    }
+  };
+
   if (!showForm) {
     return (
       <button
@@ -422,6 +430,21 @@ Please confirm my order.`;
           onChange={(e) => handleInputChange("orderNotes", e.target.value)}
           placeholder="Special instructions..."
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label>Payment Method <span className="text-red-500">*</span></Label>
+        <div className="space-y-2">
+          {["Cash on Delivery", "Bank Transfer", "Stripe (coming soon)", "PayPal (coming soon)"].map((method) => (
+            <label key={method} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${customerInfo.paymentMethod === method ? 'border-gold bg-gold/10' : 'border-border hover:border-gold/50 bg-background'} ${method.includes('soon') ? 'opacity-50 pointer-events-none' : ''}`}>
+              <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${customerInfo.paymentMethod === method ? 'border-gold' : 'border-border'}`}>
+                {customerInfo.paymentMethod === method && <div className="w-2 h-2 rounded-full bg-gold"></div>}
+              </div>
+              <span className="text-sm">{method}</span>
+            </label>
+          ))}
+        </div>
+        {errors.paymentMethod && <p className="text-xs text-red-500">{errors.paymentMethod}</p>}
       </div>
 
       <div className="border-t pt-3 space-y-1">
