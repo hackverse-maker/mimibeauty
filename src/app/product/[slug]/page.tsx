@@ -408,10 +408,10 @@ export default function ProductPage() {
               >
                 <div className="flex items-end justify-between border-b border-white/10 pb-8">
                   <div className="flex items-baseline gap-4">
-                    <span className="font-display text-5xl tracking-tight">${product.price}</span>
+                    <span className="font-display text-5xl tracking-tight">PKR {product.price.toLocaleString()}</span>
                     {product.originalPrice > product.price && (
                       <span className="text-xl text-foreground/40 line-through">
-                        ${product.originalPrice}
+                        PKR {product.originalPrice.toLocaleString()}
                       </span>
                     )}
                   </div>
@@ -564,7 +564,7 @@ export default function ProductPage() {
                 </AccordionItem>
 
                 <AccordionItem
-                  title="The Ritual"
+                  title="How To Use"
                   open={activeTab === "directions"}
                   onClick={() => setActiveTab(activeTab === "directions" ? "" : "directions")}
                 >
@@ -588,7 +588,7 @@ export default function ProductPage() {
                 </p>
               </div>
               <h2 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl">
-                Ritual companions
+                Complete your collection
               </h2>
             </div>
             <Link

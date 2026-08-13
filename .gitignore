@@ -36,3 +36,4 @@ dist-ssr
 out/
 build/
 next-env.d.ts
+tsconfig.tsbuildinfo

@@ -4,7 +4,7 @@ import { assets } from "@/lib/products";
 
 const posts = [
   { title: "The barrier repair diary", excerpt: "How ceramides rebuild the moisture barrier in 28 days.", tag: "Journal", img: assets.water },
-  { title: "On slow beauty", excerpt: "Why the ritual matters as much as the formula.", tag: "Philosophy", img: assets.stone },
+  { title: "On slow beauty", excerpt: "Why the collection matters as much as the formula.", tag: "Philosophy", img: assets.stone },
   { title: "A guide to layering", excerpt: "The right order for serums, oils, and moisturisers.", tag: "How-to", img: assets.lineup },
   { title: "Notes on rose absolute", excerpt: "Why we cold-press instead of steam-distill.", tag: "Ingredients", img: assets.halo },
 ];

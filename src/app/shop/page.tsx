@@ -56,7 +56,7 @@ export default function Shop() {
           transition={{ duration: 0.75, delay: 0.15 }}
           className="mt-6 font-display text-[clamp(2.5rem,6.5vw,6rem)] leading-[0.95] tracking-tighter"
         >
-          Shop the ritual
+          Shop the collection
         </motion.h1>
         <p className="mt-4 max-w-lg text-lg text-foreground/60 font-light leading-relaxed">
           Four objects. Endless combinations. Every formula clinically dosed and small-batch
@@ -151,7 +151,7 @@ export default function Shop() {
         {filtered.length === 0 ? (
           <div className="py-32 text-center">
             <p className="text-lg text-foreground/40 font-light">
-              No products match this ritual — yet.
+              No products match this filter — yet.
             </p>
           </div>
         ) : (

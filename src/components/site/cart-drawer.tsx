@@ -5,6 +5,12 @@ import { useCart } from "@/lib/cart";
 
 export function CartDrawer() {
   const { open, setOpen, lines, remove, setQty, subtotal, count } = useCart();
+
+  const handleQuantityChange = (slug: string, newQty: number) => {
+    if (newQty < 1) return;
+    setQty(slug, newQty);
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -25,7 +31,7 @@ export function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-border px-6 py-5">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.3em] text-gold">Your Ritual</p>
+                <p className="text-[11px] uppercase tracking-[0.3em] text-gold">Your Cart</p>
                 <h3 className="font-display text-2xl">Cart ({count})</h3>
               </div>
               <button
@@ -41,7 +47,7 @@ export function CartDrawer() {
                   <div>
                     <p className="font-display text-2xl">Your cart is quiet.</p>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      Discover a ritual made for you.
+                      Discover a collection made for you.
                     </p>
                     <Link
                       href="/shop"
@@ -79,20 +85,21 @@ export function CartDrawer() {
                         <div className="mt-3 flex items-center justify-between">
                           <div className="flex items-center gap-2 rounded-full border border-border px-1">
                             <button
-                              onClick={() => setQty(product.slug, qty - 1)}
-                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
+                              onClick={() => handleQuantityChange(product.slug, qty - 1)}
+                              disabled={qty <= 1}
+                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <Minus className="h-3 w-3" />
                             </button>
                             <span className="w-6 text-center text-sm">{qty}</span>
                             <button
-                              onClick={() => setQty(product.slug, qty + 1)}
+                              onClick={() => handleQuantityChange(product.slug, qty + 1)}
                               className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
                             >
                               <Plus className="h-3 w-3" />
                             </button>
                           </div>
-                          <p className="text-sm font-medium">${((product.price * qty) / 100).toFixed(2)}</p>
+                          <p className="text-sm font-medium">PKR {(product.price * qty).toLocaleString()}</p>
                         </div>
                       </div>
                     </li>
@@ -104,7 +111,7 @@ export function CartDrawer() {
               <div className="border-t border-border px-6 py-5">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">${(subtotal / 100).toFixed(2)}</span>
+                  <span className="font-medium">PKR {subtotal.toLocaleString()}</span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Shipping and taxes calculated at checkout.
@@ -115,7 +122,7 @@ export function CartDrawer() {
                     onClick={() => setOpen(false)}
                     className="w-full rounded-full bg-gold py-3.5 text-center text-sm font-medium tracking-wide text-background transition hover:bg-gold-soft"
                   >
-                    Checkout · ${(subtotal / 100).toFixed(2)}
+                    Checkout · PKR {subtotal.toLocaleString()}
                   </Link>
                   <button
                     onClick={() => setOpen(false)}

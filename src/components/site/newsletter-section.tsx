@@ -114,7 +114,7 @@ export function NewsletterSection() {
             THE LETTER
           </p>
           <h2
-            className="mt-6 text-[3.5rem] sm:text-[4.5rem] md:text-[5rem] leading-[1.05] tracking-tight text-[#F5F2EC]"
+            className="mt-6 text-[3rem] sm:text-[4.5rem] md:text-[5rem] leading-[1.05] tracking-tight text-[#F5F2EC]"
             style={{ fontFamily: "var(--font-cormorant, serif)" }}
           >
             Thoughtful
@@ -152,14 +152,14 @@ export function NewsletterSection() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 disabled={joined}
-                className="w-full bg-transparent text-[13px] text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A]"
+                className="w-full min-w-0 bg-transparent text-[13px] text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A]"
                 aria-label="Email"
               />
             </div>
             <button
               type="submit"
               disabled={joined}
-              className="rounded-[6px] bg-[#C9A86A] px-6 py-2.5 text-[12px] font-medium text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
+              className="shrink-0 rounded-[6px] bg-[#C9A86A] px-4 sm:px-6 py-2.5 text-[12px] font-medium text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
             >
               {joined ? "Subscribed" : "Subscribe"}
             </button>

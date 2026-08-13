@@ -142,6 +142,16 @@ export function Header() {
     return () => window.removeEventListener("mousedown", onPointer);
   }, [wishlistOpen]);
 
+  useEffect(() => {
+    if (!megaOpen) return;
+    const onPointer = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t.closest("[data-mega-root]")) setMegaOpen(false);
+    };
+    window.addEventListener("mousedown", onPointer);
+    return () => window.removeEventListener("mousedown", onPointer);
+  }, [megaOpen]);
+
   const closeOverlays = () => {
     setMobileOpen(false);
     setSearchOpen(false);
@@ -158,14 +168,29 @@ export function Header() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="relative mx-auto grid h-[120px] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:px-5 md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
+        <div className="group relative flex overflow-hidden border-b border-gold/20 bg-[#070b09] py-2.5 text-[9px] font-medium uppercase tracking-[0.25em] text-[#C9A86A] sm:text-[10px]">
+          <div className="flex animate-marquee whitespace-nowrap will-change-transform hover:[animation-play-state:paused]">
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className="flex items-center space-x-4 px-2">
+                <span>FIRST 100 CUSTOMERS</span>
+                <span className="text-[#C9A86A]/50">•</span>
+                <span>10% OFF</span>
+                <span className="text-[#C9A86A]/50">•</span>
+                <span>LIMITED LAUNCH OFFER</span>
+                <span className="text-[#C9A86A]/50">•</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative mx-auto grid h-[100px] md:h-[120px] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 sm:px-5 md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
           {/* Logo — left */}
           <Link
             href="/"
             onClick={closeOverlays}
             className="z-10 justify-self-start no-underline"
           >
-            <img src="/logo.png" alt="Mimi Beauty" className="h-[100px] w-[110px]" />
+            <img src="/logo.png" alt="Mimi Beauty" className="h-[90px] md:h-[130px] max-w-[110px] sm:max-w-none object-contain" />
           </Link>
 
           {/* Desktop nav — center */}
@@ -292,6 +317,7 @@ export function Header() {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.35, ease }}
               className="absolute inset-x-0 top-full hidden border-b border-gold/25 bg-[#0a110c] shadow-[0_30px_80px_-40px_oklch(0_0_0/0.6)] lg:block"
+              data-mega-root
             >
               <div className="mx-auto max-w-[1500px]">
                 {/* Top Section */}
@@ -307,6 +333,7 @@ export function Header() {
                         <Link
                           href="/coming-soon/body-lava-collection"
                           className="flex items-start gap-4"
+                          onClick={() => setMegaOpen(false)}
                         >
                           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
                             <Sparkles className="h-4 w-4" />
@@ -329,6 +356,7 @@ export function Header() {
                         <Link
                           href="/coming-soon/hair-collection"
                           className="flex items-start gap-4"
+                          onClick={() => setMegaOpen(false)}
                         >
                           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
                             <Wind className="h-4 w-4" />
@@ -348,7 +376,7 @@ export function Header() {
                       </li>
 
                       <li className="group cursor-pointer">
-                        <Link href="/coming-soon/face-serum" className="flex items-start gap-4">
+                        <Link href="/coming-soon/face-serum" className="flex items-start gap-4" onClick={() => setMegaOpen(false)}>
                           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
                             <Droplet className="h-4 w-4" />
                           </div>
@@ -371,6 +399,7 @@ export function Header() {
                       <Link
                         href="/shop"
                         className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] hover:text-white transition-colors flex items-center gap-2"
+                        onClick={() => setMegaOpen(false)}
                       >
                         VIEW ALL PRODUCTS <ArrowRight className="h-3 w-3" />
                       </Link>
@@ -385,14 +414,14 @@ export function Header() {
                         BODY LAVA COLLECTION
                       </p>
                       <div className="grid grid-cols-4 gap-8">
-                        {["Dewy Bronze", "Golden Glow", "Pearl Radiance", "Rosegold Shimmer"].map(
+                        {["Halò", "Pearl", "Amalfi", "Santorini"].map(
                           (n) => (
-                            <Link href="/shop" key={n} className="group text-white">
+                            <Link href="/shop" key={n} className="group text-white" onClick={() => setMegaOpen(false)}>
                               <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                                 {n}
                               </p>
                               <p className="text-xs text-white/50 mt-2 mb-1">100ml</p>
-                              <p className="text-xs text-white/80">$78</p>
+                              <p className="text-xs text-white/80">PKR 5,000</p>
                             </Link>
                           ),
                         )}
@@ -405,37 +434,21 @@ export function Header() {
                         HAIR COLLECTION
                       </p>
                       <div className="grid grid-cols-4 gap-8">
-                        <Link href="/shop" className="group text-white">
-                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Herbé
-                          </p>
-                          <p className="text-[11px] text-white/60 mt-1">Pre-Wash Hair Oil</p>
-                          <p className="text-xs text-white/50 mt-2 mb-1">50ml</p>
-                          <p className="text-xs text-white/80">$62</p>
-                        </Link>
-                        <Link href="/shop" className="group text-white">
+                        <Link href="/shop" className="group text-white" onClick={() => setMegaOpen(false)}>
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                             Veil
                           </p>
                           <p className="text-[11px] text-white/60 mt-1">Post-Wash Hair Serum</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">$54</p>
+                          <p className="text-xs text-white/80">PKR 3,500</p>
                         </Link>
-                        <Link href="/shop" className="group text-white">
+                        <Link href="/shop" className="group text-white" onClick={() => setMegaOpen(false)}>
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Nourish
+                            Herbé
                           </p>
-                          <p className="text-[11px] text-white/60 mt-1">Hair Oil</p>
+                          <p className="text-[11px] text-white/60 mt-1">Pre-Wash Hair Oil</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">50ml</p>
-                          <p className="text-xs text-white/80">$58</p>
-                        </Link>
-                        <Link href="/shop" className="group text-white">
-                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Halo Mist
-                          </p>
-                          <p className="text-[11px] text-white/60 mt-1">Hair Perfume</p>
-                          <p className="text-xs text-white/50 mt-2 mb-1">100ml</p>
-                          <p className="text-xs text-white/80">$48</p>
+                          <p className="text-xs text-white/80">PKR 4,500</p>
                         </Link>
                       </div>
                     </div>
@@ -446,37 +459,13 @@ export function Header() {
                         FACE SERUM
                       </p>
                       <div className="grid grid-cols-4 gap-8">
-                        <Link href="/shop" className="group text-white">
+                        <Link href="/shop" className="group text-white" onClick={() => setMegaOpen(false)}>
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                             Dew
                           </p>
                           <p className="text-[11px] text-white/60 mt-1">Daily Glow Face Serum</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">$68</p>
-                        </Link>
-                        <Link href="/shop" className="group text-white">
-                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Clarity
-                          </p>
-                          <p className="text-[11px] text-white/60 mt-1">Balancing Face Serum</p>
-                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">$68</p>
-                        </Link>
-                        <Link href="/shop" className="group text-white">
-                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Restore
-                          </p>
-                          <p className="text-[11px] text-white/60 mt-1">Barrier Repair Serum</p>
-                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">$68</p>
-                        </Link>
-                        <Link href="/shop" className="group text-white">
-                          <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Radiance
-                          </p>
-                          <p className="text-[11px] text-white/60 mt-1">Brightening Face Serum</p>
-                          <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">$68</p>
+                          <p className="text-xs text-white/80">PKR 3,500</p>
                         </Link>
                       </div>
                     </div>
@@ -568,7 +557,7 @@ export function Header() {
                   ref={searchRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search the ritual…"
+                  placeholder="Search products…"
                   className="w-full bg-transparent font-display text-xl outline-none placeholder:text-muted-foreground/50 md:text-2xl"
                 />
                 <button
@@ -602,7 +591,7 @@ export function Header() {
                         <p className="font-display text-lg">{p.name}</p>
                         <p className="truncate text-xs text-muted-foreground">{p.tagline}</p>
                       </div>
-                      <span className="text-sm text-gold">${p.price}</span>
+                      <span className="text-sm text-gold">PKR {p.price.toLocaleString()}</span>
                     </Link>
                   ))
                 )}
@@ -645,7 +634,7 @@ export function Header() {
                 onClick={closeOverlays}
                 className="no-underline"
               >
-                <img src="/logo.png" alt="Mimi Beauty" className="h-[100px] w-[110px]" />
+                <img src="/logo.png" alt="Mimi Beauty" className="h-[120px] w-[132px] object-contain" />
               </Link>
               <button
                 type="button"
@@ -676,10 +665,35 @@ export function Header() {
                   <Link
                     href={item.href}
                     onClick={closeOverlays}
-                    className="block font-display text-4xl tracking-tight text-foreground/90 transition-colors hover:text-gold sm:text-5xl"
+                    className="block font-display text-3xl tracking-tight text-foreground/90 transition-colors hover:text-gold sm:text-5xl"
                   >
                     {item.label}
                   </Link>
+                  {item.href === "/shop" && (
+                    <div className="mt-4 pl-4 space-y-3">
+                      <Link
+                        href="/coming-soon/body-lava-collection"
+                        onClick={closeOverlays}
+                        className="block text-lg text-foreground/70 hover:text-gold transition-colors"
+                      >
+                        Body Lava Collection
+                      </Link>
+                      <Link
+                        href="/coming-soon/hair-collection"
+                        onClick={closeOverlays}
+                        className="block text-lg text-foreground/70 hover:text-gold transition-colors"
+                      >
+                        Hair Collection
+                      </Link>
+                      <Link
+                        href="/coming-soon/face-serum"
+                        onClick={closeOverlays}
+                        className="block text-lg text-foreground/70 hover:text-gold transition-colors"
+                      >
+                        Face Serum
+                      </Link>
+                    </div>
+                  )}
                 </motion.div>
               ))}
 
@@ -809,7 +823,7 @@ function WishlistPanel({
       <div className="max-h-72 overflow-y-auto">
         {list.length === 0 ? (
           <p className="px-4 py-10 text-center text-sm text-muted-foreground">
-            Your wishlist awaits its first ritual.
+            Your wishlist awaits its first product.
           </p>
         ) : (
           list.map((p) => (
@@ -825,7 +839,7 @@ function WishlistPanel({
                 <img src={p.image} alt="" className="h-12 w-12 object-cover" />
                 <div className="min-w-0">
                   <p className="truncate font-display text-base">{p.name}</p>
-                  <p className="text-xs text-gold">${p.price}</p>
+                  <p className="text-xs text-gold">PKR {p.price.toLocaleString()}</p>
                 </div>
               </Link>
               <button

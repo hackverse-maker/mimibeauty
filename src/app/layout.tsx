@@ -4,11 +4,11 @@ import { ClientLayout } from "./client-layout";
 import "../styles.css";
 
 export const metadata: Metadata = {
-  title: "MIMIbeauty · Luxury Skincare Rituals",
+  title: "MIMIbeauty · Luxury Skincare",
   description:
     "MIMIbeauty crafts small-batch luxury skincare with botanical actives and clinical results. Reveal your natural beauty.",
   openGraph: {
-    title: "MIMIbeauty · Luxury Skincare Rituals",
+    title: "MIMIbeauty · Luxury Skincare",
     description: "Small-batch luxury skincare with botanical actives and clinical results.",
     type: "website",
   },

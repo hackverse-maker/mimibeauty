@@ -12,7 +12,6 @@ import { assets, collections, products } from "@/lib/products";
 import { ProductCard } from "@/components/site/product-card";
 import { Hero } from "@/components/site/hero";
 import { IngredientsSection } from "@/components/site/ingredients-section";
-import { RitualsGallery } from "@/components/site/rituals-gallery";
 import { NewsletterSection } from "@/components/site/newsletter-section";
 
 
@@ -27,7 +26,6 @@ export default function Home() {
       <IngredientsSection />
       <Compare />
       <Testimonials />
-      <RitualsGallery />
       <NewsletterSection />
     </>
   );
@@ -44,7 +42,7 @@ function BottomFeatureBar() {
   return (
     <div className="border-t border-gold/30 bg-[#1A271D] py-16 md:py-20">
       <div className="mx-auto max-w-[1400px] px-6">
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
           {features.map((f, i) => (
             <div key={i} className="flex flex-col items-center text-center md:items-start md:text-left">
               <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/40 text-gold mb-5">
@@ -103,7 +101,7 @@ function BestSellers() {
               CUSTOMER FAVORITES
             </p>
             <h2 
-              className="mt-5 text-5xl md:text-7xl lg:text-[80px] font-medium leading-[1.1] text-[#F6F2EB]"
+              className="mt-5 text-4xl sm:text-5xl md:text-7xl lg:text-[80px] font-medium leading-[1.1] text-[#F6F2EB]"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               Skincare that <em className="italic text-gold">stays with you.</em>
@@ -181,12 +179,12 @@ function FloralDecoration({ index }: { index: number }) {
 }
 
 const whyItems = [
-  { icon: ShieldCheck, title: "Dermatologist tested", body: "Every formula is clinically\nevaluated for sensitive skin." },
-  { icon: Rabbit, title: "Cruelty free", body: "Never tested on animals.\nCertified by Leaping Bunny." },
-  { icon: Leaf, title: "100% vegan", body: "Plant-based actives.\nNo compromise on efficacy." },
-  { icon: Sparkles, title: "Botanical actives", body: "Wild-harvested, cold-pressed,\nand clinically dosed." },
-  { icon: Recycle, title: "Sustainable packaging", body: "Refillable glass.\nPost-consumer recycled cartons." },
-  { icon: Truck, title: "Complimentary shipping", body: "Free carbon-neutral delivery\non orders over $75." },
+  { icon: ShieldCheck, title: "Dermatologically Tested", body: "Every formula evaluated for skin compatibility." },
+  { icon: Rabbit, title: "Cruelty Free", body: "Never tested on animals.\nAlways made with compassion." },
+  { icon: Leaf, title: "Botanical Actives", body: "Powered by concentrated plant-derived ingredients." },
+  { icon: Sparkles, title: "Purposefully Formulated", body: "Every ingredient selected with a clear purpose." },
+  { icon: Recycle, title: "Non-Comedogenic", body: "Won’t clog pores or leave skin congested." },
+  { icon: Truck, title: "Fast Absorbing", body: "Lightweight dry oils that absorb in seconds." },
 ];
 
 function WhyChoose() {
@@ -241,7 +239,7 @@ function WhyChoose() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.05 }}
-              className="group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl border border-gold/20 bg-[#121A15] p-8 md:p-10 transition-colors hover:border-gold/50"
+              className="group relative flex h-full min-h-[240px] flex-col overflow-hidden rounded-2xl border border-gold/20 bg-[#121A15] p-6 sm:p-8 md:p-10 transition-colors hover:border-gold/50"
             >
               <div className="absolute bottom-0 right-0 h-40 w-24 opacity-20 transition-opacity duration-500 group-hover:opacity-40 pointer-events-none text-gold">
                 <FloralDecoration index={i} />
@@ -328,7 +326,7 @@ function BeforeAfter() {
 const testimonials = [
   { name: "Amelia R.", city: "New York", quote: "The Dew serum genuinely changed my skin. Two weeks in, my barrier feels rebuilt. It's the first product I've re-ordered twice." },
   { name: "Sofia L.", city: "Milan", quote: "Hálo is the most beautiful body oil I've ever owned. The fragrance is subtle and the shine is unreal." },
-  { name: "Yuki T.", city: "Tokyo", quote: "Every detail feels intentional. The packaging, the ritual, the results. Rhode meets Aesop." },
+  { name: "Yuki T.", city: "Tokyo", quote: "Every detail feels intentional. The packaging, the collection, the results. Rhode meets Aesop." },
   { name: "Chloé D.", city: "Paris", quote: "Herbé transformed my scalp. My hair grows faster and shinier. This brand is quietly extraordinary." },
 ];
 
@@ -345,7 +343,7 @@ function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.06 }}
-              className="glass rounded-2xl p-7"
+              className="glass rounded-2xl p-5 sm:p-7"
             >
               <div className="flex gap-0.5 text-gold">
                 {Array.from({ length: 5 }).map((_, s) => <Star key={s} className="h-3.5 w-3.5 fill-gold" />)}
@@ -367,7 +365,7 @@ function Testimonials() {
 
 const posts = [
   { title: "The barrier repair diary", excerpt: "How ceramides rebuild the moisture barrier in 28 days.", tag: "Journal" },
-  { title: "On slow beauty", excerpt: "Why the ritual matters as much as the formula.", tag: "Philosophy" },
+  { title: "On slow beauty", excerpt: "Why the collection matters as much as the formula.", tag: "Philosophy" },
   { title: "A guide to layering", excerpt: "The right order for serums, oils, and moisturisers.", tag: "How-to" },
 ];
 

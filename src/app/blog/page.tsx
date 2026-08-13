@@ -11,7 +11,7 @@ const posts = [
   },
   {
     title: "On slow beauty",
-    excerpt: "Why the ritual matters as much as the formula.",
+    excerpt: "Why the process matters as much as the formula.",
     tag: "Philosophy",
     img: assets.stone,
   },

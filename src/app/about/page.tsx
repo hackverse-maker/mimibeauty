@@ -21,7 +21,7 @@ const timeline = [
   },
   {
     year: "2027",
-    title: "Worldwide Rituals",
+    title: "Worldwide Expansion",
     label: "Refillable luxury glass packaging launches globally.",
   },
 ];
@@ -77,7 +77,7 @@ export default function About() {
               transition={{ duration: 1, delay: 0.4 }}
               className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-foreground/70"
             >
-              We design slow, ritualistic skincare formulated to integrate seamlessly into your
+              We design intentional skincare formulated to integrate seamlessly into your
               daily space. Crafting botanically-infused, clinically-proven formulas in small
               batches.
             </motion.p>
@@ -97,8 +97,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* Philosophy Statement */}
-      <section className="relative z-10 mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 py-24 md:py-36 border-t border-white/5">
+      {/* Who We Are */}
+      <section className="relative z-10 mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 pt-24 md:pt-36 pb-12 md:pb-16 border-t border-white/5">
         <div className="grid gap-16 lg:grid-cols-[1.2fr_1fr] items-start">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -106,8 +106,14 @@ export default function About() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
+            <div className="flex items-center gap-4 mb-6">
+              <span className="h-[1px] w-8 bg-gold" />
+              <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold">
+                Who We Are
+              </p>
+            </div>
             <h2 className="font-display text-3xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight">
-              Belief in slow luxury, batch formulation & absolute transparency.
+              The best care works with your body, not against it.
             </h2>
           </motion.div>
 
@@ -116,17 +122,65 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="space-y-8 text-lg md:text-xl text-foreground/80 leading-relaxed font-light"
+            className="space-y-6 text-lg md:text-xl text-foreground/80 leading-relaxed font-light"
           >
             <p>
-              MIMIbeauty was born from a simple realization: that modern skincare has lost its sense
-              of presence. Every formula we create is designed to slow you down — making those brief
-              minutes at the sink a deeply grounding experience.
+              Mimi Beauty is a premium Pakistani skincare brand built on a simple belief that the best care works with your body, not against it. We thoughtfully formulate products using naturally derived ingredients that support healthy skin, hair, and body care without complexity.
             </p>
             <p className="text-foreground/60 text-base md:text-lg">
-              We collaborate with premier dermatologists in Copenhagen and wild-crafters in
-              Provence. We reject fillers, parabens, and theatrical marketing, preferring instead to
-              invest in raw botanical potency and clinically verified active levels.
+              Our collection is centered around fast-absorbing dry oil formulations that nourish deeply without leaving a heavy or greasy feel. From face and hair to body care, each product is designed to fit seamlessly into your daily routine while delivering purposeful, long-term care.
+            </p>
+            <p className="text-foreground/60 text-base md:text-lg">
+              At Mimi Beauty, we believe luxury is found in thoughtful formulation, honest ingredients, and products that truly deserve a place in your routine. We don’t believe in creating more. We believe in creating better.
+            </p>
+            <p className="text-foreground/60 text-base md:text-lg">
+              This is more than skincare. It is a commitment to helping you care for yourself with intention, confidence, and simplicity. Working in harmony with nature, helping your body restore, protect, and strengthen from within.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Brand Philosophy */}
+      <section className="relative z-10 mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 pb-24 md:pb-36">
+        <div className="grid gap-16 lg:grid-cols-[1.2fr_1fr] items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <span className="h-[1px] w-8 bg-gold" />
+              <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold">
+                Brand Philosophy
+              </p>
+            </div>
+            <h2 className="font-display text-3xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight">
+              Care that restores, not conceals.
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="space-y-6 text-lg md:text-xl text-foreground/80 leading-relaxed font-light"
+          >
+            <p>
+              Your skin and hair were never meant to depend on products forever. They were designed to protect, heal, and thrive naturally. At Mimi Beauty, we believe skincare and haircare should support your body’s natural ability to restore itself, not replace it.
+            </p>
+            <p className="text-foreground/60 text-base md:text-lg">
+              Many conventional products deliver quick, visible results by treating the surface rather than the root cause. Over time, harsh ingredients can weaken the skin barrier, damage the hair cuticle, and leave your skin and hair relying on continuous use instead of becoming healthier.
+            </p>
+            <p className="text-foreground/60 text-base md:text-lg">
+              Every formula is thoughtfully crafted with naturally derived ingredients that promote long term skin, hair, and body health. You will never find long ingredient lists or complicated routines at Mimi Beauty. Every product has a purpose, every formula serves a function, and every step is designed to deliver meaningful care without complexity.
+            </p>
+            <p className="text-foreground/60 text-base md:text-lg">
+              We are not here to create dependency. We are here to help your skin, hair, and body become healthier, stronger, and more resilient with every use. Because true beauty is not about covering imperfections. It is about restoring balance, protecting what is already yours, and helping your natural beauty flourish.
+            </p>
+            <p className="text-foreground/60 text-base md:text-lg">
+              Your journey to healthier skin, stronger hair, and lasting body wellness begins with the choices you make today. Welcome to a new standard of naturally intentional beauty. Welcome to Mimi Beauty.
             </p>
           </motion.div>
         </div>
@@ -202,7 +256,7 @@ export default function About() {
               <h2 className="mt-6 font-display text-4xl md:text-6xl">Our journey.</h2>
               <p className="mt-6 text-foreground/50 max-w-sm font-light leading-relaxed">
                 From a small design and chemistry studio to a globally recognized standard for
-                ritualistic care.
+                intentional care.
               </p>
             </div>
           </div>

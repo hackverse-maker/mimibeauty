@@ -15,8 +15,8 @@ const steps = [
     opts: ["Very calm", "Occasionally reactive", "Often reactive", "Highly sensitive"],
   },
   {
-    q: "How much time will you give the ritual?",
-    opts: ["2 min", "5 min", "10 min", "Slow ritual"],
+    q: "How much time will you give your routine?",
+    opts: ["2 min", "5 min", "10 min", "Slow routine"],
   },
 ];
 
@@ -80,7 +80,7 @@ export default function Quiz() {
               <Check className="h-6 w-6" />
             </div>
             <h2 className="mt-6 font-display text-3xl leading-tight md:text-5xl">
-              Your ritual is ready.
+              Your routine is ready.
             </h2>
             <p className="mt-3 text-muted-foreground">
               We've built a routine based on your answers.
@@ -96,7 +96,7 @@ export default function Quiz() {
               href="/shop"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 text-sm text-background"
             >
-              See your ritual <ArrowRight className="h-4 w-4" />
+              See your results <ArrowRight className="h-4 w-4" />
             </Link>
           </motion.div>
         )}

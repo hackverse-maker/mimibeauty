@@ -3,7 +3,7 @@ import Providers from "./providers";
 import "../src/styles.css";
 
 export const metadata = {
-  title: "MIMIbeauty · Luxury Skincare Rituals",
+  title: "MIMIbeauty · Luxury Skincare Collections",
   description: "MIMIbeauty crafts small-batch luxury skincare with botanical actives and clinical results. Reveal your natural beauty.",
 };
 

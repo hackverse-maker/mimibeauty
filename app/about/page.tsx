@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { assets } from "@/lib/products";
 import { ArrowRight, Sparkles, Shield, Leaf, Heart } from "lucide-react";
+import { WhoWeAreCard } from "@/components/site/who-we-are-card";
 
 
 
@@ -48,7 +49,7 @@ export default function About() {
               transition={{ duration: 1, delay: 0.4 }}
               className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-foreground/70"
             >
-              We design slow, ritualistic skincare formulated to integrate seamlessly into your daily space. Crafting botanically-infused, clinically-proven formulas in small batches.
+              We design slow, intentional skincare formulated to integrate seamlessly into your daily space. Crafting botanically-infused, clinically-proven formulas in small batches.
             </motion.p>
           </div>
         </div>
@@ -63,6 +64,9 @@ export default function About() {
           />
         </div>
       </section>
+
+      {/* Who We Are Editorial Card */}
+      <WhoWeAreCard />
 
       {/* Philosophy Statement */}
       <section className="relative z-10 mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 py-24 md:py-36 border-t border-white/5">
@@ -90,7 +94,7 @@ export default function About() {
             className="space-y-8 text-lg md:text-xl text-foreground/80 leading-relaxed font-light"
           >
             <p>
-              Created in Pakistan, our collection is thoughtfully formulated with naturally derived ingredients to nourish your skin with lightweight, fast-absorbing care. Every product is designed to fit seamlessly into your daily ritual while delivering effective, uncompromising results.
+              Created in Pakistan, our collection is thoughtfully formulated with naturally derived ingredients to nourish your skin with lightweight, fast-absorbing care. Every product is designed to fit seamlessly into your daily collection while delivering effective, uncompromising results.
             </p>
             <p className="text-foreground/60 text-base md:text-lg">
               As one of the first local brands to introduce a complete head-to-toe range of specialized dry oils, we’re redefining modern skincare with formulas crafted for face, body, hair, and intimate areas.

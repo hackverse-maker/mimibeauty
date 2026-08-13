@@ -23,40 +23,58 @@ function MoleculeIcon({ className = "" }: { className?: string }) {
 
 const newIngredients = [
   {
-    name: "Niacinamide",
-    note: "Evens tone, refines pores,\nand supports a stronger\nskin barrier.",
-    category: "BRIGHTENING",
-    image: "/images/ingredients/niacinamide.jpg",
-  },
-  {
-    name: "Vitamin C",
-    note: "Brightens dullness, protects\nagainst oxidative stress,\nand supports radiance.",
-    category: "ANTIOXIDANT",
-    image: "/images/ingredients/vitaminc.jpg",
-  },
-  {
-    name: "Retinol",
-    note: "Encourages cell renewal,\nimproves texture, and\nsupports smoother skin.",
+    name: "Rosehip Oil",
+    note: "Nature’s retinol, rich in antioxidants and essential fatty acids to support smoother, brighter,\nhealthier-looking skin.",
     category: "RENEWAL",
-    image: "/images/ingredients/retinol.jpg",
+    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&q=80",
+  },
+  {
+    name: "Cyperus Rotundus Oil",
+    note: "An antioxidant-rich botanical that helps calm, strengthen, and support the skin’s natural\nbarrier for a balanced complexion.",
+    category: "SOOTHING",
+    image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80",
+  },
+  {
+    name: "Argan Oil",
+    note: "Rich in vitamin E and essential fatty acids to deeply nourish, soften, and strengthen the skin\nfor a smooth, healthy-looking glow.",
+    category: "NOURISHING",
+    image: "/images/ingredients/argan.jpg",
+  },
+  {
+    name: "Castor Oil",
+    note: "Rich in essential fatty acids to deeply condition the scalp and hair while supporting softer,\nstronger, healthier-looking strands.",
+    category: "CONDITIONING",
+    image: "/images/ingredients/castor.jpg",
   },
   {
     name: "Jojoba Oil",
-    note: "Balances oil production,\nhydrates deeply, and\nsupports a healthy barrier.",
+    note: "Lightweight and fast-absorbing, Jojoba Oil helps smooth, soften, and protect hair while\nlocking in lasting moisture without weighing it down",
     category: "BALANCING",
     image: "/images/ingredients/jojoba.jpg",
   },
   {
-    name: "Rosehip Oil",
-    note: "Rich in essential fatty acids\nand antioxidants for\nnourished, healthy skin.",
-    category: "NOURISHING",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&q=80",
+    name: "Vitamin E",
+    note: "An antioxidant-rich vitamin that helps protect, condition, and strengthen hair while enhancing\nsoftness, moisture, and natural shine.",
+    category: "ANTIOXIDANT",
+    image: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80",
   },
   {
-    name: "Cyperus Rotundus",
-    note: "Soothes irritation,\nsupports even skin tone,\nand promotes comfort.",
-    category: "SOOTHING",
-    image: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&q=80",
+    name: "Jaborandi Root Extract",
+    note: "Traditionally valued in botanical hair care to help nourish the scalp and support stronger,\nhealthier-looking hair.",
+    category: "STRENGTHENING",
+    image: "/images/ingredients/jaborandi.jpg",
+  },
+  {
+    name: "Lemongrass Botanical Infusion",
+    note: "An invigorating botanical infusion that helps refresh, rebalance, and purify the scalp for a\nclean, revitalised feel",
+    category: "PURIFYING",
+    image: "/images/ingredients/lemongrass.jpg",
+  },
+  {
+    name: "Mimi Signature Accord",
+    note: "An exclusive fragrance composition developed to give every formula its distinctive, elegant\nidentity .",
+    category: "FRAGRANCE",
+    image: "/images/ingredients/signature.jpg",
   },
 ];
 

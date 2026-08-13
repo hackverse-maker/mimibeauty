@@ -29,7 +29,7 @@ const features = [
 ] as const;
 
 const FILM = [
-  { src: "/hero_dew_girl_left.jpg", caption: "The Ritual · Pure Radiance" },
+  { src: "/hero_dew_girl_left.jpg", caption: "Pure Radiance · Skin" },
   { src: "/hero_dew_girl_right.jpg", caption: "Slow Beauty · Skin" },
   { src: "/hero_dew_collection.jpg", caption: "The Collection · Complete Care" },
 ] as const;
@@ -201,7 +201,7 @@ function HeroVideo({
             <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
               <div>
                 <p className="text-[9px] uppercase tracking-[0.35em] text-gold/90">
-                  The Ritual · Film
+                  Collection · Film
                 </p>
                 <p className="mt-1 font-display text-lg text-white/90">{FILM[scene].caption}</p>
               </div>
@@ -273,8 +273,8 @@ export function Hero() {
     [mx, my],
   );
 
-  const scrollToRituals = () => {
-    document.getElementById("rituals")?.scrollIntoView({ behavior: "smooth" });
+  const scrollToCollections = () => {
+    document.getElementById("collections")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const btnPrimary =
@@ -317,7 +317,7 @@ export function Hero() {
 
           <motion.h1
             {...fadeUp(0.12)}
-            className="mt-6 font-display text-[clamp(2.75rem,6vw,4.5rem)] font-normal leading-[1.1] tracking-normal text-white"
+            className="mt-6 font-display text-[clamp(2.25rem,7vw,4.5rem)] font-normal leading-[1.1] tracking-normal text-white"
           >
             Real Ingredients.
             <br />
@@ -347,21 +347,12 @@ export function Hero() {
               SHOP COLLECTION
               <ArrowRight className="h-4 w-4" />
             </MagneticLink>
-            <MagneticAction onClick={scrollToRituals} className={btnSecondary}>
+            <MagneticAction onClick={scrollToCollections} className={btnSecondary}>
               EXPLORE PRODUCTS
             </MagneticAction>
           </motion.div>
 
-          <motion.div {...fadeUp(0.4)} className="mt-10 flex items-center gap-3">
-            <div className="flex items-center gap-1" aria-label="5 star rating">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-3.5 w-3.5 fill-[#D4AF37] text-gold" strokeWidth={0} />
-              ))}
-            </div>
-            <p className="text-[12px] tracking-wide text-white/80">
-              Trusted by 25,000+ Happy Customers
-            </p>
-          </motion.div>
+
 
           <motion.ul
             {...fadeUp(0.48)}

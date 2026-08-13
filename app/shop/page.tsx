@@ -36,7 +36,7 @@ export default function Shop() {
           <span className="text-[11px] font-semibold uppercase tracking-[0.5em] text-gold">The Collection</span>
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.15 }} className="mt-6 font-display text-[clamp(2.5rem,6.5vw,6rem)] leading-[0.95] tracking-tighter">
-          Shop the ritual
+          Shop the Collection
         </motion.h1>
         <p className="mt-4 max-w-lg text-lg text-foreground/60 font-light leading-relaxed">
           Four objects. Endless combinations. Every formula clinically dosed and small-batch bottled.
@@ -61,10 +61,11 @@ export default function Shop() {
               </div>
               <button 
                 onClick={() => setShowFilters(!showFilters)} 
-                className={`flex h-12 items-center justify-center gap-2 rounded-full border px-5 text-xs font-semibold uppercase tracking-wider transition ${showFilters ? "border-gold bg-gold text-black" : "border-white/10 bg-white/[0.02] text-white hover:border-white/30"}`}
+                className={`flex h-12 shrink-0 items-center justify-center gap-2 rounded-full border px-3 sm:px-5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider transition ${showFilters ? "border-gold bg-gold text-black" : "border-white/10 bg-white/[0.02] text-white hover:border-white/30"}`}
               >
                 <SlidersHorizontal className="h-3.5 w-3.5" />
-                <span>Categories</span>
+                <span className="hidden sm:inline">Categories</span>
+                <span className="inline sm:hidden">Filter</span>
               </button>
             </div>
 
@@ -117,10 +118,10 @@ export default function Shop() {
       <section className="mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 py-16">
         {filtered.length === 0 ? (
           <div className="py-32 text-center">
-            <p className="text-lg text-foreground/40 font-light">No products match this ritual — yet.</p>
+            <p className="text-lg text-foreground/40 font-light">No products match this collection — yet.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-x-6 gap-y-16 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-x-6 gap-y-16 md:grid-cols-3 lg:grid-cols-4">
             {filtered.map((p, i) => (
               <ProductCard key={p.slug} product={p} index={i} />
             ))}

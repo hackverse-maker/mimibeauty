@@ -114,7 +114,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             {product.category}
           </p>
           <h3
-            className="mt-1 font-display text-[34px] leading-none text-[#F5F2EC]"
+            className="mt-1 font-display text-[28px] sm:text-[34px] leading-none text-[#F5F2EC] break-words"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
             {product.name}
@@ -125,10 +125,10 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             <div className="flex items-center gap-2.5">
               {hasDiscount && (
                 <span className="text-[14px] text-gray-500 line-through">
-                  Rs. {product.originalPrice}
+                  PKR {product.originalPrice.toLocaleString()}
                 </span>
               )}
-              <span className="text-[16px] font-semibold text-gold">Rs. {product.price}</span>
+              <span className="text-[16px] font-semibold text-gold">PKR {product.price.toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-1.5 text-[14px] text-white">
               <Star className="h-4 w-4 fill-gold text-gold" strokeWidth={0} />{" "}

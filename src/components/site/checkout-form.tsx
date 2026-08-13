@@ -18,11 +18,14 @@ interface CustomerInfo {
   zipCode: string;
   address: string;
   orderNotes: string;
+  paymentMethod: string;
 }
 
 export function CheckoutForm() {
   const { lines, subtotal, setOpen } = useCart();
   const [showForm, setShowForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     fullName: "",
     phone: "",
@@ -33,6 +36,7 @@ export function CheckoutForm() {
     zipCode: "",
     address: "",
     orderNotes: "",
+    paymentMethod: "Cash on Delivery",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof CustomerInfo, string>>>({});
 
@@ -44,6 +48,8 @@ export function CheckoutForm() {
     }
     if (!customerInfo.phone.trim()) {
       newErrors.phone = "Phone number is required";
+    } else if (!/^[+]?[\d\s-]{10,}$/.test(customerInfo.phone.replace(/\s/g, ''))) {
+      newErrors.phone = "Please enter a valid phone number";
     }
     if (!customerInfo.email.trim()) {
       newErrors.email = "Email is required";
@@ -65,6 +71,9 @@ export function CheckoutForm() {
     if (!customerInfo.address.trim()) {
       newErrors.address = "Address is required";
     }
+    if (!customerInfo.paymentMethod || customerInfo.paymentMethod.includes("coming soon")) {
+      newErrors.paymentMethod = "Please select a payment method";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -75,12 +84,6 @@ export function CheckoutForm() {
     const discount = 0;
     const tax = subtotal * 0.1;
     const grandTotal = subtotal + shipping - discount + tax;
-
-    const subtotalInDollars = subtotal / 100;
-    const shippingInDollars = shipping;
-    const discountInDollars = discount;
-    const taxInDollars = tax / 100;
-    const grandTotalInDollars = grandTotal / 100;
 
     const now = new Date();
     const orderDate = now.toLocaleDateString("en-US", {
@@ -115,7 +118,11 @@ Street Address: ${customerInfo.address}
 
 ━━━━━━━━━━━━━━━━━━
 
-🛒 Order Items
+� Payment Method: ${customerInfo.paymentMethod}
+
+━━━━━━━━━━━━━━━━━━
+
+�🛒 Order Items
 
 `;
 
@@ -127,8 +134,8 @@ Street Address: ${customerInfo.address}
    Color: ${product.collection}
    Size: ${product.size}
    Quantity: ${qty}
-   Unit Price: $${(product.price / 100).toFixed(2)}
-   Item Total: $${(totalPrice / 100).toFixed(2)}
+   Unit Price: PKR ${product.price.toLocaleString()}
+   Item Total: PKR ${totalPrice.toLocaleString()}
 
 `;
     });
@@ -137,11 +144,11 @@ Street Address: ${customerInfo.address}
 
 💰 Order Summary
 
-Subtotal: $${subtotalInDollars.toFixed(2)}
-Shipping: $${shippingInDollars.toFixed(2)}
-Discount: $${discountInDollars.toFixed(2)}
-Tax: $${taxInDollars.toFixed(2)}
-Grand Total: $${grandTotalInDollars.toFixed(2)}
+Subtotal: PKR ${subtotal.toLocaleString()}
+Shipping: PKR ${shipping.toLocaleString()}
+Discount: PKR ${discount.toLocaleString()}
+Tax: PKR ${tax.toLocaleString()}
+Grand Total: PKR ${grandTotal.toLocaleString()}
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -161,26 +168,107 @@ Please confirm my order.`;
     return message;
   };
 
-  const handleCheckout = (e: React.FormEvent) => {
+  const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+    setIsSubmitting(true);
 
     if (lines.length === 0) {
-      alert("Your cart is empty. Please add items before checkout.");
+      setSubmitError("Your cart is empty. Please add items before checkout.");
+      setIsSubmitting(false);
       return;
     }
 
     if (!validateForm()) {
+      setIsSubmitting(false);
       return;
     }
 
-    const message = formatWhatsAppMessage();
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    try {
+      // Validate product data
+      for (const line of lines) {
+        if (!line.product || !line.product.price || line.product.price <= 0) {
+          setSubmitError(`Invalid product data for ${line.product?.name || 'unknown product'}. Please remove this item and try again.`);
+          setIsSubmitting(false);
+          return;
+        }
+      }
 
-    // Open WhatsApp in new tab
-    window.open(whatsappUrl, "_blank");
+      // Prepare order data for email
+      const shipping = 0;
+      const discount = 0;
+      const tax = subtotal * 0.1;
+      const grandTotal = subtotal + shipping - discount + tax;
 
-    // Close cart drawer
-    setOpen(false);
+      const now = new Date();
+      const orderDate = now.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const orderTime = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      const orderItems = lines.map((line) => ({
+        name: line.product.name,
+        size: line.product.size,
+        collection: line.product.collection,
+        quantity: line.qty,
+        unitPrice: line.product.price,
+        itemTotal: line.product.price * line.qty,
+      }));
+
+      const orderData = {
+        customerInfo,
+        orderItems,
+        orderSummary: {
+          subtotal,
+          shipping,
+          discount,
+          tax,
+          grandTotal,
+        },
+        orderDate,
+        orderTime,
+      };
+
+      // Send order email to owner
+      try {
+        const emailResponse = await fetch('/api/send-order-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+        });
+
+        if (!emailResponse.ok) {
+          const errorText = await emailResponse.text();
+          console.error('Failed to send order email:', errorText);
+          // Continue with WhatsApp even if email fails
+        }
+      } catch (emailError) {
+        console.error('Email sending error:', emailError);
+        // Continue with WhatsApp even if email fails
+      }
+
+      // Generate WhatsApp message
+      const message = formatWhatsAppMessage();
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+      // Open WhatsApp in new tab
+      window.open(whatsappUrl, "_blank");
+
+      // Close cart drawer
+      setOpen(false);
+    } catch (error) {
+      console.error('Checkout error:', error);
+      setSubmitError('There was an error processing your order. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: keyof CustomerInfo, value: string) => {
@@ -196,13 +284,18 @@ Please confirm my order.`;
         onClick={() => setShowForm(true)}
         className="w-full rounded-full bg-gold py-3.5 text-sm font-medium tracking-wide text-background transition hover:bg-gold-soft"
       >
-        Checkout · ${(subtotal / 100).toFixed(2)}
+        Checkout · PKR {subtotal.toLocaleString()}
       </button>
     );
   }
 
   return (
     <form onSubmit={handleCheckout} className="space-y-3 pt-4 border-t border-border">
+      {submitError && (
+        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+          {submitError}
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="fullName">
           Full Name <span className="text-red-500">*</span>
@@ -334,19 +427,19 @@ Please confirm my order.`;
       <div className="border-t pt-3 space-y-1">
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Subtotal</span>
-          <span>${(subtotal / 100).toFixed(2)}</span>
+          <span>PKR {subtotal.toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Shipping</span>
-          <span>$0.00</span>
+          <span>PKR 0</span>
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Tax (10%)</span>
-          <span>${((subtotal * 0.1) / 100).toFixed(2)}</span>
+          <span>PKR {(subtotal * 0.1).toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-sm font-bold">
           <span>Total</span>
-          <span>${((subtotal * 1.1) / 100).toFixed(2)}</span>
+          <span>PKR {(subtotal * 1.1).toLocaleString()}</span>
         </div>
       </div>
 
@@ -360,9 +453,10 @@ Please confirm my order.`;
         </button>
         <button
           type="submit"
-          className="flex-1 rounded-full bg-gold py-3 text-sm font-medium tracking-wide text-background transition hover:bg-gold-soft"
+          disabled={isSubmitting}
+          className="flex-1 rounded-full border border-gold/50 bg-gold/10 py-3 text-sm font-medium uppercase tracking-[0.2em] text-foreground transition-all duration-400 hover:border-gold hover:bg-gold hover:text-background disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Place Order
+          {isSubmitting ? "Processing..." : "Place Order"}
         </button>
       </div>
     </form>

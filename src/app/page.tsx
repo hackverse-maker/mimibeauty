@@ -15,7 +15,6 @@ import { assets, products } from "@/lib/products";
 import { ProductCard } from "@/components/site/product-card";
 import { Hero } from "@/components/site/hero";
 import { IngredientsSection } from "@/components/site/ingredients-section";
-import { RitualsGallery } from "@/components/site/rituals-gallery";
 import Link from "next/link";
 
 export default function Home() {
@@ -28,8 +27,6 @@ export default function Home() {
       <Compare />
       <Testimonials />
       <QuizPreview />
-
-      <RitualsGallery />
       <Newsletter />
     </>
   );
@@ -96,29 +93,33 @@ function BestSellers() {
 const whyItems = [
   {
     icon: ShieldCheck,
-    title: "Dermatologist tested",
-    body: "Every formula clinically evaluated for sensitive skin.",
+    title: "Dermatologically Tested",
+    body: "Every formula evaluated for skin compatibility.",
   },
   {
     icon: Rabbit,
-    title: "Cruelty free",
-    body: "Never tested on animals. Certified by Leaping Bunny.",
+    title: "Cruelty Free",
+    body: "Never tested on animals. Always made with compassion.",
   },
-  { icon: Leaf, title: "100% vegan", body: "Plant-based actives. No compromise on efficacy." },
+  {
+    icon: Leaf,
+    title: "Botanical Actives",
+    body: "Powered by concentrated plant-derived ingredients.",
+  },
   {
     icon: Sparkles,
-    title: "Botanical actives",
-    body: "Wild-harvested, cold-pressed, and clinically dosed.",
+    title: "Purposefully Formulated",
+    body: "Every ingredient selected with a clear purpose.",
   },
   {
     icon: Recycle,
-    title: "Sustainable packaging",
-    body: "Refillable glass. Post-consumer recycled cartons.",
+    title: "Non-Comedogenic",
+    body: "Won't clog pores or leave skin congested.",
   },
   {
     icon: Truck,
-    title: "Complimentary shipping",
-    body: "Free carbon-neutral delivery on orders over $75.",
+    title: "Fast Absorbing",
+    body: "Lightweight dry oils that absorb in seconds.",
   },
 ];
 
@@ -236,7 +237,7 @@ const testimonials = [
     name: "Yuki T.",
     city: "Tokyo",
     quote:
-      "Every detail feels intentional. The packaging, the ritual, the results. Rhode meets Aesop.",
+      "Every detail feels intentional. The packaging, the care, the results. Rhode meets Aesop.",
   },
   {
     name: "Chloé D.",
@@ -290,7 +291,7 @@ function QuizPreview() {
               Skin Quiz · 60 seconds
             </p>
             <h2 className="mt-4 font-display text-3xl md:text-5xl lg:text-6xl leading-tight text-balance">
-              Your ritual, <em className="text-gold">designed for you</em>.
+              Your routine, <em className="text-gold">designed for you</em>.
             </h2>
             <p className="mt-4 max-w-md text-muted-foreground">
               Four gentle questions. A personalised routine built by dermatologists, delivered
@@ -304,7 +305,7 @@ function QuizPreview() {
             </Link>
           </div>
           <div className="space-y-3">
-            {["Skin type", "Concerns", "Sensitivity", "Ritual time"].map((step, i) => (
+            {["Skin type", "Concerns", "Sensitivity", "Routine time"].map((step, i) => (
               <motion.div
                 key={step}
                 initial={{ opacity: 0, x: 30 }}
@@ -342,7 +343,7 @@ function Newsletter() {
               Slow drops, quiet news.
             </h2>
             <p className="mt-4 max-w-md text-muted-foreground">
-              Occasional letters on ritual, ingredients, and new arrivals. Never noise.
+              Occasional letters on skincare, ingredients, and new arrivals. Never noise.
             </p>
           </div>
           <form className="flex flex-col gap-3 md:flex-row" onSubmit={(e) => e.preventDefault()}>

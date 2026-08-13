@@ -21,12 +21,10 @@ const Tiktok = (props: SVGProps<SVGSVGElement>) => (
 const shop = [
   { label: "Shop All", href: "/shop" },
   { label: "Collections", href: "/collections" },
-  { label: "Skin Quiz", href: "/quiz" },
 ];
 
 const house = [
   { label: "About", href: "/about" },
-  { label: "Journal", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -85,12 +83,12 @@ export function Footer() {
         {/* Top Masthead */}
         <div className="mx-auto flex w-full max-w-[1400px] flex-col items-start justify-start px-6 text-left md:px-10 pb-28 md:pb-40">
           <Link href="/" className="no-underline">
-            <h2 className="text-[4rem] sm:text-[6rem] md:text-[8rem] leading-[0.85] tracking-tight text-[#F5F2EC]">
+            <h2 className="text-[2.75rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] leading-[0.85] tracking-tight text-[#F5F2EC]">
               Mimi<span className="italic text-[#C9A86A]">Beauty</span>
             </h2>
           </Link>
           <p className="mt-8 text-[16px] leading-relaxed text-[#F5F2EC] opacity-90">
-            Ritualistic skincare. Botanical actives. Clinical quiet luxury.
+            Botanical skincare. Clinical actives. Quiet luxury.
           </p>
 
           <div className="mt-14 flex flex-col items-start gap-5">
@@ -117,7 +115,7 @@ export function Footer() {
               href="/shop"
               className="text-[12px] uppercase tracking-[0.3em] text-[#C9A86A] transition-colors hover:text-white font-medium border-b border-[#C9A86A]/40 pb-1"
             >
-              BEGIN THE RITUAL
+              BEGIN THE JOURNEY
             </Link>
           </div>
         </div>
@@ -139,7 +137,7 @@ export function Footer() {
                 <p className="mt-5 max-w-xs text-[13px] leading-relaxed text-[#D8D2C8] opacity-80">
                   Small-batch formulas for the considered.
                   <br />
-                  Never noise — only ritual.
+                  Never noise — only beauty.
                 </p>
                 <form
                   className="mt-8 flex w-full max-w-sm overflow-hidden rounded-[4px] border border-[#C9A86A]/30 bg-transparent transition-colors focus-within:border-[#C9A86A]"
@@ -152,13 +150,13 @@ export function Footer() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email for quiet news"
                     disabled={joined}
-                    className="flex-1 bg-transparent px-4 py-3 text-xs text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A]"
+                    className="flex-1 min-w-0 bg-transparent px-4 py-3 text-xs text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A]"
                     aria-label="Email"
                   />
                   <button
                     type="submit"
                     disabled={joined}
-                    className="bg-[#C9A86A] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
+                    className="shrink-0 bg-[#C9A86A] px-4 sm:px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
                   >
                     {joined ? "JOINED" : "JOIN"}
                   </button>

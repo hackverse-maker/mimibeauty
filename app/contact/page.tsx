@@ -280,7 +280,7 @@ export default function ContactPage() {
                   maxWidth: 380,
                 }}
               >
-                Have a question, need guidance, or want to collaborate? Our concierge team is here to help you with anything you need — from product rituals to bespoke recommendations.
+                Have a question, need guidance, or want to collaborate? Our concierge team is here to help you with anything you need — from product collections to bespoke recommendations.
               </motion.p>
 
               {/* Contact detail list */}

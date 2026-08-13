@@ -34,6 +34,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CartCtx>(() => {
     const add = (p: Product, qty = 1) => {
+      // Validate product data
+      if (!p || !p.price || p.price <= 0) {
+        console.error('Invalid product data:', p);
+        return;
+      }
+      if (qty <= 0) {
+        console.error('Invalid quantity:', qty);
+        return;
+      }
+
       setLines((prev) => {
         const idx = prev.findIndex((l) => l.product.slug === p.slug);
         if (idx >= 0) {
