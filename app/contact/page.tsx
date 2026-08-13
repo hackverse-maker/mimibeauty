@@ -51,7 +51,7 @@ const CONTACT_ITEMS = [
       </svg>
     ),
     label: "Direct Care Line",
-    value: "+33 1 45 67 89 00",
+    value: "+33 1 45 67 89 00\n03239847938",
   },
   {
     icon: (
