@@ -611,7 +611,7 @@ export function Header() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] flex flex-col bg-background"
+            className="fixed inset-0 z-[60] flex flex-col bg-background h-[100dvh]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -628,68 +628,68 @@ export function Header() {
               animate={{ opacity: 0.4 }}
             />
 
-            <div className="relative flex items-center justify-between px-4 py-3">
+            <div className="relative flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3">
               <Link
                 href="/"
                 onClick={closeOverlays}
                 className="no-underline"
               >
-                <img src="/logo.png" alt="Mimi Beauty" className="h-[80px] w-[88px] object-contain" />
+                <img src="/logo.png" alt="Mimi Beauty" className="h-[60px] w-[66px] sm:h-[80px] sm:w-[88px] object-contain" />
               </Link>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="grid h-10 w-10 place-items-center text-foreground/70 transition-colors hover:text-gold"
+                className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center text-foreground/70 transition-colors hover:text-gold"
                 aria-label="Close menu"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>
 
             <motion.nav
-              className="relative flex flex-1 flex-col items-center justify-center gap-4 px-4 overflow-y-auto"
+              className="relative flex flex-1 flex-col items-center gap-2 sm:gap-3 px-3 overflow-y-auto pb-24 sm:gap-4 sm:px-4 sm:pb-28"
               initial="hidden"
               animate="visible"
               variants={{
-                visible: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+                visible: { transition: { staggerChildren: 0.04, delayChildren: 0.04 } },
               }}
             >
               {nav.map((item) => (
                 <motion.div
                   key={item.href}
                   variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
+                    hidden: { opacity: 0, y: 16 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease } },
                   }}
                   className="w-full"
                 >
                   <Link
                     href={item.href}
                     onClick={closeOverlays}
-                    className="block font-display text-2xl tracking-tight text-foreground/90 transition-colors hover:text-gold sm:text-3xl text-center"
+                    className="block font-display text-xl sm:text-2xl tracking-tight text-foreground/90 transition-colors hover:text-gold text-center py-1"
                   >
                     {item.label}
                   </Link>
                   {item.href === "/shop" && (
-                    <div className="mt-3 pl-6 space-y-2">
+                    <div className="mt-2 pl-4 sm:pl-6 space-y-1.5 sm:space-y-2">
                       <Link
                         href="/coming-soon/body-lava-collection"
                         onClick={closeOverlays}
-                        className="block text-base text-foreground/70 hover:text-gold transition-colors text-center"
+                        className="block text-sm sm:text-base text-foreground/70 hover:text-gold transition-colors text-center py-0.5"
                       >
                         Body Lava Collection
                       </Link>
                       <Link
                         href="/coming-soon/hair-collection"
                         onClick={closeOverlays}
-                        className="block text-base text-foreground/70 hover:text-gold transition-colors text-center"
+                        className="block text-sm sm:text-base text-foreground/70 hover:text-gold transition-colors text-center py-0.5"
                       >
                         Hair Collection
                       </Link>
                       <Link
                         href="/coming-soon/face-serum"
                         onClick={closeOverlays}
-                        className="block text-base text-foreground/70 hover:text-gold transition-colors text-center"
+                        className="block text-sm sm:text-base text-foreground/70 hover:text-gold transition-colors text-center py-0.5"
                       >
                         Face Serum
                       </Link>
@@ -700,17 +700,17 @@ export function Header() {
 
               <motion.div
                 variants={{
-                  hidden: { opacity: 0, y: 16 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
+                  hidden: { opacity: 0, y: 12 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease } },
                 }}
-                className="mt-6"
+                className="mt-4 sm:mt-6"
               >
                 <Link
                   href="/shop"
                   onClick={closeOverlays}
-                  className="inline-flex items-center gap-2 rounded-full border border-gold bg-gold px-6 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-background"
+                  className="inline-flex items-center gap-2 rounded-full border border-gold bg-gold px-5 py-2.5 sm:px-6 sm:py-3 text-[9px] sm:text-[10px] font-medium uppercase tracking-[0.2em] text-background"
                 >
-                  Shop Now <ArrowRight className="h-3 w-3" />
+                  Shop Now <ArrowRight className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                 </Link>
               </motion.div>
             </motion.nav>
