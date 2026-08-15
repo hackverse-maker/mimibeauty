@@ -20,7 +20,6 @@ const Tiktok = (props: SVGProps<SVGSVGElement>) => (
 
 const shop = [
   { label: "Shop All", href: "/shop" },
-  { label: "Collections", href: "/collections" },
 ];
 
 const house = [
@@ -217,8 +216,8 @@ export function Footer() {
                 </p>
                 <p className="mt-6 text-[13px] text-[#F5F2EC]">
                   Direct Care:{" "}
-                  <a href="tel:03274984584" className="hover:text-[#C9A86A] transition-colors">
-                    03274984584
+                  <a href="tel:03239847938" className="hover:text-[#C9A86A] transition-colors">
+                    03239847938
                   </a>
                 </p>
                 <div className="mt-6 flex gap-4">
@@ -245,7 +244,7 @@ export function Footer() {
                   ))}
                 </div>
                 <p className="mt-8 text-[12px] text-[#D8D2C8] opacity-80">
-                  Dermatologist tested · Vegan · Cruelty free
+                  Dermatologically tested · Vegan · Cruelty free
                 </p>
               </div>
             </div>

@@ -23,7 +23,7 @@ const GOLD = "#CFA76A";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const features = [
-  { title: "Dermatologist", subtitle: "Tested", icon: Leaf },
+  { title: "Dermatologically", subtitle: "Tested", icon: Leaf },
   { title: "Naturally Derived", subtitle: "Ingredients", icon: Leaf },
   { title: "Cruelty Free", subtitle: "Always", icon: Rabbit },
 ] as const;

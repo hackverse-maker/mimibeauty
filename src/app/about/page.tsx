@@ -186,61 +186,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values Grid */}
-      <section className="relative z-10 border-y border-white/5 bg-white/[0.01] py-24 md:py-36 backdrop-blur-3xl">
-        <div className="mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20">
-          <div className="flex items-center gap-4">
-            <span className="h-[1px] w-8 bg-gold" />
-            <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold">
-              The Pillars
-            </p>
-          </div>
-          <h2 className="mt-6 font-display text-4xl md:text-6xl">Values, quietly held.</h2>
-
-          <div className="mt-16 grid gap-8 md:grid-cols-3">
-            {[
-              {
-                icon: Shield,
-                t: "Clinical Honesty",
-                b: "We formulate with active ingredients at the exact percentages validated in clinical research. No watered-down components, no compromise.",
-              },
-              {
-                icon: Leaf,
-                t: "Botanical Craft",
-                b: "Cold-pressed, organic, and ethically wild-harvested elements. Fully traceable from the soil to the glass container.",
-              },
-              {
-                icon: Heart,
-                t: "Objects of Permanence",
-                b: "Designed to reside permanently on your dresser. Refillable heavyweight glass structures with fully recyclable dispenser systems.",
-              },
-            ].map((v, i) => (
-              <motion.div
-                key={v.t}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: i * 0.15 }}
-                className="group relative rounded-2xl border border-white/5 bg-background/60 p-8 md:p-12 hover:border-gold/30 transition-all duration-500 overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.02] border border-white/10 text-gold group-hover:scale-110 transition-transform duration-500">
-                  <v.icon className="h-6 w-6" strokeWidth={1.5} />
-                </div>
-                <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.3em] text-gold/60">
-                  0{i + 1}
-                </p>
-                <h3 className="mt-4 font-display text-2xl md:text-3xl text-white group-hover:text-gold transition-colors duration-300">
-                  {v.t}
-                </h3>
-                <p className="mt-4 text-base text-foreground/60 leading-relaxed font-light">
-                  {v.b}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Timeline Section */}
       <section className="relative z-10 mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 py-24 md:py-36">

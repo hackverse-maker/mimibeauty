@@ -8,7 +8,7 @@ import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const { add } = useCart();
+  const { addProduct } = useCart();
   const { toggle, has } = useWishlist();
   const [justAdded, setJustAdded] = useState(false);
   const wishlisted = has(product.slug);
@@ -16,7 +16,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    add(product);
+    addProduct(product);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1200);
   };
@@ -125,10 +125,10 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             <div className="flex items-center gap-2.5">
               {hasDiscount && (
                 <span className="text-[14px] text-gray-500 line-through">
-                  PKR {product.originalPrice.toLocaleString()}
+                  Rs. {product.originalPrice}
                 </span>
               )}
-              <span className="text-[16px] font-semibold text-gold">PKR {product.price.toLocaleString()}</span>
+              <span className="text-[16px] font-semibold text-gold">Rs. {product.price}</span>
             </div>
             <div className="flex items-center gap-1.5 text-[14px] text-white">
               <Star className="h-4 w-4 fill-gold text-gold" strokeWidth={0} />{" "}

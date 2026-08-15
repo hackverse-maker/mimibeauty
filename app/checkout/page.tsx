@@ -54,9 +54,6 @@ export default function CheckoutPage() {
     if (!customerInfo.city.trim()) newErrors.city = "Required";
     if (!customerInfo.zipCode.trim()) newErrors.zipCode = "Required";
     if (!customerInfo.address.trim()) newErrors.address = "Required";
-    if (!customerInfo.paymentMethod || customerInfo.paymentMethod.includes("coming soon")) {
-      newErrors.paymentMethod = "Please select a payment method";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -66,14 +63,6 @@ export default function CheckoutPage() {
     setCustomerInfo((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
-
-  const handlePaymentMethodChange = (method: string) => {
-    if (method.includes('coming soon')) return; // Prevent selecting disabled methods
-    setCustomerInfo((prev) => ({ ...prev, paymentMethod: method }));
-    if (errors.paymentMethod) {
-      setErrors((prev) => ({ ...prev, paymentMethod: undefined }));
     }
   };
 
@@ -98,15 +87,15 @@ export default function CheckoutPage() {
       const { product, qty } = line;
       message += `• ${index + 1}. ${product.name}\n`;
       message += `   Quantity: ${qty}\n`;
-      message += `   Unit Price: PKR ${product.price.toLocaleString()}\n`;
-      message += `   Item Total: PKR ${(product.price * qty).toLocaleString()}\n\n`;
+      message += `   Unit Price: $${(product.price / 100).toFixed(2)}\n`;
+      message += `   Item Total: $${((product.price * qty) / 100).toFixed(2)}\n\n`;
     });
 
     message += `💰 *Order Summary*\n`;
-    message += `Subtotal: PKR ${subtotal.toLocaleString()}\n`;
-    message += `Shipping: PKR ${shipping.toLocaleString()}\n`;
-    message += `Tax: PKR ${tax.toLocaleString()}\n`;
-    message += `Grand Total: PKR ${grandTotal.toLocaleString()}\n\n`;
+    message += `Subtotal: $${(subtotal / 100).toFixed(2)}\n`;
+    message += `Shipping: $${(shipping / 100).toFixed(2)}\n`;
+    message += `Tax: $${(tax / 100).toFixed(2)}\n`;
+    message += `Grand Total: $${(grandTotal / 100).toFixed(2)}\n\n`;
     message += `Please confirm my order.`;
 
     return message;
@@ -280,18 +269,13 @@ export default function CheckoutPage() {
                   <h2 className="text-[#D4B483] text-sm uppercase tracking-[0.2em] font-semibold mb-6">Payment Method</h2>
                   <div className="space-y-3">
                     {["Cash on Delivery", "Bank Transfer", "Stripe (coming soon)", "PayPal (coming soon)"].map((method) => (
-                      <div 
-                        key={method} 
-                        className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${customerInfo.paymentMethod === method ? 'border-[#D4B483] bg-[#D4B483]/5' : 'border-white/10 hover:border-white/20 bg-white/5'} ${method.includes('soon') ? 'opacity-50 pointer-events-none' : ''}`}
-                        onClick={() => !method.includes('soon') && handlePaymentMethodChange(method)}
-                      >
+                      <label key={method} className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${customerInfo.paymentMethod === method ? 'border-[#D4B483] bg-[#D4B483]/5' : 'border-white/10 hover:border-white/20 bg-white/5'} ${method.includes('soon') ? 'opacity-50 pointer-events-none' : ''}`}>
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${customerInfo.paymentMethod === method ? 'border-[#D4B483]' : 'border-white/30'}`}>
                           {customerInfo.paymentMethod === method && <div className="w-2 h-2 rounded-full bg-[#D4B483]"></div>}
                         </div>
                         <span className="text-[#F8F4ED] text-sm">{method}</span>
-                      </div>
+                      </label>
                     ))}
-                    {errors.paymentMethod && <span className="text-[10px] text-red-400 mt-1 block">{errors.paymentMethod}</span>}
                   </div>
                 </section>
               </form>
@@ -317,7 +301,7 @@ export default function CheckoutPage() {
                         <p className="text-xs text-[#B8B5AC] mt-1">Qty: {line.qty}</p>
                       </div>
                       <div className="flex items-center">
-                        <p className="text-[#F8F4ED] text-sm">PKR {(line.product.price * line.qty).toLocaleString()}</p>
+                        <p className="text-[#F8F4ED] text-sm">${((line.product.price * line.qty) / 100).toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -332,19 +316,19 @@ export default function CheckoutPage() {
                 <div className="space-y-3 mb-8 border-t border-white/10 pt-6">
                   <div className="flex justify-between text-sm text-[#B8B5AC]">
                     <span>Subtotal</span>
-                    <span>PKR {subtotal.toLocaleString()}</span>
+                    <span>${(subtotal / 100).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm text-[#B8B5AC]">
                     <span>Shipping</span>
-                    <span>PKR 0</span>
+                    <span>Free</span>
                   </div>
                   <div className="flex justify-between text-sm text-[#B8B5AC]">
                     <span>Tax (10%)</span>
-                    <span>PKR {tax.toLocaleString()}</span>
+                    <span>${(tax / 100).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-lg text-[#D4B483] font-display pt-3 border-t border-white/10 mt-3">
                     <span>Total</span>
-                    <span>PKR {grandTotal.toLocaleString()}</span>
+                    <span>${(grandTotal / 100).toFixed(2)}</span>
                   </div>
                 </div>
 

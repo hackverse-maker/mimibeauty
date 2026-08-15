@@ -100,11 +100,18 @@ function BestSellers() {
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-gold">
               CUSTOMER FAVORITES
             </p>
-            <h2 
-              className="mt-5 text-4xl sm:text-5xl md:text-7xl lg:text-[80px] font-medium leading-[1.1] text-[#F6F2EB]"
+            <h2
+              className="mt-5 font-medium leading-[1.08] text-[#F6F2EB]"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
-              Skincare that <em className="italic text-gold">stays with you.</em>
+              {/* Line 1 — Skincare that */}
+              <span className="block text-5xl sm:text-6xl md:text-8xl lg:text-[96px] tracking-tight">
+                Skincare <span className="italic text-[#F6F2EB]/60">that</span>
+              </span>
+              {/* Line 2 — gold italic, stays with you. */}
+              <em className="not-italic block text-4xl sm:text-5xl md:text-7xl lg:text-[80px] text-gold tracking-tight italic">
+                stays with you.
+              </em>
             </h2>
             <p className="mt-5 text-[15px] md:text-[16px] font-medium text-white/90">
               Thoughtfully formulated to work with your skin, not against it. Results you can feel. Confidence that lasts.

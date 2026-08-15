@@ -5,6 +5,7 @@ import { Footer } from "@/components/site/footer";
 import { CartDrawer } from "@/components/site/cart-drawer";
 import { LoadingScreen } from "@/components/site/loading-screen";
 import { ScrollProgress } from "@/components/site/scroll-progress";
+import { PromotionalPopup } from "@/components/ui/promotional-popup";
 import type { ReactNode } from "react";
 
 export function ClientLayout({ children }: { children: ReactNode }) {
@@ -18,6 +19,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
       <main className="min-h-screen">{children}</main>
       <Footer />
       <CartDrawer />
+      <PromotionalPopup />
     </>
   );
 }

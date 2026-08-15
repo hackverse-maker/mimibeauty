@@ -24,6 +24,7 @@ import { collections, products } from "@/lib/products";
 const nav = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Products", mega: true },
+  { href: "/bundles", label: "Bundles" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -142,16 +143,6 @@ export function Header() {
     return () => window.removeEventListener("mousedown", onPointer);
   }, [wishlistOpen]);
 
-  useEffect(() => {
-    if (!megaOpen) return;
-    const onPointer = (e: MouseEvent) => {
-      const t = e.target as HTMLElement;
-      if (!t.closest("[data-mega-root]")) setMegaOpen(false);
-    };
-    window.addEventListener("mousedown", onPointer);
-    return () => window.removeEventListener("mousedown", onPointer);
-  }, [megaOpen]);
-
   const closeOverlays = () => {
     setMobileOpen(false);
     setSearchOpen(false);
@@ -168,29 +159,18 @@ export function Header() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="group relative flex overflow-hidden border-b border-gold/20 bg-[#070b09] py-2.5 text-[9px] font-medium uppercase tracking-[0.25em] text-[#C9A86A] sm:text-[10px]">
-          <div className="flex animate-marquee whitespace-nowrap will-change-transform hover:[animation-play-state:paused]">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="flex items-center space-x-4 px-2">
-                <span>FIRST 100 CUSTOMERS</span>
-                <span className="text-[#C9A86A]/50">•</span>
-                <span>10% OFF</span>
-                <span className="text-[#C9A86A]/50">•</span>
-                <span>LIMITED LAUNCH OFFER</span>
-                <span className="text-[#C9A86A]/50">•</span>
-              </div>
-            ))}
-          </div>
-        </div>
 
         <div className="relative mx-auto grid h-[100px] md:h-[120px] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 sm:px-5 md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
           {/* Logo — left */}
           <Link
             href="/"
             onClick={closeOverlays}
-            className="z-10 justify-self-start no-underline"
+            className="z-10 justify-self-start no-underline flex items-center gap-2"
           >
-            <img src="/logo.png" alt="Mimi Beauty" className="h-[90px] md:h-[130px] max-w-[110px] sm:max-w-none object-contain" />
+            <img src="/logo.png" alt="Mimi Beauty" className="h-[70px] md:h-[100px] max-w-[90px] sm:max-w-none object-contain" />
+            <span className="font-['Playfair_Display'] text-2xl sm:text-3xl font-medium tracking-wide text-foreground mt-1">
+              Mimi<span className="italic text-gold font-light">Beauty</span>
+            </span>
           </Link>
 
           {/* Desktop nav — center */}
@@ -317,7 +297,6 @@ export function Header() {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.35, ease }}
               className="absolute inset-x-0 top-full hidden border-b border-gold/25 bg-[#0a110c] shadow-[0_30px_80px_-40px_oklch(0_0_0/0.6)] lg:block"
-              data-mega-root
             >
               <div className="mx-auto max-w-[1500px]">
                 {/* Top Section */}
@@ -333,7 +312,6 @@ export function Header() {
                         <Link
                           href="/coming-soon/body-lava-collection"
                           className="flex items-start gap-4"
-                          onClick={() => setMegaOpen(false)}
                         >
                           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
                             <Sparkles className="h-4 w-4" />
@@ -356,7 +334,6 @@ export function Header() {
                         <Link
                           href="/coming-soon/hair-collection"
                           className="flex items-start gap-4"
-                          onClick={() => setMegaOpen(false)}
                         >
                           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
                             <Wind className="h-4 w-4" />
@@ -376,7 +353,7 @@ export function Header() {
                       </li>
 
                       <li className="group cursor-pointer">
-                        <Link href="/coming-soon/face-serum" className="flex items-start gap-4" onClick={() => setMegaOpen(false)}>
+                        <Link href="/coming-soon/face-serum" className="flex items-start gap-4">
                           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#151c17] text-[#C9A86A] border border-[#C9A86A]/20 transition group-hover:bg-[#C9A86A] group-hover:text-black">
                             <Droplet className="h-4 w-4" />
                           </div>
@@ -399,7 +376,6 @@ export function Header() {
                       <Link
                         href="/shop"
                         className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A86A] hover:text-white transition-colors flex items-center gap-2"
-                        onClick={() => setMegaOpen(false)}
                       >
                         VIEW ALL PRODUCTS <ArrowRight className="h-3 w-3" />
                       </Link>
@@ -416,12 +392,12 @@ export function Header() {
                       <div className="grid grid-cols-4 gap-8">
                         {["Halò", "Pearl", "Amalfi", "Santorini"].map(
                           (n) => (
-                            <Link href="/shop" key={n} className="group text-white" onClick={() => setMegaOpen(false)}>
+                            <Link href="/shop" key={n} className="group text-white">
                               <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                                 {n}
                               </p>
                               <p className="text-xs text-white/50 mt-2 mb-1">100ml</p>
-                              <p className="text-xs text-white/80">PKR 5,000</p>
+                              <p className="text-xs text-white/80">Rs. 5000</p>
                             </Link>
                           ),
                         )}
@@ -434,21 +410,21 @@ export function Header() {
                         HAIR COLLECTION
                       </p>
                       <div className="grid grid-cols-4 gap-8">
-                        <Link href="/shop" className="group text-white" onClick={() => setMegaOpen(false)}>
+                        <Link href="/shop" className="group text-white">
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                             Veil
                           </p>
                           <p className="text-[11px] text-white/60 mt-1">Post-Wash Hair Serum</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">PKR 3,500</p>
+                          <p className="text-xs text-white/80">Rs. 3500</p>
                         </Link>
-                        <Link href="/shop" className="group text-white" onClick={() => setMegaOpen(false)}>
+                        <Link href="/shop" className="group text-white">
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                             Herbé
                           </p>
                           <p className="text-[11px] text-white/60 mt-1">Pre-Wash Hair Oil</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">50ml</p>
-                          <p className="text-xs text-white/80">PKR 4,500</p>
+                          <p className="text-xs text-white/80">Rs. 4500</p>
                         </Link>
                       </div>
                     </div>
@@ -459,13 +435,13 @@ export function Header() {
                         FACE SERUM
                       </p>
                       <div className="grid grid-cols-4 gap-8">
-                        <Link href="/shop" className="group text-white" onClick={() => setMegaOpen(false)}>
+                        <Link href="/shop" className="group text-white">
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
                             Dew
                           </p>
                           <p className="text-[11px] text-white/60 mt-1">Daily Glow Face Serum</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">30ml</p>
-                          <p className="text-xs text-white/80">PKR 3,500</p>
+                          <p className="text-xs text-white/80">Rs. 3500</p>
                         </Link>
                       </div>
                     </div>
@@ -591,7 +567,7 @@ export function Header() {
                         <p className="font-display text-lg">{p.name}</p>
                         <p className="truncate text-xs text-muted-foreground">{p.tagline}</p>
                       </div>
-                      <span className="text-sm text-gold">PKR {p.price.toLocaleString()}</span>
+                      <span className="text-sm text-gold">Rs. {p.price}</span>
                     </Link>
                   ))
                 )}
@@ -611,7 +587,7 @@ export function Header() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-[60] flex flex-col bg-background h-[100dvh]"
+            className="fixed inset-0 z-[60] flex flex-col bg-background"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -628,89 +604,79 @@ export function Header() {
               animate={{ opacity: 0.4 }}
             />
 
-            <div className="relative flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3">
+            <div className="relative flex items-center justify-between px-5 py-4">
               <Link
                 href="/"
                 onClick={closeOverlays}
                 className="no-underline"
               >
-                <img src="/logo.png" alt="Mimi Beauty" className="h-[60px] w-[66px] sm:h-[80px] sm:w-[88px] object-contain" />
+                <img src="/logo.png" alt="Mimi Beauty" className="h-[120px] w-[132px] object-contain" />
               </Link>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center text-foreground/70 transition-colors hover:text-gold"
+                className="grid h-11 w-11 place-items-center text-foreground/70 transition-colors hover:text-gold"
                 aria-label="Close menu"
               >
-                <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                <X className="h-6 w-6" />
               </button>
             </div>
 
             <motion.nav
-              className="relative flex flex-1 flex-col items-center gap-2 sm:gap-3 px-3 overflow-y-auto pb-24 sm:gap-4 sm:px-4 sm:pb-28"
+              className="relative flex flex-1 flex-col items-center justify-center gap-7 px-6"
               initial="hidden"
               animate="visible"
               variants={{
-                visible: { transition: { staggerChildren: 0.04, delayChildren: 0.04 } },
+                visible: { transition: { staggerChildren: 0.07, delayChildren: 0.08 } },
               }}
             >
               {nav.map((item) => (
                 <motion.div
                   key={item.href}
                   variants={{
-                    hidden: { opacity: 0, y: 16 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease } },
+                    hidden: { opacity: 0, y: 36 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
                   }}
-                  className="w-full"
                 >
                   <Link
                     href={item.href}
                     onClick={closeOverlays}
-                    className="block font-display text-xl sm:text-2xl tracking-tight text-foreground/90 transition-colors hover:text-gold text-center py-1"
+                    className="block font-display text-3xl tracking-tight text-foreground/90 transition-colors hover:text-gold sm:text-5xl"
                   >
                     {item.label}
                   </Link>
-                  {item.href === "/shop" && (
-                    <div className="mt-2 pl-4 sm:pl-6 space-y-1.5 sm:space-y-2">
-                      <Link
-                        href="/coming-soon/body-lava-collection"
-                        onClick={closeOverlays}
-                        className="block text-sm sm:text-base text-foreground/70 hover:text-gold transition-colors text-center py-0.5"
-                      >
-                        Body Lava Collection
-                      </Link>
-                      <Link
-                        href="/coming-soon/hair-collection"
-                        onClick={closeOverlays}
-                        className="block text-sm sm:text-base text-foreground/70 hover:text-gold transition-colors text-center py-0.5"
-                      >
-                        Hair Collection
-                      </Link>
-                      <Link
-                        href="/coming-soon/face-serum"
-                        onClick={closeOverlays}
-                        className="block text-sm sm:text-base text-foreground/70 hover:text-gold transition-colors text-center py-0.5"
-                      >
-                        Face Serum
-                      </Link>
-                    </div>
-                  )}
                 </motion.div>
               ))}
+
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
+                }}
+                className="mt-4"
+              >
+                <Link
+                  href="/shop"
+                  onClick={closeOverlays}
+                  className="inline-flex items-center gap-2 rounded-full border border-gold bg-gold px-8 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-background"
+                >
+                  Shop Now <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </motion.div>
 
               <motion.div
                 variants={{
                   hidden: { opacity: 0, y: 12 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease } },
                 }}
-                className="mt-4 sm:mt-6"
+                className="mt-4"
               >
                 <Link
-                  href="/shop"
+                  href="/bundles"
                   onClick={closeOverlays}
-                  className="inline-flex items-center gap-2 rounded-full border border-gold bg-gold px-5 py-2.5 sm:px-6 sm:py-3 text-[9px] sm:text-[10px] font-medium uppercase tracking-[0.2em] text-background"
+                  className="inline-flex items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-6 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-foreground transition-colors hover:border-gold hover:bg-gold hover:text-background"
                 >
-                  Shop Now <ArrowRight className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                  Shop Bundles <ArrowRight className="h-3 w-3" />
                 </Link>
               </motion.div>
             </motion.nav>
@@ -840,7 +806,7 @@ function WishlistPanel({
                 <img src={p.image} alt="" className="h-12 w-12 object-cover" />
                 <div className="min-w-0">
                   <p className="truncate font-display text-base">{p.name}</p>
-                  <p className="text-xs text-gold">PKR {p.price.toLocaleString()}</p>
+                  <p className="text-xs text-gold">Rs. {p.price}</p>
                 </div>
               </Link>
               <button

@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { findProduct, products } from "@/lib/products";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import {
   ArrowRight,
@@ -20,24 +19,33 @@ import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { ProductCard } from "@/components/site/product-card";
 
+// -------------------------------------------------------------
+// Accordion Item
+// -------------------------------------------------------------
 function AccordionItem({
   title,
   children,
   open,
   onClick,
+  accent,
 }: {
   title: string;
   children: React.ReactNode;
   open: boolean;
   onClick: () => void;
+  accent: string;
 }) {
   return (
     <div className="border-b border-white/10">
       <button
         onClick={onClick}
-        className="group flex w-full items-center justify-between py-6 text-left transition-colors hover:text-gold"
+        className="group flex w-full items-center justify-between py-6 text-left transition-colors"
+        style={{ ["--accent" as string]: accent }}
       >
-        <span className="font-display text-lg tracking-wide text-foreground/90 transition-colors group-hover:text-gold">
+        <span
+          className="font-display text-lg tracking-wide text-foreground/90 transition-colors"
+          style={{ color: open ? accent : undefined }}
+        >
           {title}
         </span>
         <motion.div
@@ -45,8 +53,9 @@ function AccordionItem({
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
           <ChevronDown
-            className="h-5 w-5 text-foreground/50 transition-colors group-hover:text-gold"
+            className="h-5 w-5 text-foreground/50 transition-colors"
             strokeWidth={1.5}
+            style={{ color: open ? accent : undefined }}
           />
         </motion.div>
       </button>
@@ -75,18 +84,17 @@ function AccordionItem({
 function MagneticButton({
   children,
   onClick,
-  active,
   className,
+  style,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
-  active?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
@@ -94,15 +102,11 @@ function MagneticButton({
     if (!ref.current) return;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     const center = { x: left + width / 2, y: top + height / 2 };
-    const distance = { x: e.clientX - center.x, y: e.clientY - center.y };
-    x.set(distance.x * 0.2);
-    y.set(distance.y * 0.2);
+    x.set((e.clientX - center.x) * 0.2);
+    y.set((e.clientY - center.y) * 0.2);
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
 
   return (
     <motion.button
@@ -110,10 +114,9 @@ function MagneticButton({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
-      style={{ x: mouseXSpring, y: mouseYSpring }}
+      style={{ x: mouseXSpring, y: mouseYSpring, ...style } as React.CSSProperties & { x: typeof mouseXSpring; y: typeof mouseYSpring }}
       className={`group relative overflow-hidden transition-all duration-300 ${className}`}
     >
-      {/* Shine effect */}
       <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-[1.5s] ease-in-out group-hover:translate-x-[150%]" />
       {children}
     </motion.button>
@@ -121,43 +124,29 @@ function MagneticButton({
 }
 
 // -------------------------------------------------------------
-// Cinematic Stage Component (Left Side)
+// Cinematic Stage Component
 // -------------------------------------------------------------
-function CinematicStage({ image }: { image: string }) {
+function CinematicStage({ image, accent, glow }: { image: string; accent: string; glow: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [isHovered, setIsHovered] = useState(false);
-
   const mouseXSpring = useSpring(x, { stiffness: 40, damping: 25 });
   const mouseYSpring = useSpring(y, { stiffness: 40, damping: 25 });
-
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [8, -8]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-8, 8]);
-
-  // Spotlight movement
   const spotX = useTransform(mouseXSpring, [-0.5, 0.5], ["-30%", "30%"]);
   const spotY = useTransform(mouseYSpring, [-0.5, 0.5], ["-30%", "30%"]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
     setIsHovered(true);
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-    setIsHovered(false);
-  };
-
-  // Create an array for particles without relying on window on first render
+  const handleMouseLeave = () => { x.set(0); y.set(0); setIsHovered(false); };
   const particles = Array.from({ length: 12 });
 
   return (
@@ -165,10 +154,10 @@ function CinematicStage({ image }: { image: string }) {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex min-h-[60vh] w-full items-center justify-center overflow-hidden rounded-[2.5rem] bg-background shadow-2xl lg:h-[calc(100vh-4rem)] lg:min-h-0"
-      style={{ perspective: "1500px" }}
+      className="relative flex min-h-[60vh] w-full items-center justify-center overflow-hidden rounded-[2.5rem] shadow-2xl lg:h-[calc(100vh-4rem)] lg:min-h-0"
+      style={{ perspective: "1500px", background: "rgba(0,0,0,0.3)" }}
     >
-      {/* Noise Grain Background */}
+      {/* Noise grain */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay"
         style={{
@@ -176,36 +165,28 @@ function CinematicStage({ image }: { image: string }) {
         }}
       />
 
-      {/* Deep Radial Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,168,106,0.03)_0%,transparent_70%)]" />
-
-      {/* Interactive Spotlight */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 rounded-full bg-gold opacity-[0.08] blur-[100px]"
-        style={{ x: spotX, y: spotY, scale: 1.5 }}
+      {/* Ambient glow */}
+      <div
+        className="absolute inset-0"
+        style={{ background: `radial-gradient(circle at center, ${glow.replace('0.06', '0.08')} 0%, transparent 70%)` }}
       />
 
-      {/* Floating Particles */}
+      {/* Interactive spotlight */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-full blur-[100px] opacity-[0.12]"
+        style={{ x: spotX, y: spotY, scale: 1.5, backgroundColor: accent }}
+      />
+
+      {/* Floating particles */}
       <div className="absolute inset-0 z-0">
         {particles.map((_, i) => (
           <motion.div
             key={i}
-            initial={{
-              opacity: 0,
-              x: `${Math.random() * 100}%`,
-              y: "110%",
-            }}
-            animate={{
-              opacity: [0, Math.random() * 0.4 + 0.1, 0],
-              y: ["110%", "-10%"],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              ease: "linear",
-              delay: Math.random() * 10,
-            }}
-            className="absolute h-1 w-1 rounded-full bg-gold blur-[2px]"
+            initial={{ opacity: 0, x: `${Math.random() * 100}%`, y: "110%" }}
+            animate={{ opacity: [0, Math.random() * 0.4 + 0.1, 0], y: ["110%", "-10%"] }}
+            transition={{ duration: Math.random() * 10 + 10, repeat: Infinity, ease: "linear", delay: Math.random() * 10 }}
+            className="absolute h-1 w-1 rounded-full blur-[2px]"
+            style={{ backgroundColor: accent }}
           />
         ))}
       </div>
@@ -219,12 +200,7 @@ function CinematicStage({ image }: { image: string }) {
           <motion.img
             key={image}
             initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              filter: "blur(0px)",
-              y: [0, -12, 0],
-            }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)", y: [0, -12, 0] }}
             exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
             transition={{
               opacity: { duration: 0.6 },
@@ -239,7 +215,7 @@ function CinematicStage({ image }: { image: string }) {
           />
         </AnimatePresence>
 
-        {/* Dynamic Glass Reflection */}
+        {/* Glass reflection */}
         <motion.div
           animate={{ opacity: isHovered ? 0.3 : 0.1 }}
           transition={{ duration: 0.5 }}
@@ -262,16 +238,15 @@ function CinematicStage({ image }: { image: string }) {
 // -------------------------------------------------------------
 // Main Page Component
 // -------------------------------------------------------------
-export default function ProductPage() {
-  const params = useParams();
-  const slug = params.slug as string;
+export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params);
+  const slug = resolvedParams.slug;
   const product = findProduct(slug);
 
-  const { add } = useCart();
+  const { addProduct } = useCart();
   const { toggle, has } = useWishlist();
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<string>("ingredients");
-  const [active, setActive] = useState(0);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
 
   if (!product) {
@@ -279,33 +254,47 @@ export default function ProductPage() {
       <div className="grid min-h-[60vh] place-items-center bg-background text-foreground">
         <p>
           Product not found.{" "}
-          <Link href="/shop" className="text-gold underline">
-            Back to shop
-          </Link>
+          <Link href="/shop" className="text-gold underline">Back to shop</Link>
         </p>
       </div>
     );
   }
 
+  const { theme } = product;
   const wishlisted = has(product.slug);
-  const gallery = [product.image, product.hoverImage].filter(Boolean);
   const related = products.filter((p) => p.slug !== product.slug);
 
   const handleAddToCart = () => {
     setStatus("loading");
     setTimeout(() => {
-      add(product, qty);
+      addProduct(product, qty);
       setStatus("success");
       setTimeout(() => setStatus("idle"), 2500);
-    }, 600); // Simulate network request for premium feel
+    }, 600);
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-gold/30">
-      {/* Background ambient lighting */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gold/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-gold/5 blur-[120px]" />
+    <div
+      className="min-h-screen text-white selection:bg-white/20"
+      style={{ backgroundColor: theme.bg }}
+    >
+      {/* Background ambient blobs */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div
+          className="absolute top-[-15%] right-[-10%] w-[55vw] h-[55vw] rounded-full blur-[140px]"
+          style={{ backgroundColor: theme.glow }}
+        />
+        <div
+          className="absolute bottom-[-15%] left-[-10%] w-[45vw] h-[45vw] rounded-full blur-[140px]"
+          style={{ backgroundColor: theme.glow }}
+        />
+        {/* Subtle gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${theme.accentMuted}, transparent 70%)`,
+          }}
+        />
       </div>
 
       <div className="relative z-10 pt-24 lg:pt-32">
@@ -314,15 +303,34 @@ export default function ProductPage() {
           <div className="flex items-center gap-6">
             <Link
               href="/shop"
-              className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-foreground/50 transition-colors hover:text-white"
+              className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white/50 transition-colors hover:text-white"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-colors group-hover:border-gold group-hover:bg-gold/10 group-hover:text-gold">
+              <span
+                className="flex h-8 w-8 items-center justify-center rounded-full border transition-colors"
+                style={{
+                  borderColor: "rgba(255,255,255,0.1)",
+                  ["--hover-border" as string]: theme.accent,
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = theme.accent;
+                  (e.currentTarget as HTMLElement).style.backgroundColor = theme.accentMuted;
+                  (e.currentTarget as HTMLElement).style.color = theme.accent;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "";
+                  (e.currentTarget as HTMLElement).style.color = "";
+                }}
+              >
                 <ArrowLeft className="h-3.5 w-3.5" />
               </span>
               Back to Shop
             </Link>
             <span className="h-3 w-[1px] bg-white/10" />
-            <span className="text-[10px] uppercase tracking-[0.4em] text-foreground/40">
+            <span
+              className="text-[10px] uppercase tracking-[0.4em]"
+              style={{ color: `${theme.accent}99` }}
+            >
               {product.category}
             </span>
           </div>
@@ -331,34 +339,10 @@ export default function ProductPage() {
         <section className="mx-auto max-w-[1800px] lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12 xl:gap-20">
           {/* Left Column: Cinematic Stage */}
           <div className="relative px-6 lg:pl-12 xl:pl-20">
-            <CinematicStage image={gallery[active]} />
-
-            {/* Premium Glass Thumbnails */}
-            <div className="absolute bottom-10 left-1/2 flex -translate-x-1/2 gap-4 lg:bottom-16">
-              {gallery.map((src, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className={`relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border bg-background/40 backdrop-blur-xl transition-all duration-300 ${active === i ? "border-gold/50" : "border-white/10 hover:border-white/30"}`}
-                >
-                  <img
-                    src={src}
-                    className="h-full w-full object-contain p-2 mix-blend-screen opacity-80"
-                    alt=""
-                  />
-                  {active === i && (
-                    <motion.div
-                      layoutId="active-thumb-border"
-                      className="absolute inset-0 rounded-2xl border-2 border-gold shadow-[0_0_15px_rgba(201,168,106,0.3)]"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
+            <CinematicStage image={product.image} accent={theme.accent} glow={theme.glow} />
           </div>
 
-          {/* Right Column: Sticky Typography & Details */}
+          {/* Right Column: Product Info */}
           <div className="relative mt-12 px-6 lg:mt-0 lg:pr-12 xl:pr-20">
             <div className="lg:sticky lg:top-12 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <motion.div
@@ -366,17 +350,21 @@ export default function ProductPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               >
+                {/* Collection label */}
                 <div className="flex items-center gap-4">
-                  <span className="h-[1px] w-8 bg-gold" />
-                  <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold">
+                  <span className="h-[1px] w-8" style={{ backgroundColor: theme.accent }} />
+                  <p
+                    className="text-[11px] font-medium uppercase tracking-[0.4em]"
+                    style={{ color: theme.accent }}
+                  >
                     {product.collection} Collection
                   </p>
                 </div>
 
-                <h1 className="mt-6 font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.95] tracking-tight">
+                <h1 className="mt-6 font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.95] tracking-tight text-white">
                   {product.name}
                 </h1>
-                <p className="mt-4 text-lg text-foreground/60 md:text-xl">{product.tagline}</p>
+                <p className="mt-4 text-lg text-white/60 md:text-xl">{product.tagline}</p>
 
                 {/* Reviews */}
                 <div className="mt-8 flex items-center gap-3">
@@ -384,48 +372,67 @@ export default function ProductPage() {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`h-4 w-4 ${i < Math.round(product.rating) ? "fill-gold text-gold" : "text-white/20"}`}
+                        className="h-4 w-4"
                         strokeWidth={1}
+                        style={{
+                          color: i < Math.round(product.rating) ? theme.accent : "rgba(255,255,255,0.15)",
+                          fill: i < Math.round(product.rating) ? theme.accent : "transparent",
+                        }}
                       />
                     ))}
                   </div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-foreground/60">
-                    {product.rating} <span className="mx-1">·</span> {product.reviews} reviews
+                  <span className="text-xs uppercase tracking-[0.2em] text-white/50">
+                    {product.rating} · {product.reviews} reviews
                   </span>
                 </div>
 
-                <p className="mt-10 text-base leading-relaxed text-foreground/70 md:text-lg">
+                <p className="mt-10 text-base leading-relaxed text-white/65 md:text-lg">
                   {product.description}
                 </p>
               </motion.div>
 
-              {/* Glassmorphism Purchase Panel */}
+              {/* Purchase Panel */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-12 rounded-[2rem] border border-white/10 dark:border-white/10 bg-white/[0.02] dark:bg-white/[0.02] p-8 shadow-2xl backdrop-blur-3xl"
+                className="mt-12 rounded-[2rem] border p-8 shadow-2xl backdrop-blur-3xl"
+                style={{
+                  borderColor: `${theme.accent}20`,
+                  backgroundColor: theme.surface,
+                }}
               >
-                <div className="flex items-end justify-between border-b border-white/10 pb-8">
+                {/* Price */}
+                <div
+                  className="flex items-end justify-between border-b pb-8"
+                  style={{ borderColor: `${theme.accent}15` }}
+                >
                   <div className="flex items-baseline gap-4">
-                    <span className="font-display text-5xl tracking-tight">PKR {product.price.toLocaleString()}</span>
+                    <span className="font-display text-5xl tracking-tight text-white">
+                      PKR {product.price}
+                    </span>
                     {product.originalPrice > product.price && (
-                      <span className="text-xl text-foreground/40 line-through">
-                        PKR {product.originalPrice.toLocaleString()}
+                      <span className="text-xl text-white/35 line-through">
+                        PKR {product.originalPrice}
                       </span>
                     )}
                   </div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-foreground/50">
+                  <span className="text-xs uppercase tracking-[0.2em] text-white/40">
                     {product.size}
                   </span>
                 </div>
 
+                {/* Qty + Add to Bag */}
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                  {/* Premium Quantity Selector */}
-                  <div className="flex h-16 w-full items-center justify-between rounded-full border border-white/10 bg-background/40 px-6 sm:w-1/3">
+                  {/* Quantity */}
+                  <div
+                    className="flex h-16 w-full items-center justify-between rounded-full border px-6 sm:w-1/3"
+                    style={{ borderColor: `${theme.accent}20`, backgroundColor: "rgba(0,0,0,0.2)" }}
+                  >
                     <button
                       onClick={() => setQty(Math.max(1, qty - 1))}
-                      className="text-gold transition hover:scale-110"
+                      className="transition hover:scale-110"
+                      style={{ color: theme.accent }}
                     >
                       <Minus className="h-4 w-4" strokeWidth={2.5} />
                     </button>
@@ -435,23 +442,29 @@ export default function ProductPage() {
                         initial={{ y: -10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: 10, opacity: 0 }}
-                        className="w-8 text-center text-lg font-medium"
+                        className="w-8 text-center text-lg font-medium text-white"
                       >
                         {qty}
                       </motion.span>
                     </AnimatePresence>
                     <button
                       onClick={() => setQty(qty + 1)}
-                      className="text-gold transition hover:scale-110"
+                      className="transition hover:scale-110"
+                      style={{ color: theme.accent }}
                     >
                       <Plus className="h-4 w-4" strokeWidth={2.5} />
                     </button>
                   </div>
 
-                  {/* Magnetic Add to Bag */}
+                  {/* Add to Bag button */}
                   <MagneticButton
                     onClick={handleAddToCart}
-                    className={`flex h-16 w-full flex-1 items-center justify-center rounded-full sm:w-2/3 ${status === "success" ? "bg-gold text-black shadow-[0_0_40px_rgba(201,168,106,0.4)]" : "bg-white text-black hover:bg-gold hover:shadow-[0_0_40px_rgba(201,168,106,0.3)]"}`}
+                    className="flex h-16 w-full flex-1 items-center justify-center rounded-full sm:w-2/3"
+                    style={{
+                      backgroundColor: status === "success" ? theme.accent : theme.accent,
+                      color: theme.bg,
+                      boxShadow: status === "success" ? `0 0 40px ${theme.accentMuted}` : "none",
+                    } as React.CSSProperties}
                   >
                     <AnimatePresence mode="wait">
                       {status === "idle" && (
@@ -490,22 +503,22 @@ export default function ProductPage() {
                   </MagneticButton>
                 </div>
 
+                {/* Wishlist & Share */}
                 <div className="mt-8 flex justify-center gap-10">
                   <button
                     onClick={() => toggle(product.slug)}
-                    className={`group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] transition-colors ${wishlisted ? "text-gold" : "text-foreground/50 hover:text-white"}`}
+                    className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] transition-colors"
+                    style={{ color: wishlisted ? theme.accent : "rgba(255,255,255,0.4)" }}
                   >
                     <Heart
-                      className={`h-4 w-4 transition-transform group-hover:scale-110 ${wishlisted ? "fill-gold" : ""}`}
-                      strokeWidth={1.5}
-                    />{" "}
-                    {wishlisted ? "Saved" : "Wishlist"}
-                  </button>
-                  <button className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-foreground/50 transition-colors hover:text-white">
-                    <Share2
                       className="h-4 w-4 transition-transform group-hover:scale-110"
                       strokeWidth={1.5}
-                    />{" "}
+                      style={{ fill: wishlisted ? theme.accent : "transparent" }}
+                    />
+                    {wishlisted ? "Saved" : "Wishlist"}
+                  </button>
+                  <button className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-white/40 transition-colors hover:text-white">
+                    <Share2 className="h-4 w-4 transition-transform group-hover:scale-110" strokeWidth={1.5} />
                     Share
                   </button>
                 </div>
@@ -522,27 +535,38 @@ export default function ProductPage() {
                   title="Ingredients"
                   open={activeTab === "ingredients"}
                   onClick={() => setActiveTab(activeTab === "ingredients" ? "" : "ingredients")}
+                  accent={theme.accent}
                 >
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {product.ingredients.map((i: string) => (
                       <div
                         key={i}
-                        className="rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 backdrop-blur-sm transition hover:bg-white/[0.05]"
+                        className="rounded-xl border px-5 py-4 backdrop-blur-sm transition"
+                        style={{
+                          borderColor: `${theme.accent}15`,
+                          backgroundColor: theme.surface,
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = theme.accentMuted;
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = theme.surface;
+                        }}
                       >
-                        <span className="text-foreground/90">{i}</span>
+                        <span className="text-white/90">{i}</span>
                       </div>
                     ))}
                   </div>
                   <div className="mt-8 flex gap-6">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">
-                      Clean
-                    </span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">
-                      Vegan
-                    </span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">
-                      Cruelty-Free
-                    </span>
+                    {["Clean", "Vegan", "Cruelty-Free"].map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] font-bold uppercase tracking-[0.3em]"
+                        style={{ color: theme.accent }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </AccordionItem>
 
@@ -550,54 +574,93 @@ export default function ProductPage() {
                   title="Benefits"
                   open={activeTab === "benefits"}
                   onClick={() => setActiveTab(activeTab === "benefits" ? "" : "benefits")}
+                  accent={theme.accent}
                 >
                   <ul className="space-y-6">
                     {product.benefits.map((b: string) => (
                       <li key={b} className="flex items-start gap-5">
-                        <span className="mt-1.5 grid h-3 w-3 shrink-0 place-items-center rounded-full bg-gold/20">
-                          <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                        <span
+                          className="mt-1.5 grid h-3 w-3 shrink-0 place-items-center rounded-full"
+                          style={{ backgroundColor: theme.accentMuted }}
+                        >
+                          <span
+                            className="h-1.5 w-1.5 rounded-full"
+                            style={{ backgroundColor: theme.accent }}
+                          />
                         </span>
-                        <span className="text-lg text-foreground/80">{b}</span>
+                        <span className="text-lg text-white/75">{b}</span>
                       </li>
                     ))}
                   </ul>
                 </AccordionItem>
 
                 <AccordionItem
-                  title="How To Use"
+                  title="Directions"
                   open={activeTab === "directions"}
                   onClick={() => setActiveTab(activeTab === "directions" ? "" : "directions")}
+                  accent={theme.accent}
                 >
-                  <p className="text-lg leading-loose text-foreground/80">{product.directions}</p>
+                  <p className="text-lg leading-loose text-white/75">{product.directions}</p>
                 </AccordionItem>
+
+                {product.storageCaution && (
+                  <AccordionItem
+                    title="Storage & Caution"
+                    open={activeTab === "storage"}
+                    onClick={() => setActiveTab(activeTab === "storage" ? "" : "storage")}
+                    accent={theme.accent}
+                  >
+                    <p className="text-lg leading-loose text-white/75 whitespace-pre-line">{product.storageCaution}</p>
+                  </AccordionItem>
+                )}
               </motion.div>
             </div>
           </div>
         </section>
       </div>
 
-      {/* Related Products - Premium Section */}
-      <section className="relative z-10 border-t border-white/5 bg-background/50 py-24 md:py-32 backdrop-blur-2xl">
+      {/* Related Products */}
+      <section
+        className="relative z-10 border-t py-24 md:py-32 backdrop-blur-2xl"
+        style={{
+          borderColor: `${theme.accent}15`,
+          backgroundColor: `${theme.bg}cc`,
+        }}
+      >
         <div className="mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <div className="flex items-center gap-4">
-                <span className="h-[1px] w-8 bg-gold" />
-                <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold">
+                <span className="h-[1px] w-8" style={{ backgroundColor: theme.accent }} />
+                <p
+                  className="text-[11px] font-medium uppercase tracking-[0.4em]"
+                  style={{ color: theme.accent }}
+                >
                   Explore
                 </p>
               </div>
-              <h2 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl">
+              <h2 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl text-white">
                 Complete your collection
               </h2>
             </div>
             <Link
               href="/shop"
-              className="group flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-foreground/60 transition hover:text-white"
+              className="group flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-white/50 transition hover:text-white"
             >
               View Collection
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 transition-colors group-hover:border-gold group-hover:bg-gold/10">
-                <ArrowRight className="h-4 w-4 text-gold" />
+              <span
+                className="flex h-10 w-10 items-center justify-center rounded-full border transition-colors"
+                style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = theme.accent;
+                  (e.currentTarget as HTMLElement).style.backgroundColor = theme.accentMuted;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "";
+                }}
+              >
+                <ArrowRight className="h-4 w-4" style={{ color: theme.accent }} />
               </span>
             </Link>
           </div>

@@ -4,13 +4,7 @@ import Link from "next/link";
 import { useCart } from "@/lib/cart";
 
 export function CartDrawer() {
-  const { open, setOpen, lines, remove, setQty, subtotal, count } = useCart();
-
-  const handleQuantityChange = (slug: string, newQty: number) => {
-    if (newQty < 1) return;
-    setQty(slug, newQty);
-  };
-
+  const { open, setOpen, lines, bundles, removeProduct, removeBundle, setProductQty, setBundleQty, subtotal, count } = useCart();
   return (
     <AnimatePresence>
       {open && (
@@ -42,7 +36,7 @@ export function CartDrawer() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-6">
-              {lines.length === 0 ? (
+              {lines.length === 0 && bundles.length === 0 ? (
                 <div className="grid h-full place-items-center text-center">
                   <div>
                     <p className="font-display text-2xl">Your cart is quiet.</p>
@@ -60,6 +54,55 @@ export function CartDrawer() {
                 </div>
               ) : (
                 <ul className="space-y-6">
+                  {bundles.map(({ bundle, selectedProducts, selectedOptions, qty }) => (
+                    <li key={bundle.id} className="flex gap-4 border-l-2 border-gold pl-4">
+                      <div className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-secondary">
+                        <img
+                          src={bundle.image}
+                          alt={bundle.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="truncate font-display text-lg text-gold">{bundle.name}</p>
+                            <p className="text-xs text-muted-foreground">{bundle.description}</p>
+                            {bundle.discountPercent > 0 && (
+                              <p className="mt-1 text-xs font-medium text-gold">{bundle.discountPercent}% OFF</p>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => removeBundle(bundle.id)}
+                            className="text-muted-foreground hover:text-foreground"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <div className="mt-2 text-xs text-muted-foreground">
+                          {selectedProducts.map(p => p.name).join(" + ")}
+                        </div>
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="flex items-center gap-2 rounded-full border border-border px-1">
+                            <button
+                              onClick={() => setBundleQty(bundle.id, qty - 1)}
+                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </button>
+                            <span className="w-6 text-center text-sm">{qty}</span>
+                            <button
+                              onClick={() => setBundleQty(bundle.id, qty + 1)}
+                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </button>
+                          </div>
+                          <p className="text-sm font-medium">PKR {(bundle.finalPrice * qty).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
                   {lines.map(({ product, qty }) => (
                     <li key={product.slug} className="flex gap-4">
                       <div className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-secondary">
@@ -76,7 +119,7 @@ export function CartDrawer() {
                             <p className="text-xs text-muted-foreground">{product.tagline}</p>
                           </div>
                           <button
-                            onClick={() => remove(product.slug)}
+                            onClick={() => removeProduct(product.slug)}
                             className="text-muted-foreground hover:text-foreground"
                           >
                             <X className="h-4 w-4" />
@@ -85,15 +128,14 @@ export function CartDrawer() {
                         <div className="mt-3 flex items-center justify-between">
                           <div className="flex items-center gap-2 rounded-full border border-border px-1">
                             <button
-                              onClick={() => handleQuantityChange(product.slug, qty - 1)}
-                              disabled={qty <= 1}
-                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => setProductQty(product.slug, qty - 1)}
+                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
                             >
                               <Minus className="h-3 w-3" />
                             </button>
                             <span className="w-6 text-center text-sm">{qty}</span>
                             <button
-                              onClick={() => handleQuantityChange(product.slug, qty + 1)}
+                              onClick={() => setProductQty(product.slug, qty + 1)}
                               className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
                             >
                               <Plus className="h-3 w-3" />
@@ -107,7 +149,7 @@ export function CartDrawer() {
                 </ul>
               )}
             </div>
-            {lines.length > 0 && (
+            {(lines.length > 0 || bundles.length > 0) && (
               <div className="border-t border-border px-6 py-5">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
