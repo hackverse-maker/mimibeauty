@@ -210,7 +210,7 @@ Please confirm my order.`;
         onClick={() => setShowForm(true)}
         className="w-full rounded-full bg-gold py-3.5 text-sm font-medium tracking-wide text-background transition hover:bg-gold-soft"
       >
-        Checkout · PKR {(subtotal / 100).toFixed(2)}
+        Checkout · PKR {subtotal.toLocaleString()}
       </button>
     );
   }
@@ -348,19 +348,19 @@ Please confirm my order.`;
       <div className="border-t pt-3 space-y-1">
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Subtotal</span>
-          <span>PKR {(subtotal / 100).toFixed(2)}</span>
+          <span>PKR {subtotal.toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Shipping</span>
-          <span>PKR 0.00</span>
+          <span>PKR 0</span>
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Tax (10%)</span>
-          <span>PKR {((subtotal * 0.1) / 100).toFixed(2)}</span>
+          <span>PKR {Math.round(subtotal * 0.1).toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-sm font-bold">
           <span>Total</span>
-          <span>PKR {((subtotal * 1.1) / 100).toFixed(2)}</span>
+          <span>PKR {Math.round(subtotal * 1.1).toLocaleString()}</span>
         </div>
       </div>
 

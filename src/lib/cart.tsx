@@ -5,6 +5,7 @@ import type { Bundle } from "./bundles";
 
 export type CartLine = { product: Product; qty: number };
 export type CartBundle = {
+  cartItemId?: string;
   bundle: Bundle;
   selectedProducts: Product[];
   selectedOptions?: Record<string, string>;
@@ -19,9 +20,9 @@ type CartCtx = {
   addProduct: (p: Product, qty?: number) => void;
   addBundle: (bundle: Bundle, selectedProducts: Product[], selectedOptions?: Record<string, string>, qty?: number) => void;
   removeProduct: (slug: string) => void;
-  removeBundle: (bundleId: string) => void;
+  removeBundle: (bundleKey: string) => void;
   setProductQty: (slug: string, qty: number) => void;
-  setBundleQty: (bundleId: string, qty: number) => void;
+  setBundleQty: (bundleKey: string, qty: number) => void;
   clear: () => void;
   count: number;
   subtotal: number;
@@ -64,15 +65,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setOpen(true);
     };
 
+    const getBundleKey = (bundle: Bundle, prods: Product[], opts?: Record<string, string>) => {
+      const pSlugs = (prods || []).map((p) => p.slug).sort().join("_");
+      const optStr = opts ? JSON.stringify(opts) : "";
+      return `${bundle.id}:${pSlugs}:${optStr}`;
+    };
+
     const addBundle = (bundle: Bundle, selectedProducts: Product[], selectedOptions?: Record<string, string>, qty = 1) => {
+      const cartItemId = getBundleKey(bundle, selectedProducts, selectedOptions);
       setBundles((prev) => {
-        const idx = prev.findIndex((b) => b.bundle.id === bundle.id);
+        const idx = prev.findIndex((b) => (b.cartItemId || b.bundle.id) === cartItemId);
         if (idx >= 0) {
           const next = [...prev];
           next[idx] = { ...next[idx], qty: next[idx].qty + qty };
           return next;
         }
-        return [...prev, { bundle, selectedProducts, selectedOptions, qty }];
+        return [...prev, { cartItemId, bundle, selectedProducts, selectedOptions, qty }];
       });
       setOpen(true);
     };
@@ -83,14 +91,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addProduct,
       addBundle,
       removeProduct: (slug) => setLines((p) => p.filter((l) => l.product.slug !== slug)),
-      removeBundle: (bundleId) => setBundles((b) => b.filter((b) => b.bundle.id !== bundleId)),
+      removeBundle: (bundleKey) => setBundles((b) => b.filter((b) => (b.cartItemId || b.bundle.id) !== bundleKey)),
       setProductQty: (slug, qty) =>
         setLines((p) =>
           p.map((l) => (l.product.slug === slug ? { ...l, qty: Math.max(1, qty) } : l)),
         ),
-      setBundleQty: (bundleId, qty) =>
+      setBundleQty: (bundleKey, qty) =>
         setBundles((b) =>
-          b.map((b) => (b.bundle.id === bundleId ? { ...b, qty: Math.max(1, qty) } : b)),
+          b.map((b) => ((b.cartItemId || b.bundle.id) === bundleKey ? { ...b, qty: Math.max(1, qty) } : b)),
         ),
       clear: () => {
         setLines((prev) => (prev.length === 0 ? prev : []));

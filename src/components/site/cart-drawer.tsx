@@ -54,55 +54,58 @@ export function CartDrawer() {
                 </div>
               ) : (
                 <ul className="space-y-6">
-                  {bundles.map(({ bundle, selectedProducts, selectedOptions, qty }) => (
-                    <li key={bundle.id} className="flex gap-4 border-l-2 border-gold pl-4">
-                      <div className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-secondary">
-                        <img
-                          src={bundle.image}
-                          alt={bundle.name}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0">
-                            <p className="truncate font-display text-lg text-gold">{bundle.name}</p>
-                            <p className="text-xs text-muted-foreground">{bundle.description}</p>
-                            {bundle.discountPercent > 0 && (
-                              <p className="mt-1 text-xs font-medium text-gold">{bundle.discountPercent}% OFF</p>
-                            )}
-                          </div>
-                          <button
-                            onClick={() => removeBundle(bundle.id)}
-                            className="text-muted-foreground hover:text-foreground"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
+                  {bundles.map(({ cartItemId, bundle, selectedProducts, selectedOptions, qty }) => {
+                    const itemKey = cartItemId || bundle.id;
+                    return (
+                      <li key={itemKey} className="flex gap-4 border-l-2 border-gold pl-4">
+                        <div className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-secondary">
+                          <img
+                            src={bundle.image}
+                            alt={bundle.name}
+                            className="h-full w-full object-cover"
+                          />
                         </div>
-                        <div className="mt-2 text-xs text-muted-foreground">
-                          {selectedProducts.map(p => p.name).join(" + ")}
-                        </div>
-                        <div className="mt-3 flex items-center justify-between">
-                          <div className="flex items-center gap-2 rounded-full border border-border px-1">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="truncate font-display text-lg text-gold">{bundle.name}</p>
+                              <p className="text-xs text-muted-foreground">{bundle.description}</p>
+                              {bundle.discountPercent > 0 && (
+                                <p className="mt-1 text-xs font-medium text-gold">{bundle.discountPercent}% OFF</p>
+                              )}
+                            </div>
                             <button
-                              onClick={() => setBundleQty(bundle.id, qty - 1)}
-                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
+                              onClick={() => removeBundle(itemKey)}
+                              className="text-muted-foreground hover:text-foreground"
                             >
-                              <Minus className="h-3 w-3" />
-                            </button>
-                            <span className="w-6 text-center text-sm">{qty}</span>
-                            <button
-                              onClick={() => setBundleQty(bundle.id, qty + 1)}
-                              className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
-                            >
-                              <Plus className="h-3 w-3" />
+                              <X className="h-4 w-4" />
                             </button>
                           </div>
-                          <p className="text-sm font-medium">PKR {(bundle.finalPrice * qty).toLocaleString()}</p>
+                          <div className="mt-2 text-xs text-muted-foreground">
+                            {selectedProducts.map((p) => p.name).join(" + ")}
+                          </div>
+                          <div className="mt-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2 rounded-full border border-border px-1">
+                              <button
+                                onClick={() => setBundleQty(itemKey, qty - 1)}
+                                className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
+                              >
+                                <Minus className="h-3 w-3" />
+                              </button>
+                              <span className="w-6 text-center text-sm">{qty}</span>
+                              <button
+                                onClick={() => setBundleQty(itemKey, qty + 1)}
+                                className="grid h-9 w-9 min-h-[44px] min-w-[44px] place-items-center"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <p className="text-sm font-medium">PKR {(bundle.finalPrice * qty).toLocaleString()}</p>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
+                      </li>
+                    );
+                  })}
                   {lines.map(({ product, qty }) => (
                     <li key={product.slug} className="flex gap-4">
                       <div className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-secondary">

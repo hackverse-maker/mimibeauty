@@ -2,204 +2,237 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { bundles } from "@/lib/bundles";
-import { products, findProduct, type Product } from "@/lib/products";
+import { findProduct, type Product } from "@/lib/products";
+import { useCart } from "@/lib/cart";
 
 export default function BundlesPage() {
+  const { addBundle } = useCart();
+
   return (
-    <>
-      <style>{`
-        .bundles-hero-bg {
-          background: linear-gradient(135deg, rgba(10,22,15,0.95) 0%, rgba(15,31,23,0.88) 50%, rgba(12,25,18,0.92) 100%);
-        }
-      `}</style>
+    <div className="min-h-screen bg-background text-foreground py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1360px] mx-auto space-y-12 sm:space-y-16 lg:space-y-20">
+        
+        {/* 1. HERO SECTION — Horizontal Side-by-Side Composition */}
+        <section className="bg-card border border-border/40 rounded-2xl lg:rounded-3xl p-6 sm:p-10 lg:p-14 relative overflow-hidden">
+          {/* Ambient Lighting Glow */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bundles-hero-bg">
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-20 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-80 h-80 bg-gold/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-[10px] uppercase tracking-[0.3em] text-gold mb-3"
-          >
-            Mimi Sets
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-3xl md:text-4xl lg:text-5xl leading-[1.1] text-foreground mb-4"
-          >
-            Curated combinations for your skin, hair, and body.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base md:text-lg text-muted-foreground mb-6"
-          >
-            Thoughtfully paired. Effortlessly essential.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <Link
-              href="#bundles"
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] text-background hover:bg-gold/90 transition-colors"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center relative z-10">
+            {/* Left Side — Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6 text-left"
             >
-              Shop Bundles <ArrowRight className="h-3 w-3" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+              <h1
+                className="text-5xl sm:text-6xl lg:text-7xl font-normal leading-[1.05] tracking-tight text-foreground"
+                style={{ fontFamily: "var(--font-cormorant, serif)" }}
+              >
+                Mimi Sets
+              </h1>
 
-      {/* Our Bundles Section */}
-      <section id="bundles" className="py-12 md:py-16 px-6">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-[11px] uppercase tracking-[0.4em] text-gold mb-4">Our Bundles</p>
-            <h2 className="font-display text-2xl md:text-3xl lg:text-4xl leading-[1.1] text-foreground mb-4">
-              Care, simplified. Results, amplified.
+              <div className="space-y-3 max-w-lg">
+                <p className="text-lg sm:text-xl text-foreground/90 font-light leading-relaxed">
+                  Curated combinations for your skin, hair, and body.
+                </p>
+                <div className="text-sm sm:text-base text-muted-foreground font-light leading-relaxed space-y-0.5">
+                  <p>Thoughtfully paired. Effortlessly essential.</p>
+                  <p>Everything you need, in harmony.</p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="#bundles"
+                  className="inline-flex items-center justify-center border border-gold/50 text-foreground hover:bg-gold hover:text-background transition-all duration-300 text-xs font-semibold uppercase tracking-[0.25em] px-8 py-3.5 rounded-sm min-h-[44px]"
+                >
+                  SHOP SETS
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right Side — Lifestyle/Product Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="w-full flex items-center justify-center"
+            >
+              <div className="relative w-full h-[300px] sm:h-[380px] lg:h-[420px] flex items-center justify-center p-2">
+                <img
+                  src="/media__1784439730149.png"
+                  alt="Mimi Sets Collection"
+                  className="w-full h-full object-contain filter drop-shadow-2xl"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 2. OUR BUNDLES SECTION — Centered Header & 4-Column Desktop Grid */}
+        <section id="bundles" className="space-y-10 sm:space-y-12">
+          {/* Centered Section Header */}
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <h2
+              className="text-4xl sm:text-5xl lg:text-6xl font-normal text-foreground tracking-tight"
+              style={{ fontFamily: "var(--font-cormorant, serif)" }}
+            >
+              Our Bundles
             </h2>
-            <div className="w-24 h-px bg-gold/30 mx-auto" />
+
+            {/* Decorative Diamond Divider */}
+            <div className="flex items-center justify-center gap-3 text-gold/60 my-3">
+              <span className="w-12 sm:w-16 h-px bg-gradient-to-r from-transparent to-gold/40" />
+              <span className="text-xs sm:text-sm text-gold">✦</span>
+              <span className="w-12 sm:w-16 h-px bg-gradient-to-l from-transparent to-gold/40" />
+            </div>
+
+            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-[0.25em] font-light">
+              Care, simplified. Results, amplified.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {bundles.filter(b => b.id !== 'make-your-own-bundle').map((bundle, index) => {
+          {/* Bundles Grid — 1 Col Mobile, 2 Col Tablet, 4 Col Desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+            {bundles.filter((b) => b.id !== "make-your-own-bundle").map((bundle, index) => {
               const bundleProducts = bundle.productIds
-                .map(id => findProduct(id))
+                .map((id) => findProduct(id))
                 .filter((p): p is Product => p !== undefined);
 
               return (
                 <motion.div
                   key={bundle.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.5, delay: index * 0.06 }}
+                  className="group flex flex-col justify-between h-full bg-card border border-border/30 hover:border-gold/50 transition-all duration-300 p-5 sm:p-6 text-center rounded-xl relative"
                 >
-                  <Link href={`/bundles/${bundle.slug}`} className="block">
-                    <div className="relative overflow-hidden rounded-xl bg-secondary/30 border border-border/50">
-                      {/* Bundle Image */}
-                      <div className="aspect-[3/4] overflow-hidden">
-                        <img
-                          src={bundle.image}
-                          alt={bundle.name}
-                          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
-                        />
-                      </div>
-
-                      {/* Discount Badge */}
+                  <div>
+                    {/* Bundle Product Image Box */}
+                    <Link
+                      href={`/bundles/${bundle.slug}`}
+                      className="block overflow-hidden mb-5 relative aspect-[4/3] bg-secondary/30 rounded-lg p-4 flex items-center justify-center"
+                    >
+                      <img
+                        src={bundle.image}
+                        alt={bundle.name}
+                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                      />
                       {bundle.discountPercent > 0 && (
-                        <div className="absolute top-2 right-2 bg-gold text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider">
+                        <div className="absolute top-2.5 right-2.5 bg-gold text-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm">
                           {bundle.discountPercent}% OFF
                         </div>
                       )}
-
-                      {/* Flagship Badge */}
                       {bundle.isFlagship && (
-                        <div className="absolute top-2 left-2 bg-foreground text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider">
+                        <div className="absolute top-2.5 left-2.5 bg-foreground text-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm">
                           Flagship
                         </div>
                       )}
+                    </Link>
 
-                      {/* Content */}
-                      <div className="p-4">
-                        <h3 className="font-display text-lg text-foreground mb-1">{bundle.name}</h3>
-                        <p className="text-xs text-muted-foreground mb-3">{bundle.description}</p>
-                        
-                        {/* Products */}
-                        <div className="mb-3">
-                          <p className="text-[10px] text-gold uppercase tracking-wider mb-1">Includes</p>
-                          <p className="text-xs text-foreground/80">
-                            {bundleProducts.map(p => p.name).join(" + ")}
-                          </p>
-                        </div>
+                    {/* Bundle Title */}
+                    <Link href={`/bundles/${bundle.slug}`} className="block group-hover:text-gold transition-colors">
+                      <h3
+                        className="text-2xl sm:text-3xl text-foreground font-normal mb-2 leading-tight"
+                        style={{ fontFamily: "var(--font-cormorant, serif)" }}
+                      >
+                        {bundle.name}
+                      </h3>
+                    </Link>
 
-                        {/* Pricing */}
-                        <div className="flex items-baseline gap-2 mb-3">
-                          <p className="text-lg font-display text-foreground">
-                            PKR {bundle.finalPrice.toLocaleString()}
-                          </p>
-                          {bundle.originalPrice > bundle.finalPrice && (
-                            <>
-                              <p className="text-xs text-muted-foreground line-through">
-                                PKR {bundle.originalPrice.toLocaleString()}
-                              </p>
-                              <p className="text-xs text-gold">
-                                Save PKR {bundle.savings.toLocaleString()}
-                              </p>
-                            </>
-                          )}
-                        </div>
+                    {/* Short Description */}
+                    <p className="text-xs text-muted-foreground font-light line-clamp-2 min-h-[36px] mb-3 px-1">
+                      {bundle.description}
+                    </p>
 
-                        <div className="flex items-center gap-1 text-gold text-xs font-medium uppercase tracking-wider">
-                          View Bundle <ArrowRight className="h-3 w-3" />
-                        </div>
-                      </div>
+                    {/* Included Items Summary */}
+                    <div className="text-[11px] text-gold/90 mb-4 px-1 font-medium tracking-wide truncate">
+                      {bundleProducts.map((p) => p.name).join(" + ")}
                     </div>
-                  </Link>
+                  </div>
+
+                  {/* Pricing & ADD TO BAG Button */}
+                  <div className="pt-3 border-t border-border/20 mt-auto">
+                    <p className="text-sm sm:text-base font-semibold text-foreground tracking-wide mb-4">
+                      PKR {bundle.finalPrice.toLocaleString()}
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => addBundle(bundle, bundleProducts)}
+                      className="w-full py-3 px-4 uppercase text-[11px] tracking-[0.2em] font-semibold border border-gold/50 text-foreground hover:bg-gold hover:text-background transition-all duration-300 text-center min-h-[44px] rounded-sm"
+                    >
+                      ADD TO BAG
+                    </button>
+                  </div>
                 </motion.div>
               );
             })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Made for You Section */}
-      <section className="py-12 md:py-16 px-6 bg-secondary/20">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+        {/* 3. MADE FOR YOU SECTION — 50% Left Image + 50% Right Text */}
+        <section className="bg-card border border-border/40 rounded-2xl lg:rounded-3xl overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[420px] lg:min-h-[460px]">
+            
+            {/* LEFT — 50% Banner Image */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.7 }}
+              className="relative w-full h-[300px] sm:h-[360px] lg:h-full min-h-[300px] lg:min-h-[460px] bg-secondary/40"
             >
-              <p className="text-[10px] uppercase tracking-[0.3em] text-gold mb-3">Made for You</p>
-              <h2 className="font-display text-2xl md:text-3xl leading-[1.1] text-foreground mb-3">
-                Can't find the perfect set?
-              </h2>
-              <p className="text-base text-muted-foreground mb-5">
-                Create your own bundle and get 10% off.
-              </p>
-              <Link
-                href="/bundles/make-your-own-bundle"
-                className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] text-background hover:bg-gold/90 transition-colors"
-              >
-                Build Your Set <ArrowRight className="h-3 w-3" />
-              </Link>
+              <img
+                src="/media__1784439898781.jpg"
+                alt="Made for You Custom Mimi Gift Set"
+                className="w-full h-full object-cover"
+              />
             </motion.div>
+
+            {/* RIGHT — 50% Centered Text & Action */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="flex flex-col items-center justify-center text-center p-8 sm:p-12 lg:p-16 space-y-4 h-full"
             >
-              <div className="aspect-square max-w-sm mx-auto relative">
-                <div className="absolute inset-0 bg-gold/10 rounded-full blur-3xl" />
-                <img
-                  src="/media__1784439730149.png"
-                  alt="Build your own bundle"
-                  className="relative w-full h-full object-contain rounded-xl"
-                />
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-normal text-foreground tracking-tight"
+                style={{ fontFamily: "var(--font-cormorant, serif)" }}
+              >
+                Made for You
+              </h2>
+
+              {/* Decorative Diamond Divider */}
+              <div className="flex items-center justify-center gap-3 text-gold/60 my-1">
+                <span className="w-10 sm:w-14 h-px bg-gradient-to-r from-transparent to-gold/40" />
+                <span className="text-xs text-gold">✦</span>
+                <span className="w-10 sm:w-14 h-px bg-gradient-to-l from-transparent to-gold/40" />
+              </div>
+
+              <div className="space-y-1 text-muted-foreground font-light text-sm sm:text-base max-w-md">
+                <p className="text-foreground/90 font-medium">Can’t find the perfect set?</p>
+                <p>Create your own bundle and get <span className="text-gold font-medium">10% off</span>.</p>
+              </div>
+
+              <div className="pt-3">
+                <Link
+                  href="/bundles/make-your-own-bundle"
+                  className="inline-flex items-center justify-center border border-gold/50 text-foreground hover:bg-gold hover:text-background transition-all duration-300 text-xs font-semibold uppercase tracking-[0.25em] px-8 py-3.5 rounded-sm min-h-[44px]"
+                >
+                  BUILD YOUR SET
+                </Link>
               </div>
             </motion.div>
           </div>
-        </div>
-      </section>
-    </>
+        </section>
+
+      </div>
+    </div>
   );
 }

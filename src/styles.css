@@ -35,9 +35,9 @@
   --color-gold-soft: var(--gold-soft);
   --color-forest: var(--forest);
 
-  --font-display: "Cinzel", ui-serif, Georgia, serif;
-  --font-cormorant: "Cinzel", ui-serif, Georgia, serif;
-  --font-script: "Cinzel", ui-serif, Georgia, serif;
+  --font-display: "Cormorant Garamond", "Playfair Display", "Cinzel", Georgia, serif;
+  --font-cormorant: "Cormorant Garamond", "Playfair Display", "Cinzel", Georgia, serif;
+  --font-script: "Cormorant Garamond", "Playfair Display", "Cinzel", Georgia, serif;
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
   --shadow-luxe: 0 30px 80px -30px color-mix(in oklab, var(--gold) 35%, transparent);

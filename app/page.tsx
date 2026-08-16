@@ -6,15 +6,14 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import {
   ArrowRight, Leaf, ShieldCheck, Sparkles, Truck, Rabbit, Recycle,
-  Star, Heart,
+  Star, Heart, ShoppingBag,
 } from "lucide-react";
-import { assets, collections, products } from "@/lib/products";
-import { ProductCard } from "@/components/site/product-card";
+import { assets, collections, products, findProduct, type Product } from "@/lib/products";
+import { bundles } from "@/lib/bundles";
+import { useCart } from "@/lib/cart";
 import { Hero } from "@/components/site/hero";
 import { IngredientsSection } from "@/components/site/ingredients-section";
 import { NewsletterSection } from "@/components/site/newsletter-section";
-
-
 
 export default function Home() {
   return (
@@ -83,9 +82,9 @@ function SectionHeader({ eyebrow, title, kicker }: { eyebrow: string; title: str
   );
 }
 
-
-
 function BestSellers() {
+  const { addBundle } = useCart();
+
   return (
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-[1400px] px-6">
@@ -98,7 +97,7 @@ function BestSellers() {
         >
           <div className="w-full max-w-[1000px]">
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-gold">
-              CUSTOMER FAVORITES
+              MIMI SETS & BUNDLES
             </p>
             <h2
               className="mt-5 font-medium leading-[1.08] text-[#F6F2EB]"
@@ -106,28 +105,123 @@ function BestSellers() {
             >
               {/* Line 1 — Skincare that */}
               <span className="block text-5xl sm:text-6xl md:text-8xl lg:text-[96px] tracking-tight">
-                Skincare <span className="italic text-[#F6F2EB]/60">that</span>
+                Luxury sets <span className="italic text-[#F6F2EB]/60">that</span>
               </span>
               {/* Line 2 — gold italic, stays with you. */}
               <em className="not-italic block text-4xl sm:text-5xl md:text-7xl lg:text-[80px] text-gold tracking-tight italic">
-                stays with you.
+                stay with you.
               </em>
             </h2>
             <p className="mt-5 text-[15px] md:text-[16px] font-medium text-white/90">
-              Thoughtfully formulated to work with your skin, not against it. Results you can feel. Confidence that lasts.
+              Thoughtfully paired combinations for skin, hair, and body. Results you can feel. Value that amplifies care.
             </p>
           </div>
           <div className="shrink-0 mb-1">
-            <Link href="/shop" className="inline-flex items-center gap-2 text-[12px] font-medium tracking-wide text-gold hover:text-gold-soft transition-colors group">
-              View all products <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <Link href="/bundles" className="inline-flex items-center gap-2 text-[12px] font-medium tracking-wide text-gold hover:text-gold-soft transition-colors group">
+              View all bundles <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </motion.div>
         
         <div className="mt-16 md:mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((p, i) => (
-            <ProductCard key={p.slug} product={p} index={i} />
-          ))}
+          {bundles.filter(b => b.id !== 'make-your-own-bundle').map((bundle, index) => {
+            const bundleProducts = bundle.productIds
+              .map(id => findProduct(id))
+              .filter((p): p is Product => p !== undefined);
+
+            return (
+              <motion.div
+                key={bundle.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group flex flex-col h-full"
+              >
+                <div className="relative flex flex-col justify-between h-full overflow-hidden rounded-xl bg-secondary/30 border border-border/50 transition-all duration-300 hover:border-gold/50">
+                  <div>
+                    <Link href={`/bundles/${bundle.slug}`} className="block">
+                      {/* Bundle Image */}
+                      <div className="aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-secondary/50 relative">
+                        <img
+                          src={bundle.image}
+                          alt={bundle.name}
+                          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                        />
+                        {/* Discount Badge */}
+                        {bundle.discountPercent > 0 && (
+                          <div className="absolute top-2 right-2 bg-gold text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider rounded-sm">
+                            {bundle.discountPercent}% OFF
+                          </div>
+                        )}
+
+                        {/* Flagship Badge */}
+                        {bundle.isFlagship && (
+                          <div className="absolute top-2 left-2 bg-foreground text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider rounded-sm">
+                            Flagship
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+
+                    {/* Content */}
+                    <div className="p-4 sm:p-5 flex-1">
+                      <Link href={`/bundles/${bundle.slug}`} className="block group-hover:text-gold transition-colors">
+                        <h3 className="font-display text-lg sm:text-xl text-foreground mb-1">{bundle.name}</h3>
+                      </Link>
+                      <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{bundle.description}</p>
+                      
+                      {/* Products */}
+                      <div className="mb-4 bg-background/40 p-2.5 rounded-lg border border-border/30">
+                        <p className="text-[10px] text-gold uppercase tracking-wider mb-1 font-semibold">Includes ({bundleProducts.length} Items)</p>
+                        <p className="text-xs text-foreground/90 font-medium">
+                          {bundleProducts.map(p => p.name).join(" + ")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing & Actions */}
+                  <div className="p-4 sm:p-5 pt-0 border-t border-border/20 mt-auto">
+                    <div className="flex items-baseline justify-between gap-2 mb-4 pt-3">
+                      <div>
+                        <p className="text-xl font-display text-foreground font-semibold">
+                          PKR {bundle.finalPrice.toLocaleString()}
+                        </p>
+                        {bundle.originalPrice > bundle.finalPrice && (
+                          <p className="text-xs text-muted-foreground line-through">
+                            PKR {bundle.originalPrice.toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                      {bundle.savings > 0 && (
+                        <span className="text-[11px] text-gold font-medium bg-gold/10 px-2 py-0.5 rounded">
+                          Save PKR {bundle.savings.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => addBundle(bundle, bundleProducts)}
+                        className="flex items-center justify-center gap-1.5 rounded-full bg-gold py-2.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-background hover:bg-gold/90 transition-all shadow-sm active:scale-95 min-h-[44px]"
+                      >
+                        <ShoppingBag className="h-3.5 w-3.5" />
+                        Add to Cart
+                      </button>
+                      <Link
+                        href={`/bundles/${bundle.slug}`}
+                        className="flex items-center justify-center gap-1 rounded-full border border-border bg-secondary/40 px-3 py-2.5 text-[11px] font-medium uppercase tracking-wider text-foreground hover:border-gold/60 hover:text-gold transition-colors text-center min-h-[44px]"
+                      >
+                        Details <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

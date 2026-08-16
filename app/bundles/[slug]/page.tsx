@@ -3,17 +3,22 @@
 import { useState, use } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Check, Plus, Minus } from "lucide-react";
+import { ArrowRight, Check, Plus, Minus, ShoppingBag } from "lucide-react";
 import { findBundle, type Bundle } from "@/lib/bundles";
 import { products, findProduct, type Product } from "@/lib/products";
 import { useCart } from "@/lib/cart";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default function BundleDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
+  
+  if (resolvedParams.slug === "make-your-own-bundle") {
+    redirect("/bundles/make-your-own-bundle");
+  }
+
   const bundle = findBundle(resolvedParams.slug);
   const { addBundle } = useCart();
-  
+
   const [selectedBodyOil, setSelectedBodyOil] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>("2");
