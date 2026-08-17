@@ -382,5 +382,9 @@ export const collections = [
 ];
 
 export function findProduct(slug: string) {
-  return products.find((p) => p.slug === slug);
+  const norm = slug.toLowerCase();
+  if (norm === "herba" || norm === "herbe") {
+    return products.find((p) => p.slug === "herbe");
+  }
+  return products.find((p) => p.slug === norm);
 }

@@ -14,6 +14,7 @@ import { useCart } from "@/lib/cart";
 import { Hero } from "@/components/site/hero";
 import { IngredientsSection } from "@/components/site/ingredients-section";
 import { NewsletterSection } from "@/components/site/newsletter-section";
+import { TestimonialsCarousel } from "@/components/site/testimonials-carousel";
 
 export default function Home() {
   return (
@@ -24,7 +25,7 @@ export default function Home() {
       <WhyChoose />
       <IngredientsSection />
       <Compare />
-      <Testimonials />
+      <TestimonialsCarousel />
       <NewsletterSection />
     </>
   );
@@ -124,7 +125,7 @@ function BestSellers() {
         </motion.div>
         
         <div className="mt-16 md:mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {bundles.filter(b => b.id !== 'make-your-own-bundle').map((bundle, index) => {
+          {bundles.filter(b => b.id !== 'make-your-own-bundle').slice(0, 4).map((bundle, index) => {
             const bundleProducts = bundle.productIds
               .map(id => findProduct(id))
               .filter((p): p is Product => p !== undefined);

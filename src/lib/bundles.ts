@@ -1,20 +1,19 @@
 import type { Product } from "./products";
 
 export type BundleType = "fixed" | "configurable" | "custom";
+
 export type BundleConfiguration = {
   type: BundleType;
   productIds: string[];
-  bodyOilChoice?: "required" | "optional" | "none";
-  selectionMode?: "single" | "multiple";
-  minSelections?: number;
-  maxSelections?: number;
-  selectionOptions?: { name: string; price: number; count: number }[];
+  requiresBodyOil?: boolean;
+  bodyOilCount?: number;
 };
 
 export type Bundle = {
   id: string;
   slug: string;
   name: string;
+  category: string;
   description: string;
   productIds: string[];
   image: string;
@@ -24,52 +23,58 @@ export type Bundle = {
   savings: number;
   configuration: BundleConfiguration;
   isFlagship?: boolean;
+  isCustom?: boolean;
 };
 
 export const bundles: Bundle[] = [
   {
-    id: "luna-glow-duo",
-    slug: "luna-glow-duo",
-    name: "Luna Glow Duo",
-    description: "Face and body, daily glow.",
-    productIds: ["dew", "halo"],
-    image: "/media__1784439730149.png",
-    originalPrice: 16950,
+    id: "luna-glow",
+    slug: "luna-glow",
+    name: "Luna Glow",
+    category: "Face + Body",
+    description: "DEW + 1 Body Oil of customer's choice",
+    productIds: ["dew"],
+    image: "/02_luna_glow_duo.jpg",
+    originalPrice: 8500,
     discountPercent: 10,
-    finalPrice: 16950,
-    savings: 0,
+    finalPrice: 7650,
+    savings: 850,
     configuration: {
-      type: "fixed",
-      productIds: ["dew", "halo"],
+      type: "configurable",
+      productIds: ["dew"],
+      requiresBodyOil: true,
+      bodyOilCount: 1,
     },
   },
   {
     id: "root-to-radiance",
     slug: "root-to-radiance",
-    name: "Root to Radiance",
-    description: "Nourish your roots, shine through.",
-    productIds: ["herbe", "veil"],
-    image: "/media__1784439730152.png",
-    originalPrice: 15950,
+    name: "Root To Radiance",
+    category: "Hair",
+    description: "VEIL + HERBA. Nourish your roots, shine through.",
+    productIds: ["veil", "herbe"],
+    image: "/03_root_to_radiance.jpg",
+    originalPrice: 8000,
     discountPercent: 10,
-    finalPrice: 15950,
-    savings: 0,
+    finalPrice: 7200,
+    savings: 800,
     configuration: {
       type: "fixed",
-      productIds: ["herbe", "veil"],
+      productIds: ["veil", "herbe"],
     },
   },
   {
     id: "radiant-you",
     slug: "radiant-you",
     name: "Radiant You",
-    description: "For skin that glows and hair that flows.",
+    category: "Face + Hair",
+    description: "DEW + VEIL + HERBA for skin that glows and hair that flows.",
     productIds: ["dew", "veil", "herbe"],
-    image: "/media__1784439730149.png",
-    originalPrice: 20950,
+    image: "/04_radiant_you.jpg",
+    originalPrice: 11500,
     discountPercent: 10,
-    finalPrice: 20950,
-    savings: 0,
+    finalPrice: 10350,
+    savings: 1150,
     configuration: {
       type: "fixed",
       productIds: ["dew", "veil", "herbe"],
@@ -79,101 +84,118 @@ export const bundles: Bundle[] = [
     id: "the-complete-glow",
     slug: "the-complete-glow",
     name: "The Complete Glow",
-    description: "All the essentials, all for you.",
-    productIds: ["dew", "veil", "herbe", "halo", "pearl", "santorini", "amalfi"],
-    image: "/media__1784439730149.png",
-    originalPrice: 27950,
+    category: "All Four",
+    description: "DEW + VEIL + HERBA + 1 Body Oil of customer's choice",
+    productIds: ["dew", "veil", "herbe"],
+    image: "/05_complete_glow.jpg",
+    originalPrice: 16500,
     discountPercent: 10,
-    finalPrice: 27950,
-    savings: 0,
-    isFlagship: true,
+    finalPrice: 14850,
+    savings: 1650,
     configuration: {
-      type: "fixed",
-      productIds: ["dew", "veil", "herbe", "halo", "pearl", "santorini", "amalfi"],
+      type: "configurable",
+      productIds: ["dew", "veil", "herbe"],
+      requiresBodyOil: true,
+      bodyOilCount: 1,
     },
   },
   {
     id: "halo-duo",
     slug: "halo-duo",
     name: "Halo Duo",
-    description: "Double the glow, double the glow.",
-    productIds: ["halo", "pearl"],
-    image: "/media__1784439730231.png",
-    originalPrice: 16950,
+    category: "Body Oil",
+    description: "Any 2 Body Oils of customer's choice",
+    productIds: [],
+    image: "/06_halo_duo.jpg",
+    originalPrice: 10000,
     discountPercent: 10,
-    finalPrice: 16950,
-    savings: 0,
+    finalPrice: 9000,
+    savings: 1000,
     configuration: {
-      type: "fixed",
-      productIds: ["halo", "pearl"],
+      type: "configurable",
+      productIds: [],
+      requiresBodyOil: true,
+      bodyOilCount: 2,
     },
   },
   {
     id: "halo-quartet",
     slug: "halo-quartet",
     name: "Halo Quartet",
-    description: "Four shades, endless luminosity.",
-    productIds: ["halo", "pearl", "santorini", "amalfi"],
-    image: "/media__1784439730231.png",
-    originalPrice: 27950,
+    category: "Body Oil",
+    description: "All 4 Body Oils: HALO, PEARL, AMALFI & SANTORINI",
+    productIds: ["halo", "pearl", "amalfi", "santorini"],
+    image: "/07_halo_quartet.jpg",
+    originalPrice: 20000,
     discountPercent: 10,
-    finalPrice: 27950,
-    savings: 0,
+    finalPrice: 18000,
+    savings: 2000,
     configuration: {
       type: "fixed",
-      productIds: ["halo", "pearl", "santorini", "amalfi"],
+      productIds: ["halo", "pearl", "amalfi", "santorini"],
     },
   },
   {
-    id: "the-everything-set",
-    slug: "the-everything-set",
-    name: "The Everything Set",
-    description: "Seven essentials, one complete you.",
-    productIds: ["dew", "veil", "herbe", "halo", "pearl", "santorini", "amalfi"],
-    image: "/media__1784439730149.png",
-    originalPrice: 36950,
-    discountPercent: 15,
-    finalPrice: 36950,
-    savings: 0,
+    id: "the-mimi-collection",
+    slug: "the-mimi-collection",
+    name: "The Mimi Collection / All In One",
+    category: "Complete Collection",
+    description: "The complete collection containing all 7 essential products.",
+    productIds: ["dew", "veil", "herbe", "halo", "pearl", "amalfi", "santorini"],
+    image: "/08_everything_set.jpg",
+    originalPrice: 31500,
+    discountPercent: 20,
+    finalPrice: 25200,
+    savings: 6300,
     isFlagship: true,
     configuration: {
       type: "fixed",
-      productIds: ["dew", "veil", "herbe", "halo", "pearl", "santorini", "amalfi"],
+      productIds: ["dew", "veil", "herbe", "halo", "pearl", "amalfi", "santorini"],
     },
   },
   {
-    id: "mimis-edit",
-    slug: "mimis-edit",
-    name: "Mimi's Edit",
-    description: "A handpicked edit to love, gift or keep.",
-    productIds: ["dew", "veil", "halo", "pearl"],
-    image: "/media__1784439730149.png",
-    originalPrice: 18950,
+    id: "make-your-own-bundle",
+    slug: "make-your-own-bundle",
+    name: "Mimi's Edit — Mimi Edits",
+    category: "Custom Bundle",
+    description: "Create your perfect Mimi Beauty ritual, your way.",
+    productIds: [],
+    image: "/09_mimis_edit.jpg",
+    originalPrice: 0,
     discountPercent: 10,
-    finalPrice: 18950,
+    finalPrice: 0,
     savings: 0,
+    isCustom: true,
     configuration: {
-      type: "fixed",
-      productIds: ["dew", "veil", "halo", "pearl"],
+      type: "custom",
+      productIds: [],
     },
   },
 ];
 
 export function findBundle(slug: string): Bundle | undefined {
-  return bundles.find((b) => b.slug === slug);
+  const normalized = slug.toLowerCase();
+  return bundles.find(
+    (b) =>
+      b.slug === normalized ||
+      b.id === normalized ||
+      (normalized === "luna-glow-duo" && b.slug === "luna-glow") ||
+      (normalized === "the-everything-set" && b.slug === "the-mimi-collection") ||
+      (normalized === "mimis-edit" && b.slug === "make-your-own-bundle")
+  );
 }
 
 export function calculateBundlePrice(
   productIds: string[],
   products: Product[],
-  discountPercent: number
+  discountPercent: number = 10
 ): { originalPrice: number; finalPrice: number; savings: number } {
   const originalPrice = productIds.reduce((total, id) => {
-    const product = products.find((p) => p.slug === id);
+    const product = products.find((p) => p.slug === id || (id === "herba" && p.slug === "herbe"));
     return total + (product?.price || 0);
   }, 0);
 
-  const savings = (originalPrice * discountPercent) / 100;
+  const savings = Math.round((originalPrice * discountPercent) / 100);
   const finalPrice = originalPrice - savings;
 
   return { originalPrice, finalPrice, savings };

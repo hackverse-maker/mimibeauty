@@ -59,8 +59,7 @@ export default function Shop() {
           Shop the collection
         </motion.h1>
         <p className="mt-4 max-w-lg text-lg text-foreground/60 font-light leading-relaxed">
-          Four product. Endless combinations. Every formula clinically dosed and small-batch
-          bottled.
+          Seven essential formulations. Endless luxury combinations. Every formula clinically dosed and small-batch bottled.
         </p>
       </section>
 

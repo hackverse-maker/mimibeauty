@@ -5,13 +5,18 @@ import { CartProvider } from "@/lib/cart";
 import { WishlistProvider } from "@/lib/wishlist";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
+import { BundlesHeader } from "@/components/site/bundles-header";
+import { BundlesFooter } from "@/components/site/bundles-footer";
 import { CartDrawer } from "@/components/site/cart-drawer";
 import { LoadingScreen } from "@/components/site/loading-screen";
 import { ScrollProgress } from "@/components/site/scroll-progress";
 import { type ReactNode, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
+  const pathname = usePathname();
+  const isBundlesPage = pathname?.startsWith("/bundles");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -20,11 +25,11 @@ export default function Providers({ children }: { children: ReactNode }) {
           <WishlistProvider>
             <LoadingScreen />
             <ScrollProgress />
-            <Header />
+            {isBundlesPage ? <BundlesHeader /> : <Header />}
             <main className="min-h-screen">
               {children}
             </main>
-            <Footer />
+            {isBundlesPage ? <BundlesFooter /> : <Footer />}
             <CartDrawer />
           </WishlistProvider>
         </CartProvider>

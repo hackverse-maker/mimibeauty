@@ -236,6 +236,9 @@ export function Footer() {
                       href={href}
                       target={href.startsWith("http") ? "_blank" : undefined}
                       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      onClick={(e) => {
+                        if (href === "#" || !href) e.preventDefault();
+                      }}
                       aria-label={label}
                       className="grid h-8 w-8 place-items-center text-[#C9A86A] transition-colors hover:text-white"
                     >
@@ -253,11 +256,19 @@ export function Footer() {
             <div className="flex flex-col items-center justify-between gap-4 border-t border-[#C9A86A]/20 py-8 text-[11px] text-[#D8D2C8] opacity-70 md:flex-row">
               <p>© {new Date().getFullYear()} Mimi Beauty. All rights reserved.</p>
               <div className="flex gap-6">
-                <a href="#" className="transition-colors hover:text-[#C9A86A]">
+                <a
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  className="transition-colors hover:text-[#C9A86A]"
+                >
                   Privacy
                 </a>
                 <span>|</span>
-                <a href="#" className="transition-colors hover:text-[#C9A86A]">
+                <a
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  className="transition-colors hover:text-[#C9A86A]"
+                >
                   Terms
                 </a>
               </div>

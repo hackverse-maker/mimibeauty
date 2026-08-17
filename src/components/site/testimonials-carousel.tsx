@@ -6,45 +6,37 @@ import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Amelia R.",
-    city: "New York",
+    name: "Khadija Faisal",
+    city: "Verified Buyer",
     product: "DEW — Barrier Repair Face Serum",
     quote:
-      "The Dew serum genuinely changed my skin. Two weeks in, my barrier feels rebuilt. It's the first product I've re-ordered twice.",
-    image: "/hero_dew_girl_left.jpg",
+      "I’ve actually been really happy with the face serum. I’ve struggled with random breakouts and acne for a while, so I was honestly a bit hesitant to try it. But my skin has been so much calmer since I started using it, and I’ve had way fewer breakouts. Even the marks from old acne are starting to look better. Definitely one of my favourite products from Mimi so far.",
+    image: "/02_luna_glow_duo.jpg",
   },
   {
-    name: "Sofia L.",
-    city: "Milan",
-    product: "HALÒ — Illuminating Body Oil",
+    name: "Aitezaz Malik",
+    city: "Verified Buyer",
+    product: "Mimi Beauty Ritual",
     quote:
-      "Hálo is the most beautiful body oil I've ever owned. The fragrance is subtle and the shine is unreal.",
-    image: "/hero_dew_girl_right.jpg",
+      "I’ve been using Mimi for a few days now and I actually really like it. My skin feels so much softer and the glow is definitely there. I was a little unsure at first because I’m always scared of trying new products but so far it’s been really good. Also the packaging is SO pretty.",
+    image: "/04_radiant_you.jpg",
   },
   {
-    name: "Yuki T.",
-    city: "Tokyo",
-    product: "The Signature Ritual",
+    name: "Meerab Bilal",
+    city: "Verified Buyer",
+    product: "The Complete Mimi Collection",
     quote:
-      "Every detail feels intentional. The packaging, the care, the results. Rhode meets Aesop.",
-    image: "/media__1784439898541.jpg",
+      "I’m genuinely loving these products! The hair serum has made my hair feel so much softer and smoother, while the face serum gives such a fresh, dewy glow—skin bilkul fresh lagti hai. The body oil is honestly my favourite, it leaves the skin super soft and hydrated without that heavy, greasy feeling. And the scent is just next level, noticeable but not overpowering. Packaging is so pretty and gives such a luxurious feel. Overall, I’m really happy with everything and already excited for the next products.",
+    image: "/05_complete_glow.jpg",
   },
   {
-    name: "Chloé D.",
-    city: "Paris",
-    product: "HERBÉ — Scalp & Hair Oil",
+    name: "Haider Shah",
+    city: "Verified Buyer",
+    product: "VEIL — Post Wash Leave-In Serum",
     quote:
-      "Herbé transformed my scalp. My hair grows faster and shinier. This brand is quietly extraordinary.",
-    image: "/media__1784439898491.jpg",
+      "Post wash hair serum bhi honestly kaafi acha laga. Hair ko smooth aur manageable feel karwata hai, aur frizz bhi kaafi control ho jata hai. Sabse achi baat ye hai ke hair oily ya heavy feel nahi hotay. I’ve been using it and the overall finish is very clean, nourishing yet lightweight and worth trying. 💗",
+    image: "/03_root_to_radiance.jpg",
   },
-  {
-    name: "Elena M.",
-    city: "London",
-    product: "DEW — Barrier Repair Face Serum",
-    quote:
-      "The texture is like nothing else. It absorbs instantly but leaves this incredible, lasting luminosity.",
-    image: "/brand-story-editorial.jpg",
-  }
 ];
 
 export function TestimonialsCarousel() {
