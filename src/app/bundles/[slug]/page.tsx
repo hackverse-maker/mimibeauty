@@ -203,25 +203,78 @@ export default function BundleDetailsPage({ params }: { params: Promise<{ slug: 
               </div>
             )}
 
-            {/* Included Products Overview */}
-            <div className="space-y-3 border-t border-border/40 pt-6">
-              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
-                What's Included ({allFinalProducts.length} Items)
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {allFinalProducts.map((prod, i) => (
-                  <div
-                    key={`${prod.slug}-${i}`}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-secondary/20 border border-border/30"
-                  >
-                    <img src={prod.image} alt={prod.name} className="h-12 w-12 object-contain rounded-lg bg-secondary/40 shrink-0" />
-                    <div>
-                      <p className="font-display text-sm text-foreground font-medium">{prod.name}</p>
-                      <p className="text-[11px] text-muted-foreground">PKR {prod.price.toLocaleString()}</p>
-                    </div>
+            {/* Included Products Overview - Separated by Category */}
+            <div className="space-y-6 border-t border-border/40 pt-6">
+              {/* Face Actives Section */}
+              {allFinalProducts.filter(p => p.category === "SERUM").length > 0 && (
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-display text-foreground font-medium">DEW — Face Serum</h3>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-gold mt-1">Face Actives</p>
                   </div>
-                ))}
-              </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {allFinalProducts.filter(p => p.category === "SERUM").map((prod, i) => (
+                      <div
+                        key={`${prod.slug}-face-${i}`}
+                        className="flex items-center gap-3 p-2 rounded-xl bg-secondary/20 border border-border/30 h-16"
+                      >
+                        <img src={prod.image} alt={prod.name} className="h-10 w-10 object-contain rounded-lg bg-secondary/40 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="font-display text-xs text-foreground font-medium truncate">{prod.name}</p>
+                          <p className="text-[10px] text-muted-foreground">PKR {prod.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Hair Actives Section */}
+              {allFinalProducts.filter(p => p.category === "HAIR" || p.category === "SCALP").length > 0 && (
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-display text-foreground font-medium">VEIL + HERBÉ — Hair & Scalp</h3>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-gold mt-1">Hair Actives</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {allFinalProducts.filter(p => p.category === "HAIR" || p.category === "SCALP").map((prod, i) => (
+                      <div
+                        key={`${prod.slug}-hair-${i}`}
+                        className="flex items-center gap-3 p-2 rounded-xl bg-secondary/20 border border-border/30 h-16"
+                      >
+                        <img src={prod.image} alt={prod.name} className="h-10 w-10 object-contain rounded-lg bg-secondary/40 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="font-display text-xs text-foreground font-medium truncate">{prod.name}</p>
+                          <p className="text-[10px] text-muted-foreground">PKR {prod.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Other Products (Body Oils, etc.) */}
+              {allFinalProducts.filter(p => p.category !== "SERUM" && p.category !== "HAIR" && p.category !== "SCALP").length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
+                    Other Products ({allFinalProducts.filter(p => p.category !== "SERUM" && p.category !== "HAIR" && p.category !== "SCALP").length} Items)
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {allFinalProducts.filter(p => p.category !== "SERUM" && p.category !== "HAIR" && p.category !== "SCALP").map((prod, i) => (
+                      <div
+                        key={`${prod.slug}-other-${i}`}
+                        className="flex items-center gap-3 p-2 rounded-xl bg-secondary/20 border border-border/30 h-16"
+                      >
+                        <img src={prod.image} alt={prod.name} className="h-10 w-10 object-contain rounded-lg bg-secondary/40 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="font-display text-xs text-foreground font-medium truncate">{prod.name}</p>
+                          <p className="text-[10px] text-muted-foreground">PKR {prod.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Quantity */}

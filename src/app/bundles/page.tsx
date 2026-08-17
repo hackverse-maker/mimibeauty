@@ -87,7 +87,7 @@ export default function BundlesPage() {
           </div>
 
           {/* Desktop: 4 per row | Mobile: 1 per row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {bundles.slice(0, 7).map((bundle, index) => (
               <BundleCard key={bundle.id} bundle={bundle} index={index} />
             ))}
@@ -168,7 +168,7 @@ function BundleCard({ bundle, index }: { bundle: Bundle; index: number }) {
       }`}
     >
       {/* 1. High Quality Image */}
-      <div className="relative aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#F3EFE6] border-b border-[#0C1810]/10 flex items-center justify-center p-4">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#F3EFE6] border-b border-[#0C1810]/10 flex items-center justify-center p-3">
         <img
           src={bundle.image}
           alt={bundle.name}
@@ -178,18 +178,18 @@ function BundleCard({ bundle, index }: { bundle: Bundle; index: number }) {
         />
 
         {/* Category Badge */}
-        <div className="absolute top-3 left-3 bg-[#FAF7F2]/90 backdrop-blur border border-[#0C1810]/15 text-[#0C1810] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] rounded-full">
+        <div className="absolute top-2 left-2 bg-[#FAF7F2]/90 backdrop-blur border border-[#0C1810]/15 text-[#0C1810] px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.2em] rounded-full">
           {bundle.category}
         </div>
 
         {/* Discount Badge */}
-        <div className="absolute top-3 right-3 bg-[#0C1810] text-[#FAF7F2] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded">
+        <div className="absolute top-2 right-2 bg-[#0C1810] text-[#FAF7F2] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded">
           {bundle.discountPercent}% OFF
         </div>
       </div>
 
       {/* 2-5. Card Content (Centered Hierarchy) */}
-      <div className="flex flex-col flex-1 p-5 text-center">
+      <div className="flex flex-col flex-1 p-3 text-center">
         {/* 2. Bundle Name */}
         <Link href={`/bundles/${bundle.slug}`} className="block group-hover:text-[#0C1810]/80 transition-colors">
           <h3 className="font-display text-xl text-[#0C1810] font-medium mb-1">

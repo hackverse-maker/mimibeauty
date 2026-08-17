@@ -104,17 +104,17 @@ function BestSellers() {
               className="mt-5 font-medium leading-[1.08] text-[#F6F2EB]"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
-              {/* Line 1 — Skincare that */}
+              {/* Line 1 */}
               <span className="block text-5xl sm:text-6xl md:text-8xl lg:text-[96px] tracking-tight">
-                Luxury sets <span className="italic text-[#F6F2EB]/60">that</span>
+                Skincare that <span className="italic text-[#F6F2EB]/60">stays</span>
               </span>
-              {/* Line 2 — gold italic, stays with you. */}
+              {/* Line 2 — gold italic */}
               <em className="not-italic block text-4xl sm:text-5xl md:text-7xl lg:text-[80px] text-gold tracking-tight italic">
-                stay with you.
+                with you.
               </em>
             </h2>
             <p className="mt-5 text-[15px] md:text-[16px] font-medium text-white/90">
-              Thoughtfully paired combinations for skin, hair, and body. Results you can feel. Value that amplifies care.
+              Thoughtfully formulated to work with your skin, not against it. Real botanicals, real purpose, results you can feel.
             </p>
           </div>
           <div className="shrink-0 mb-1">
@@ -284,8 +284,8 @@ const whyItems = [
   { icon: ShieldCheck, title: "Dermatologically Tested", body: "Every formula evaluated for skin compatibility." },
   { icon: Rabbit, title: "Cruelty Free", body: "Never tested on animals.\nAlways made with compassion." },
   { icon: Leaf, title: "Botanical Actives", body: "Powered by concentrated plant-derived ingredients." },
-  { icon: Sparkles, title: "Purposefully Formulated", body: "Every ingredient selected with a clear purpose." },
-  { icon: Recycle, title: "Non-Comedogenic", body: "Won’t clog pores or leave skin congested." },
+  { icon: Sparkles, title: "Purposefully Formulated", body: "Every ingredient is selected with a clear purpose." },
+  { icon: Recycle, title: "Non-Comedogenic", body: "Designed not to clog pores or leave skin feeling congested." },
   { icon: Truck, title: "Fast Absorbing", body: "Lightweight dry oils that absorb in seconds." },
 ];
 

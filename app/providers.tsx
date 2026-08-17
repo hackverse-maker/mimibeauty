@@ -10,6 +10,7 @@ import { BundlesFooter } from "@/components/site/bundles-footer";
 import { CartDrawer } from "@/components/site/cart-drawer";
 import { LoadingScreen } from "@/components/site/loading-screen";
 import { ScrollProgress } from "@/components/site/scroll-progress";
+import { WelcomePopup } from "@/components/site/welcome-popup";
 import { type ReactNode, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -25,6 +26,7 @@ export default function Providers({ children }: { children: ReactNode }) {
           <WishlistProvider>
             <LoadingScreen />
             <ScrollProgress />
+            <WelcomePopup />
             {isBundlesPage ? <BundlesHeader /> : <Header />}
             <main className="min-h-screen">
               {children}
