@@ -39,7 +39,8 @@ export default function Shop() {
           Shop the Collection
         </motion.h1>
         <p className="mt-4 max-w-lg text-lg text-foreground/60 font-light leading-relaxed">
-          Seven essential formulations. Endless luxury combinations. Every formula clinically dosed and small-batch bottled.
+          Four products — Every formula clinically tested<br className="hidden md:block" />
+          and small batch bottled.
         </p>
       </section>
 
@@ -121,7 +122,7 @@ export default function Shop() {
             <p className="text-lg text-foreground/40 font-light">No products match this collection — yet.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-x-6 gap-y-16 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-16 md:grid-cols-3 lg:grid-cols-4">
             {filtered.map((p, i) => (
               <ProductCard key={p.slug} product={p} index={i} />
             ))}

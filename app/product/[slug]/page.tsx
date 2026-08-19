@@ -129,10 +129,11 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const resolvedParams = use(params);
   const product = findProduct(resolvedParams.slug);
 
-  const { addProduct } = useCart();
+  const { add } = useCart();
   const { toggle, has } = useWishlist();
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<string>("ingredients");
+  const [active, setActive] = useState(0);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
 
   if (!product) return (
@@ -143,11 +144,12 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
   const { theme } = product;
   const wishlisted = has(product.slug);
+  const gallery = product.gallery?.length ? product.gallery : [product.image, product.hoverImage].filter(Boolean);
   const related = products.filter((p) => p.slug !== product.slug);
 
   const handleAddToCart = () => {
     setStatus("loading");
-    setTimeout(() => { addProduct(product, qty); setStatus("success"); setTimeout(() => setStatus("idle"), 2500); }, 600);
+    setTimeout(() => { add(product, qty); setStatus("success"); setTimeout(() => setStatus("idle"), 2500); }, 600);
   };
 
   return (
@@ -176,10 +178,11 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
           </div>
         </div>
 
-        <section className="mx-auto max-w-[1800px] lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12 xl:gap-20">
-          {/* Left: Cinematic Stage */}
-          <div className="relative px-6 lg:pl-12 xl:pl-20">
-            <CinematicStage image={product.image} accent={theme.accent} glow={theme.glow} />
+        <section className="mx-auto max-w-[1800px] flex flex-col lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12 xl:gap-20">
+          {/* Left: Cinematic Stage - Mobile Second */}
+          <div className="relative order-2 px-6 lg:order-1 lg:pl-12 xl:pl-20">
+            <CinematicStage image={gallery[active]} accent={theme.accent} glow={theme.glow} />
+
 
             {/* Accordions on left */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }} className="mt-16 pb-16">
@@ -213,11 +216,23 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                   ))}
                 </ul>
               </AccordionItem>
+
+              {product.directions && (
+                <AccordionItem title="Directions" open={activeTab === "directions"} onClick={() => setActiveTab(activeTab === "directions" ? "" : "directions")} accent={theme.accent}>
+                  <p className="text-lg text-white/75 leading-relaxed whitespace-pre-wrap">{product.directions}</p>
+                </AccordionItem>
+              )}
+
+              {product.storageCaution && (
+                <AccordionItem title="Storage & Caution" open={activeTab === "storage"} onClick={() => setActiveTab(activeTab === "storage" ? "" : "storage")} accent={theme.accent}>
+                  <p className="text-lg text-white/75 leading-relaxed whitespace-pre-wrap">{product.storageCaution}</p>
+                </AccordionItem>
+              )}
             </motion.div>
           </div>
 
-          {/* Right: Product Info */}
-          <div className="relative mt-12 px-6 lg:mt-0 lg:pr-12 xl:pr-20">
+          {/* Right: Product Info - Mobile First */}
+          <div className="relative order-1 mt-12 px-6 lg:order-2 lg:mt-0 lg:pr-12 xl:pr-20">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}>
               <div className="flex items-center gap-4">
                 <span className="h-[1px] w-8" style={{ backgroundColor: theme.accent }} />
@@ -226,15 +241,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
               <h1 className="mt-6 font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.95] tracking-tight text-white">{product.name}</h1>
               <p className="mt-4 text-lg text-white/60 md:text-xl">{product.tagline}</p>
 
-              <div className="mt-8 flex items-center gap-3">
-                <div className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4" strokeWidth={1}
-                      style={{ color: i < Math.round(product.rating) ? theme.accent : "rgba(255,255,255,0.15)", fill: i < Math.round(product.rating) ? theme.accent : "transparent" }} />
-                  ))}
-                </div>
-                <span className="text-xs uppercase tracking-[0.2em] text-white/50">{product.rating} · {product.reviews} reviews</span>
-              </div>
+
 
               <div className="mt-10">
                 <div className="text-base leading-relaxed text-white/65 md:text-lg whitespace-pre-wrap">{product.description}</div>
@@ -248,9 +255,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
               <div className="flex items-end justify-between border-b pb-8" style={{ borderColor: `${theme.accent}15` }}>
                 <div className="flex items-baseline gap-4">
                   <span className="font-display text-5xl tracking-tight text-white">Rs. {product.price}</span>
-                  {product.originalPrice > product.price && (
-                    <span className="text-xl text-white/35 line-through">Rs. {product.originalPrice}</span>
-                  )}
                 </div>
                 <span className="text-xs uppercase tracking-[0.2em] text-white/40">{product.size}</span>
               </div>

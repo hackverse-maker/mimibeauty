@@ -8,7 +8,7 @@ import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const { addProduct } = useCart();
+  const { add } = useCart();
   const { toggle, has } = useWishlist();
   const [justAdded, setJustAdded] = useState(false);
   const wishlisted = has(product.slug);
@@ -16,7 +16,7 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addProduct(product);
+    add(product);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1200);
   };
@@ -26,11 +26,6 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
     e.stopPropagation();
     toggle(product.slug);
   };
-
-  const hasDiscount = product.originalPrice > product.price;
-  const discountPct = hasDiscount
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0;
 
   return (
     <motion.div
@@ -48,13 +43,6 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-[450ms] ease-out group-hover:scale-[1.05]"
             loading="lazy"
           />
-
-          {/* Discount badge */}
-          {hasDiscount && (
-            <span className="absolute left-4 top-4 z-10 rounded-full bg-[#1A271D] px-3 py-1.5 text-[10px] font-medium tracking-wide text-white">
-              -{discountPct}%
-            </span>
-          )}
 
           {/* Hover/Touch action buttons - Always visible on mobile, hover on desktop */}
           <div className="absolute right-3 top-3 z-10 flex flex-col gap-2 opacity-100 lg:opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100">
@@ -123,11 +111,6 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
 
           <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
             <div className="flex items-center gap-2.5">
-              {hasDiscount && (
-                <span className="text-[14px] text-gray-500 line-through">
-                  Rs. {product.originalPrice}
-                </span>
-              )}
               <span className="text-[16px] font-semibold text-gold">Rs. {product.price}</span>
             </div>
             <div className="flex items-center gap-1.5 text-[14px] text-white">

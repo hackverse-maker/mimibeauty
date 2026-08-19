@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -24,7 +24,6 @@ import { collections, products } from "@/lib/products";
 const nav = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Products", mega: true },
-  { href: "/bundles", label: "Bundles" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -86,7 +85,7 @@ export function Header() {
     : products.slice(0, 4);
 
   useEffect(() => {
-    // rAF-throttled scroll flag — only setState when boolean flips
+    // rAF-throttled scroll flag ÔÇö only setState when boolean flips
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
@@ -161,19 +160,19 @@ export function Header() {
       >
 
         <div className="relative mx-auto grid h-[100px] md:h-[120px] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-2 px-3 sm:px-5 md:grid-cols-[1fr_auto_1fr] md:gap-4 md:px-8">
-          {/* Logo — left */}
+          {/* Logo ÔÇö left */}
           <Link
             href="/"
             onClick={closeOverlays}
             className="z-10 justify-self-start no-underline flex items-center gap-2"
           >
             <img src="/logo.png" alt="Mimi Beauty" className="h-[70px] md:h-[100px] max-w-[90px] sm:max-w-none object-contain" />
-            <span style={{ fontFamily: "'Cinzel', serif", fontWeight: 500, letterSpacing: "0.08em" }} className="text-2xl sm:text-3xl tracking-wide text-foreground mt-1">
-              Mimi<span className="text-gold">Beauty</span>
+            <span className="font-['Playfair_Display'] text-2xl sm:text-3xl font-medium tracking-wide text-foreground mt-1">
+              Mimi<span className="italic text-gold font-light">Beauty</span>
             </span>
           </Link>
 
-          {/* Desktop nav — center */}
+          {/* Desktop nav ÔÇö center */}
           <nav className="hidden items-center gap-9 justify-self-center lg:flex">
             {nav.map((item) =>
               "mega" in item && item.mega ? (
@@ -183,7 +182,7 @@ export function Header() {
                 >
                   <button
                     type="button"
-                    className="group relative flex items-center gap-1 py-2 text-[12px] font-medium uppercase tracking-[0.22em] text-foreground/75 transition-colors hover:text-foreground" style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    className="group relative flex items-center gap-1 py-2 text-[12px] font-medium uppercase tracking-[0.22em] text-foreground/75 transition-colors hover:text-foreground"
                     aria-expanded={megaOpen}
                     onClick={() => setMegaOpen((v) => !v)}
                   >
@@ -198,7 +197,6 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  style={{ fontFamily: "'Montserrat', sans-serif" }}
                   className={`group relative py-2 text-[12px] font-medium uppercase tracking-[0.22em] transition-colors hover:text-foreground ${
                     pathname === item.href ? "text-foreground" : "text-foreground/75"
                   }`}
@@ -210,7 +208,7 @@ export function Header() {
             )}
           </nav>
 
-          {/* Actions — right */}
+          {/* Actions ÔÇö right */}
           <div className="z-10 flex items-center gap-0.5 justify-self-end md:gap-1">
             <IconButton
               label="Search"
@@ -391,7 +389,7 @@ export function Header() {
                         BODY LAVA COLLECTION
                       </p>
                       <div className="grid grid-cols-4 gap-8">
-                        {["Halò", "Pearl", "Amalfi", "Santorini"].map(
+                        {["Hal├▓", "Pearl", "Amalfi", "Santorini"].map(
                           (n) => (
                             <Link href="/shop" key={n} className="group text-white">
                               <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
@@ -421,7 +419,7 @@ export function Header() {
                         </Link>
                         <Link href="/shop" className="group text-white">
                           <p className="font-display text-lg text-[#F5F2EC] group-hover:text-[#C9A86A] transition-colors">
-                            Herbé
+                            Herb├®
                           </p>
                           <p className="text-[11px] text-white/60 mt-1">Pre-Wash Hair Oil</p>
                           <p className="text-xs text-white/50 mt-2 mb-1">50ml</p>
@@ -534,7 +532,7 @@ export function Header() {
                   ref={searchRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search products…"
+                  placeholder="Search productsÔÇª"
                   className="w-full bg-transparent font-display text-xl outline-none placeholder:text-muted-foreground/50 md:text-2xl"
                 />
                 <button
@@ -549,7 +547,7 @@ export function Header() {
               <div className="max-h-[50vh] overflow-y-auto p-2">
                 {searchResults.length === 0 ? (
                   <p className="px-4 py-10 text-center text-sm text-muted-foreground">
-                    No matches for “{query}”
+                    No matches for ÔÇ£{query}ÔÇØ
                   </p>
                 ) : (
                   searchResults.map((p) => (
@@ -574,7 +572,7 @@ export function Header() {
                 )}
               </div>
               <div className="flex items-center justify-between border-t border-border/50 px-5 py-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-                <span>⌘K to search</span>
+                <span>ÔîÿK to search</span>
                 <Link href="/shop" onClick={() => setSearchOpen(false)} className="hover:text-gold">
                   Shop all
                 </Link>

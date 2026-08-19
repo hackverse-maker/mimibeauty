@@ -11,10 +11,7 @@ import {
   Recycle,
   Star,
 } from "lucide-react";
-import { assets, products, findProduct, type Product } from "@/lib/products";
-import { bundles } from "@/lib/bundles";
-import { useCart } from "@/lib/cart";
-import { ShoppingBag } from "lucide-react";
+import { assets, products } from "@/lib/products";
 import { ProductCard } from "@/components/site/product-card";
 import { Hero } from "@/components/site/hero";
 import { IngredientsSection } from "@/components/site/ingredients-section";
@@ -69,121 +66,24 @@ function SectionHeader({
 }
 
 function BestSellers() {
-  const { addBundle } = useCart();
-
   return (
     <section className="py-16 md:py-24">
       <div className="mx-auto max-w-[1400px] px-6">
         <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.4em] text-gold">MIMI SETS & BUNDLES</p>
+            <p className="text-[11px] uppercase tracking-[0.4em] text-gold">Best Sellers</p>
             <h2 className="mt-3 font-display text-3xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight text-balance">
-              Luxury sets that stay with you.
+              Loved into permanence.
             </h2>
           </div>
-          <Link href="/bundles" className="inline-flex items-center gap-2 text-sm hover:text-gold">
-            View all bundles <ArrowRight className="h-4 w-4" />
+          <Link href="/shop" className="inline-flex items-center gap-2 text-sm hover:text-gold">
+            Shop all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {bundles.filter(b => b.id !== 'make-your-own-bundle').slice(0, 4).map((bundle, index) => {
-            const bundleProducts = bundle.productIds
-              .map(id => findProduct(id))
-              .filter((p): p is Product => p !== undefined);
-
-            return (
-              <motion.div
-                key={bundle.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group flex flex-col h-full"
-              >
-                <div className="relative flex flex-col justify-between h-full overflow-hidden rounded-xl bg-secondary/30 border border-border/50 transition-all duration-300 hover:border-gold/50">
-                  <div>
-                    <Link href={`/bundles/${bundle.slug}`} className="block">
-                      {/* Bundle Image */}
-                      <div className="aspect-[4/3] overflow-hidden bg-secondary/50 relative">
-                        <img
-                          src={bundle.image}
-                          alt={bundle.name}
-                          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
-                        />
-                        {/* Discount Badge */}
-                        {bundle.discountPercent > 0 && (
-                          <div className="absolute top-2 right-2 bg-gold text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider rounded-sm">
-                            {bundle.discountPercent}% OFF
-                          </div>
-                        )}
-
-                        {/* Flagship Badge */}
-                        {bundle.isFlagship && (
-                          <div className="absolute top-2 left-2 bg-foreground text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider rounded-sm">
-                            Flagship
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-
-                    {/* Content */}
-                    <div className="p-3 flex-1">
-                      <Link href={`/bundles/${bundle.slug}`} className="block group-hover:text-gold transition-colors">
-                        <h3 className="font-display text-base text-foreground mb-1">{bundle.name}</h3>
-                      </Link>
-                      <p className="text-[11px] text-muted-foreground mb-2 line-clamp-1">{bundle.description}</p>
-                      
-                      {/* Products */}
-                      <div className="mb-3 bg-background/40 p-2 rounded-lg border border-border/30">
-                        <p className="text-[9px] text-gold uppercase tracking-wider mb-0.5 font-semibold">Includes ({bundleProducts.length})</p>
-                        <p className="text-[11px] text-foreground/90 font-medium truncate">
-                          {bundleProducts.map(p => p.name).join(" + ")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Pricing & Actions */}
-                  <div className="p-3 pt-0 border-t border-border/20 mt-auto">
-                    <div className="flex items-baseline justify-between gap-2 mb-3 pt-2">
-                      <div>
-                        <p className="text-lg font-display text-foreground font-semibold">
-                          PKR {bundle.finalPrice.toLocaleString()}
-                        </p>
-                        {bundle.originalPrice > bundle.finalPrice && (
-                          <p className="text-[11px] text-muted-foreground line-through">
-                            PKR {bundle.originalPrice.toLocaleString()}
-                          </p>
-                        )}
-                      </div>
-                      {bundle.savings > 0 && (
-                        <span className="text-[10px] text-gold font-medium bg-gold/10 px-1.5 py-0.5 rounded">
-                          Save PKR {bundle.savings.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => addBundle(bundle, bundleProducts)}
-                        className="flex items-center justify-center gap-1.5 rounded-full bg-gold py-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-background hover:bg-gold/90 transition-all shadow-sm active:scale-95 min-h-[40px]"
-                      >
-                        <ShoppingBag className="h-3.5 w-3.5" />
-                        Add to Cart
-                      </button>
-                      <Link
-                        href={`/bundles/${bundle.slug}`}
-                        className="flex items-center justify-center gap-1 rounded-full border border-border bg-secondary/40 px-3 py-2 text-[10px] font-medium uppercase tracking-wider text-foreground hover:border-gold/60 hover:text-gold transition-colors text-center min-h-[40px]"
-                      >
-                        Details <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+        <div className="mt-12 grid grid-cols-1 gap-y-12 md:grid-cols-2 lg:grid-cols-4 md:gap-x-6 md:gap-y-14">
+          {products.map((p, i) => (
+            <ProductCard key={p.slug} product={p} index={i} />
+          ))}
         </div>
       </div>
     </section>
@@ -209,7 +109,7 @@ const whyItems = [
   {
     icon: Sparkles,
     title: "Purposefully Formulated",
-    body: "Every ingredient selected with a clear purpose.",
+    body: "Every ingredient is selected with a clear purpose.",
   },
   {
     icon: Recycle,
@@ -228,7 +128,7 @@ function WhyChoose() {
     <section className="relative overflow-hidden bg-[oklch(0.97_0.01_95)] py-16 md:py-24 dark:bg-background/50">
       <div className="mx-auto max-w-[1400px] px-6">
         <SectionHeader eyebrow="Why MIMIbeauty" title="Six promises, kept quietly." />
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
           {whyItems.map((it, i) => (
             <motion.div
               key={it.title}

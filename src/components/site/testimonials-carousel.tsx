@@ -1,161 +1,212 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Star } from "lucide-react";
+
+const INTERVAL_MS = 3500;
 
 const testimonials = [
   {
     name: "Khadija Faisal",
-    city: "Verified Buyer",
     product: "DEW — Barrier Repair Face Serum",
+    stars: 5,
     quote:
       "I've actually been really happy with the face serum. I've struggled with random breakouts and acne for a while, so I was honestly a bit hesitant to try it. But my skin has been so much calmer since I started using it, and I've had way fewer breakouts. Even the marks from old acne are starting to look better. Definitely one of my favourite products from Mimi so far.",
   },
   {
     name: "Aitezaz Malik",
-    city: "Verified Buyer",
-    product: "Mimi Beauty Ritual",
+    product: "DEW — Barrier Repair Face Serum",
+    stars: 5,
     quote:
       "I've been using Mimi for a few days now and I actually really like it. My skin feels so much softer and the glow is definitely there. I was a little unsure at first because I'm always scared of trying new products but so far it's been really good. Also the packaging is SO pretty.",
   },
   {
     name: "Meerab Bilal",
-    city: "Verified Buyer",
-    product: "The Complete Mimi Collection",
+    product: "Face, Hair & Body",
+    stars: 5,
     quote:
-      "I'm genuinely loving these products! The hair serum has made my hair feel so much softer and smoother, while the face serum gives such a fresh, dewy glow—skin bilkul fresh lagti hai. The body oil is honestly my favourite, it leaves the skin super soft and hydrated without that heavy, greasy feeling. And the scent is just next level, noticeable but not overpowering. Packaging is so pretty and gives such a luxurious feel. Overall, I'm really happy with everything and already excited for the next products.",
+      "I'm genuinely loving these products! The hair serum has made my hair feel so much softer and smoother, while the face serum gives such a fresh, dewy glow — skin bilkul fresh lagti hai. The body oil is honestly my favourite, it leaves the skin super soft and hydrated without that heavy, greasy feeling. And the scent is just next level, noticeable but not overpowering. Packaging is so pretty and gives such a luxurious feel. Overall, I'm really happy with everything and already excited for the next products.",
   },
   {
     name: "Haider Shah",
-    city: "Verified Buyer",
-    product: "VEIL — Post Wash Leave-In Serum",
+    product: "VEIL — Post Wash Hair Serum",
+    stars: 5,
     quote:
       "Post wash hair serum bhi honestly kaafi acha laga. Hair ko smooth aur manageable feel karwata hai, aur frizz bhi kaafi control ho jata hai. Sabse achi baat ye hai ke hair oily ya heavy feel nahi hotay. I've been using it and the overall finish is very clean, nourishing yet lightweight and worth trying. 💗",
   },
 ];
 
+function Stars({ count }: { count: number }) {
+  return (
+    <div className="flex gap-1">
+      {Array.from({ length: count }).map((_, i) => (
+        <Star key={i} className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-[#C9A86A] text-[#C9A86A]" />
+      ))}
+    </div>
+  );
+}
+
 export function TestimonialsCarousel() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const count = testimonials.length;
+  const [index, setIndex] = useState(0);
+  const dragging = useRef(false);
+  const startX = useRef(0);
+  const pausedRef = useRef(false);
+  const rootRef = useRef<HTMLElement>(null);
+  const timerRef = useRef<number | null>(null);
+
+  const go = useCallback((next: number) => {
+    setIndex(((next % count) + count) % count);
+  }, [count]);
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current != null) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  const startTimer = useCallback(() => {
+    stopTimer();
+    if (pausedRef.current) return;
+    timerRef.current = window.setInterval(() => {
+      if (document.hidden || pausedRef.current) return;
+      setIndex((i) => (i + 1) % count);
+    }, INTERVAL_MS);
+  }, [count, stopTimer]);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    let animationFrameId: number;
-    let scrollPos = el.scrollLeft;
-
-    const scroll = () => {
-      if (!isHovered && el) {
-        scrollPos += 0.6;
-        if (scrollPos >= el.scrollWidth / 3) {
-          scrollPos = 0;
-        }
-        el.scrollLeft = scrollPos;
-      }
-      animationFrameId = requestAnimationFrame(scroll);
+    startTimer();
+    const onVis = () => {
+      if (document.hidden) stopTimer();
+      else startTimer();
     };
+    document.addEventListener("visibilitychange", onVis);
 
-    const onScroll = () => {
-      if (isHovered) scrollPos = el.scrollLeft;
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    animationFrameId = requestAnimationFrame(scroll);
+    const el = rootRef.current;
+    let io: IntersectionObserver | undefined;
+    if (el && typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          pausedRef.current = !entry.isIntersecting;
+          if (entry.isIntersecting) startTimer();
+          else stopTimer();
+        },
+        { threshold: 0.05 },
+      );
+      io.observe(el);
+    }
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      el.removeEventListener("scroll", onScroll);
+      stopTimer();
+      document.removeEventListener("visibilitychange", onVis);
+      io?.disconnect();
     };
-  }, [isHovered]);
+  }, [startTimer, stopTimer]);
 
-  const scrollLeft = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: -420, behavior: "smooth" });
-  };
-  const scrollRight = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: 420, behavior: "smooth" });
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    dragging.current = true;
+    startX.current = e.clientX;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    pausedRef.current = true;
+    stopTimer();
   };
 
-  const displayTestimonials = [...testimonials, ...testimonials, ...testimonials];
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const delta = e.clientX - startX.current;
+    dragging.current = false;
+    if (Math.abs(delta) > 40) {
+      go(delta < 0 ? index + 1 : index - 1);
+    }
+    pausedRef.current = false;
+    startTimer();
+  };
 
   return (
-    <section className="relative border-y border-[#C9A86A]/20 bg-[#08140E] overflow-hidden py-24 md:py-32">
-      <div className="absolute inset-0 bg-[#08140E] opacity-50 pointer-events-none" />
+    <section
+      ref={rootRef}
+      className="relative overflow-hidden border-y border-[#C9A86A]/15 bg-[#07110D] py-20 md:py-28"
+    >
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 55% at 18% 20%, rgba(201,168,106,0.05) 0%, transparent 70%)",
+        }}
+      />
 
-      <div className="relative z-10 mx-auto max-w-[1500px] px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="flex flex-col items-start gap-4">
-            <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#C9A86A]">
-              Loved worldwide
+      <div className="relative z-10 mx-auto max-w-[1400px] px-6">
+        <div className="mb-12 md:mb-16 max-w-3xl">
+          <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#C9A86A]">
+            Community
+          </span>
+          <h2
+            className="mt-4 text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] leading-[1.05] tracking-tight text-[#F5F2EC]"
+            style={{ fontFamily: "var(--font-cormorant, serif)" }}
+          >
+            Words from our customers.
+          </h2>
+          <div className="mt-4 flex items-center gap-3">
+            <Stars count={5} />
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#F5F2EC]/45">
+              5.0 · All verified customers
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#F5F2EC]">
-              Words from our community.
-            </h2>
-          </div>
-          <div className="hidden md:flex gap-3 pb-2">
-            <button
-              onClick={scrollLeft}
-              className="grid h-12 w-12 place-items-center rounded-full border border-[#C9A86A]/30 text-[#F5F2EC] transition-all hover:bg-[#C9A86A] hover:text-[#08140E]"
-              aria-label="Previous review"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              onClick={scrollRight}
-              className="grid h-12 w-12 place-items-center rounded-full border border-[#C9A86A]/30 text-[#F5F2EC] transition-all hover:bg-[#C9A86A] hover:text-[#08140E]"
-              aria-label="Next review"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
           </div>
         </div>
-      </div>
 
-      <div className="relative z-10 mt-16 md:mt-24">
         <div
-          ref={scrollRef}
-          className="flex overflow-x-auto gap-6 px-6 md:px-12 pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab active:cursor-grabbing"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onTouchStart={() => setIsHovered(true)}
-          onTouchEnd={() => setIsHovered(false)}
-          style={{ scrollBehavior: "auto" }}
+          className="relative overflow-hidden"
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          style={{ touchAction: "pan-y" }}
         >
-          {displayTestimonials.map((t, i) => (
-            <motion.div
-              key={`${t.name}-${i}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: (i % testimonials.length) * 0.1 }}
-              className="relative flex-none w-[85vw] sm:w-[400px] md:w-[440px] rounded-3xl bg-[#0F1813] p-7 shadow-2xl border border-[#C9A86A]/20 overflow-hidden group flex flex-col transition-all duration-300 hover:border-[#C9A86A]/40"
-            >
-              {/* Stars */}
-              <div className="flex gap-1 mb-6">
-                {Array.from({ length: 5 }).map((_, s) => (
-                  <Star key={s} className="h-4 w-4 fill-[#C9A86A] text-[#C9A86A]" />
-                ))}
-              </div>
-
-              {/* Quote */}
-              <p className="font-sans text-base leading-relaxed text-[#F5F2EC]/85 italic flex-1">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-
-              {/* Footer */}
-              <footer className="mt-8 pt-6 border-t border-[#C9A86A]/15 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
-                <div>
-                  <p className="font-display text-xl text-[#F5F2EC]">{t.name}</p>
-                  <p className="text-xs uppercase tracking-[0.2em] text-[#F5F2EC]/50 mt-1.5">
-                    {t.city}
-                  </p>
+          <div
+            className="flex"
+            style={{
+              transform: `translate3d(-${index * 100}%, 0, 0)`,
+              transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+            }}
+          >
+            {testimonials.map((t) => (
+              <article key={t.name} className="relative w-full min-w-0 shrink-0 basis-full">
+                <div className="relative mx-auto max-w-4xl overflow-hidden rounded-sm border border-[#C9A86A]/20 bg-[#0B1510] px-6 py-10 sm:px-12 sm:py-14">
+                  <span
+                    className="pointer-events-none absolute -top-6 left-4 select-none text-[8rem] leading-none text-[#C9A86A]/15 sm:text-[11rem]"
+                    style={{ fontFamily: "var(--font-cormorant, serif)" }}
+                    aria-hidden
+                  >
+                    “
+                  </span>
+                  <div className="relative min-h-[280px] sm:min-h-[240px]">
+                    <Stars count={t.stars} />
+                    <p className="mt-8 text-[17px] sm:text-[22px] md:text-[24px] leading-[1.55] text-[#F5F2EC]/90 font-light italic">
+                      {t.quote}
+                    </p>
+                    <div className="mt-10 border-t border-[#C9A86A]/15 pt-6">
+                      <p className="font-display text-[20px] sm:text-[22px] tracking-wide text-[#F5F2EC]">
+                        {t.name}
+                      </p>
+                      <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C9A86A]/75">
+                        {t.product}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A86A] sm:text-right max-w-[180px]">
-                  {t.product}
-                </p>
-              </footer>
-            </motion.div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-2" aria-hidden>
+          {testimonials.map((t, i) => (
+            <span
+              key={t.name}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                i === index ? "w-8 bg-[#C9A86A]" : "w-2 bg-[#C9A86A]/30"
+              }`}
+            />
           ))}
         </div>
       </div>

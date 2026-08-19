@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { findProduct, products } from "@/lib/products";
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import {
   ArrowRight,
@@ -238,15 +239,16 @@ function CinematicStage({ image, accent, glow }: { image: string; accent: string
 // -------------------------------------------------------------
 // Main Page Component
 // -------------------------------------------------------------
-export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = use(params);
-  const slug = resolvedParams.slug;
+export default function ProductPage() {
+  const params = useParams();
+  const slug = params.slug as string;
   const product = findProduct(slug);
 
-  const { addProduct } = useCart();
+  const { add } = useCart();
   const { toggle, has } = useWishlist();
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<string>("ingredients");
+  const [active, setActive] = useState(0);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
 
   if (!product) {
@@ -262,12 +264,13 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
   const { theme } = product;
   const wishlisted = has(product.slug);
+  const gallery = [product.image, product.hoverImage].filter(Boolean);
   const related = products.filter((p) => p.slug !== product.slug);
 
   const handleAddToCart = () => {
     setStatus("loading");
     setTimeout(() => {
-      addProduct(product, qty);
+      add(product, qty);
       setStatus("success");
       setTimeout(() => setStatus("idle"), 2500);
     }, 600);
@@ -339,7 +342,39 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
         <section className="mx-auto max-w-[1800px] lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12 xl:gap-20">
           {/* Left Column: Cinematic Stage */}
           <div className="relative px-6 lg:pl-12 xl:pl-20">
-            <CinematicStage image={product.image} accent={theme.accent} glow={theme.glow} />
+            <CinematicStage image={gallery[active]} accent={theme.accent} glow={theme.glow} />
+
+            {/* Thumbnails */}
+            <div className="absolute bottom-10 left-1/2 flex -translate-x-1/2 gap-4 lg:bottom-16">
+              {gallery.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border backdrop-blur-xl transition-all duration-300"
+                  style={{
+                    backgroundColor: "rgba(0,0,0,0.4)",
+                    borderColor: active === i ? `${theme.accent}80` : "rgba(255,255,255,0.08)",
+                  }}
+                >
+                  <img
+                    src={src}
+                    className="h-full w-full object-contain p-2 mix-blend-screen opacity-80"
+                    alt=""
+                  />
+                  {active === i && (
+                    <motion.div
+                      layoutId="active-thumb-border"
+                      className="absolute inset-0 rounded-2xl border-2"
+                      style={{
+                        borderColor: theme.accent,
+                        boxShadow: `0 0 15px ${theme.accentMuted}`,
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Right Column: Product Info */}
@@ -411,11 +446,6 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                     <span className="font-display text-5xl tracking-tight text-white">
                       PKR {product.price}
                     </span>
-                    {product.originalPrice > product.price && (
-                      <span className="text-xl text-white/35 line-through">
-                        PKR {product.originalPrice}
-                      </span>
-                    )}
                   </div>
                   <span className="text-xs uppercase tracking-[0.2em] text-white/40">
                     {product.size}

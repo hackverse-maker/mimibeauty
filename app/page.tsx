@@ -6,15 +6,18 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import {
   ArrowRight, Leaf, ShieldCheck, Sparkles, Truck, Rabbit, Recycle,
-  Star, Heart, ShoppingBag,
+  Star, Heart,
 } from "lucide-react";
-import { assets, collections, products, findProduct, type Product } from "@/lib/products";
-import { bundles } from "@/lib/bundles";
-import { useCart } from "@/lib/cart";
+import { assets, collections, products } from "@/lib/products";
+import { ProductCard } from "@/components/site/product-card";
 import { Hero } from "@/components/site/hero";
 import { IngredientsSection } from "@/components/site/ingredients-section";
 import { NewsletterSection } from "@/components/site/newsletter-section";
 import { TestimonialsCarousel } from "@/components/site/testimonials-carousel";
+import { ReadSlowlySection } from "@/components/site/read-slowly-section";
+import { bundles, BundleCard } from "@/components/site/bundle-card";
+
+
 
 export default function Home() {
   return (
@@ -26,6 +29,7 @@ export default function Home() {
       <IngredientsSection />
       <Compare />
       <TestimonialsCarousel />
+      <ReadSlowlySection />
       <NewsletterSection />
     </>
   );
@@ -83,9 +87,9 @@ function SectionHeader({ eyebrow, title, kicker }: { eyebrow: string; title: str
   );
 }
 
-function BestSellers() {
-  const { addBundle } = useCart();
 
+
+function BestSellers() {
   return (
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-[1400px] px-6">
@@ -98,131 +102,36 @@ function BestSellers() {
         >
           <div className="w-full max-w-[1000px]">
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-gold">
-              MIMI SETS & BUNDLES
+              CUSTOMER FAVORITES
             </p>
             <h2
               className="mt-5 font-medium leading-[1.08] text-[#F6F2EB]"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
-              {/* Line 1 */}
+              {/* Line 1 — Skincare that */}
               <span className="block text-5xl sm:text-6xl md:text-8xl lg:text-[96px] tracking-tight">
-                Skincare that <span className="italic text-[#F6F2EB]/60">stays</span>
+                Skincare <span className="italic text-[#F6F2EB]/60">that</span>
               </span>
-              {/* Line 2 — gold italic */}
+              {/* Line 2 — gold italic, stays with you. */}
               <em className="not-italic block text-4xl sm:text-5xl md:text-7xl lg:text-[80px] text-gold tracking-tight italic">
-                with you.
+                stays with you.
               </em>
             </h2>
             <p className="mt-5 text-[15px] md:text-[16px] font-medium text-white/90">
-              Thoughtfully formulated to work with your skin, not against it. Real botanicals, real purpose, results you can feel.
+              Thoughtfully formulated to work with your skin, not against it. Results you can feel. Confidence that lasts.
             </p>
           </div>
           <div className="shrink-0 mb-1">
-            <Link href="/bundles" className="inline-flex items-center gap-2 text-[12px] font-medium tracking-wide text-gold hover:text-gold-soft transition-colors group">
-              View all bundles <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <Link href="/shop" className="inline-flex items-center gap-2 text-[12px] font-medium tracking-wide text-gold hover:text-gold-soft transition-colors group">
+              View all products <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </motion.div>
         
         <div className="mt-16 md:mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {bundles.filter(b => b.id !== 'make-your-own-bundle').slice(0, 4).map((bundle, index) => {
-            const bundleProducts = bundle.productIds
-              .map(id => findProduct(id))
-              .filter((p): p is Product => p !== undefined);
-
-            return (
-              <motion.div
-                key={bundle.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group flex flex-col h-full"
-              >
-                <div className="relative flex flex-col justify-between h-full overflow-hidden rounded-xl bg-secondary/30 border border-border/50 transition-all duration-300 hover:border-gold/50">
-                  <div>
-                    <Link href={`/bundles/${bundle.slug}`} className="block">
-                      {/* Bundle Image */}
-                      <div className="aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-secondary/50 relative">
-                        <img
-                          src={bundle.image}
-                          alt={bundle.name}
-                          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
-                        />
-                        {/* Discount Badge */}
-                        {bundle.discountPercent > 0 && (
-                          <div className="absolute top-2 right-2 bg-gold text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider rounded-sm">
-                            {bundle.discountPercent}% OFF
-                          </div>
-                        )}
-
-                        {/* Flagship Badge */}
-                        {bundle.isFlagship && (
-                          <div className="absolute top-2 left-2 bg-foreground text-background px-2 py-1 text-[10px] font-medium uppercase tracking-wider rounded-sm">
-                            Flagship
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-
-                    {/* Content */}
-                    <div className="p-4 sm:p-5 flex-1">
-                      <Link href={`/bundles/${bundle.slug}`} className="block group-hover:text-gold transition-colors">
-                        <h3 className="font-display text-lg sm:text-xl text-foreground mb-1">{bundle.name}</h3>
-                      </Link>
-                      <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{bundle.description}</p>
-                      
-                      {/* Products */}
-                      <div className="mb-4 bg-background/40 p-2.5 rounded-lg border border-border/30">
-                        <p className="text-[10px] text-gold uppercase tracking-wider mb-1 font-semibold">Includes ({bundleProducts.length} Items)</p>
-                        <p className="text-xs text-foreground/90 font-medium">
-                          {bundleProducts.map(p => p.name).join(" + ")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Pricing & Actions */}
-                  <div className="p-4 sm:p-5 pt-0 border-t border-border/20 mt-auto">
-                    <div className="flex items-baseline justify-between gap-2 mb-4 pt-3">
-                      <div>
-                        <p className="text-xl font-display text-foreground font-semibold">
-                          PKR {bundle.finalPrice.toLocaleString()}
-                        </p>
-                        {bundle.originalPrice > bundle.finalPrice && (
-                          <p className="text-xs text-muted-foreground line-through">
-                            PKR {bundle.originalPrice.toLocaleString()}
-                          </p>
-                        )}
-                      </div>
-                      {bundle.savings > 0 && (
-                        <span className="text-[11px] text-gold font-medium bg-gold/10 px-2 py-0.5 rounded">
-                          Save PKR {bundle.savings.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => addBundle(bundle, bundleProducts)}
-                        className="flex items-center justify-center gap-1.5 rounded-full bg-gold py-2.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-background hover:bg-gold/90 transition-all shadow-sm active:scale-95 min-h-[44px]"
-                      >
-                        <ShoppingBag className="h-3.5 w-3.5" />
-                        Add to Cart
-                      </button>
-                      <Link
-                        href={`/bundles/${bundle.slug}`}
-                        className="flex items-center justify-center gap-1 rounded-full border border-border bg-secondary/40 px-3 py-2.5 text-[11px] font-medium uppercase tracking-wider text-foreground hover:border-gold/60 hover:text-gold transition-colors text-center min-h-[44px]"
-                      >
-                        Details <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+          {bundles.slice(0, 4).map((bundle) => (
+            <BundleCard key={bundle.id} bundle={bundle} />
+          ))}
         </div>
       </div>
     </section>
@@ -285,7 +194,7 @@ const whyItems = [
   { icon: Rabbit, title: "Cruelty Free", body: "Never tested on animals.\nAlways made with compassion." },
   { icon: Leaf, title: "Botanical Actives", body: "Powered by concentrated plant-derived ingredients." },
   { icon: Sparkles, title: "Purposefully Formulated", body: "Every ingredient is selected with a clear purpose." },
-  { icon: Recycle, title: "Non-Comedogenic", body: "Designed not to clog pores or leave skin feeling congested." },
+  { icon: Recycle, title: "Non-Comedogenic", body: "Say No to Clogged Pores & Congested Skin." },
   { icon: Truck, title: "Fast Absorbing", body: "Lightweight dry oils that absorb in seconds." },
 ];
 
@@ -309,10 +218,18 @@ function WhyChoose() {
             className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] leading-[1.1] tracking-tight text-[#F5F2EC]"
             style={{ fontFamily: "var(--font-cormorant, serif)" }}
           >
-            Skincare that's honest,<br className="hidden md:block" />
-            <em className="italic text-gold">effective, and made for you.</em>
+            Skincare that's simple,<br />
+            <em className="italic text-gold">Effective, and made for you.</em>
           </motion.h2>
-          
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mx-auto max-w-2xl mt-6 text-[16px] md:text-[20px] leading-relaxed text-[#D8D2C8] opacity-85"
+          >
+            We make clean, high-performance skincare, free from harmful chemicals and is skin compatible.
+          </motion.p>
+
           <div className="flex items-center justify-center gap-4 my-10">
              <svg width="40" height="12" viewBox="0 0 40 12" fill="none" className="text-gold">
                <path d="M10 6H30" stroke="currentColor" strokeWidth="0.5"/>
@@ -323,14 +240,6 @@ function WhyChoose() {
              </svg>
           </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mx-auto max-w-2xl text-[18px] md:text-[24px] leading-relaxed text-[#D8D2C8] opacity-90"
-          >
-            We make clean, high-performance skincare with<br className="hidden md:block" />
-            real ingredients and real purpose.
-          </motion.p>
         </div>
 
         <div className="mt-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -425,43 +334,6 @@ function BeforeAfter() {
   );
 }
 
-const testimonials = [
-  { name: "Amelia R.", city: "New York", quote: "The Dew serum genuinely changed my skin. Two weeks in, my barrier feels rebuilt. It's the first product I've re-ordered twice." },
-  { name: "Sofia L.", city: "Milan", quote: "Hálo is the most beautiful body oil I've ever owned. The fragrance is subtle and the shine is unreal." },
-  { name: "Yuki T.", city: "Tokyo", quote: "Every detail feels intentional. The packaging, the collection, the results. Rhode meets Aesop." },
-  { name: "Chloé D.", city: "Paris", quote: "Herbé transformed my scalp. My hair grows faster and shinier. This brand is quietly extraordinary." },
-];
-
-function Testimonials() {
-  return (
-    <section className="border-y border-border/60 bg-secondary/40 py-16 md:py-24">
-      <div className="mx-auto max-w-[1400px] px-6">
-        <SectionHeader eyebrow="Loved worldwide" title="Words from our community." />
-        <div className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {testimonials.map((t, i) => (
-            <motion.blockquote
-              key={t.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: i * 0.06 }}
-              className="glass rounded-2xl p-5 sm:p-7"
-            >
-              <div className="flex gap-0.5 text-gold">
-                {Array.from({ length: 5 }).map((_, s) => <Star key={s} className="h-3.5 w-3.5 fill-gold" />)}
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-foreground/85">"{t.quote}"</p>
-              <footer className="mt-6">
-                <p className="font-display text-lg">{t.name}</p>
-                <p className="text-xs text-muted-foreground">{t.city}</p>
-              </footer>
-            </motion.blockquote>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 
 

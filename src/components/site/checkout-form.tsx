@@ -21,7 +21,7 @@ interface CustomerInfo {
 }
 
 export function CheckoutForm() {
-  const { lines, bundles, subtotal, setOpen } = useCart();
+  const { lines, subtotal, setOpen } = useCart();
   const [showForm, setShowForm] = useState(false);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     fullName: "",
@@ -73,8 +73,14 @@ export function CheckoutForm() {
   const formatWhatsAppMessage = (): string => {
     const shipping = 0;
     const discount = 0;
-    const tax = subtotal * 0.1;
-    const grandTotal = subtotal + shipping - discount + tax;
+    const tax = 0;
+    const grandTotal = subtotal;
+
+    const subtotalInDollars = subtotal;
+    const shippingInDollars = shipping;
+    const discountInDollars = discount;
+    const taxInDollars = tax;
+    const grandTotalInDollars = grandTotal;
 
     const now = new Date();
     const orderDate = now.toLocaleDateString("en-US", {
@@ -113,35 +119,16 @@ Street Address: ${customerInfo.address}
 
 `;
 
-    // Add bundles first
-    bundles.forEach((bundle, index) => {
-      const { bundle: b, selectedProducts, selectedOptions, qty } = bundle;
-      const totalPrice = b.finalPrice * qty;
-      message += `📦 *BUNDLE ${index + 1}: ${b.name}*
-   Products: ${selectedProducts.map(p => p.name).join(" + ")}
-   Quantity: ${qty}
-   Original Price: PKR ${b.originalPrice.toLocaleString()}
-   Discount: ${b.discountPercent}%
-   Savings: PKR ${b.savings.toLocaleString()}
-   Bundle Price: PKR ${b.finalPrice.toLocaleString()}
-   Item Total: PKR ${totalPrice.toLocaleString()}
-`;
-      if (selectedOptions && Object.keys(selectedOptions).length > 0) {
-        message += `   Options: ${Object.entries(selectedOptions).map(([k, v]) => `${k}: ${v}`).join(", ")}
-`;
-      }
-      message += `
-`;
-    });
-
-    // Add regular products
     lines.forEach((line: CartLine, index: number) => {
-      const { product, qty } = line;
-      const totalPrice = product.price * qty;
-      message += `• ${index + 1}. ${product.name}
+      const { product, qty, isBundle, bundlePrice, giftPackaging } = line;
+      const unitPrice = isBundle && bundlePrice ? bundlePrice : product.price;
+      const totalPrice = unitPrice * qty;
+      message += `• ${index + 1}. ${product.name}${giftPackaging ? " (Gift Packaging)" : ""}
    Variant: ${product.size}
+   Color: ${product.collection}
+   Size: ${product.size}
    Quantity: ${qty}
-   Unit Price: PKR ${product.price.toLocaleString()}
+   Unit Price: PKR ${unitPrice.toLocaleString()}
    Item Total: PKR ${totalPrice.toLocaleString()}
 
 `;
@@ -151,11 +138,11 @@ Street Address: ${customerInfo.address}
 
 💰 Order Summary
 
-Subtotal: PKR ${subtotal.toLocaleString()}
-Shipping: PKR ${shipping.toLocaleString()}
-Discount: PKR ${discount.toLocaleString()}
-Tax: PKR ${tax.toLocaleString()}
-Grand Total: PKR ${grandTotal.toLocaleString()}
+Subtotal: PKR ${subtotalInDollars.toLocaleString()}
+Shipping: Free
+Discount: Free
+Tax: Free
+Grand Total: PKR ${grandTotalInDollars.toLocaleString()}
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -178,7 +165,7 @@ Please confirm my order.`;
   const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (lines.length === 0 && bundles.length === 0) {
+    if (lines.length === 0) {
       alert("Your cart is empty. Please add items before checkout.");
       return;
     }
@@ -352,15 +339,15 @@ Please confirm my order.`;
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Shipping</span>
-          <span>PKR 0</span>
+          <span>Free</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-muted-foreground">Tax (10%)</span>
-          <span>PKR {Math.round(subtotal * 0.1).toLocaleString()}</span>
+          <span className="text-muted-foreground">Tax</span>
+          <span>Free</span>
         </div>
         <div className="flex justify-between text-sm font-bold">
           <span>Total</span>
-          <span>PKR {Math.round(subtotal * 1.1).toLocaleString()}</span>
+          <span>PKR {subtotal.toLocaleString()}</span>
         </div>
       </div>
 

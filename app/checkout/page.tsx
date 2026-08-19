@@ -22,7 +22,7 @@ interface CustomerInfo {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { lines, bundles, subtotal, clear } = useCart();
+  const { lines, subtotal, clear } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -66,9 +66,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const shipping = 0;
-  const tax = subtotal * 0.1;
-  const grandTotal = subtotal + shipping + tax;
+
 
   const formatWhatsAppMessage = (): string => {
     let message = `🛍 *NEW ORDER*\n\n`;
@@ -83,34 +81,20 @@ export default function CheckoutPage() {
     message += `💳 *Payment Method*: ${customerInfo.paymentMethod}\n\n`;
     message += `🛒 *Order Items*\n\n`;
 
-    let itemIndex = 1;
-
-    // Bundles
-    bundles.forEach((b) => {
-      const totalPrice = b.bundle.finalPrice * b.qty;
-      message += `• ${itemIndex++}. 📦 [BUNDLE] ${b.bundle.name}\n`;
-      message += `   Included: ${b.selectedProducts.map((p) => p.name).join(" + ")}\n`;
-      message += `   Quantity: ${b.qty}\n`;
-      message += `   Bundle Price: PKR ${b.bundle.finalPrice.toLocaleString()}\n`;
-      message += `   Total: PKR ${totalPrice.toLocaleString()}\n\n`;
-    });
-
-    // Individual Products
-    lines.forEach((line) => {
-      const { product, qty } = line;
-      const totalPrice = product.price * qty;
-      message += `• ${itemIndex++}. ${product.name}\n`;
-      message += `   Size: ${product.size}\n`;
+    lines.forEach((line, index) => {
+      const { product, qty, isBundle, bundlePrice, giftPackaging } = line;
+      const unitPrice = isBundle && bundlePrice ? bundlePrice : product.price;
+      message += `• ${index + 1}. ${product.name}${giftPackaging ? " (Gift Packaging)" : ""}\n`;
       message += `   Quantity: ${qty}\n`;
-      message += `   Unit Price: PKR ${product.price.toLocaleString()}\n`;
-      message += `   Total: PKR ${totalPrice.toLocaleString()}\n\n`;
+      message += `   Unit Price: PKR ${unitPrice.toLocaleString()}\n`;
+      message += `   Item Total: PKR ${(unitPrice * qty).toLocaleString()}\n\n`;
     });
 
     message += `💰 *Order Summary*\n`;
     message += `Subtotal: PKR ${subtotal.toLocaleString()}\n`;
-    message += `Shipping: PKR ${shipping.toLocaleString()}\n`;
-    message += `Tax (10%): PKR ${tax.toLocaleString()}\n`;
-    message += `Grand Total: PKR ${grandTotal.toLocaleString()}\n\n`;
+    message += `Shipping: Free\n`;
+    message += `Tax: Free\n`;
+    message += `Grand Total: PKR ${subtotal.toLocaleString()}\n\n`;
     message += `Please confirm my order.`;
 
     return message;
@@ -118,7 +102,7 @@ export default function CheckoutPage() {
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (lines.length === 0 && bundles.length === 0) return;
+    if (lines.length === 0) return;
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -137,7 +121,7 @@ export default function CheckoutPage() {
     router.push("/checkout/success");
   };
 
-  if (lines.length === 0 && bundles.length === 0) {
+  if (lines.length === 0) {
     return (
       <main className="min-h-screen bg-[#0B0F0D] pt-32 pb-20 px-6 flex items-center justify-center">
         <div className="text-center">
@@ -306,38 +290,27 @@ export default function CheckoutPage() {
                 <h2 className="text-[#D4B483] text-sm uppercase tracking-[0.2em] font-semibold mb-6">Order Summary</h2>
                 
                 <div className="space-y-4 mb-6 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                  {bundles.map((b) => (
-                    <div key={b.cartItemId || b.bundle.id} className="flex gap-4 border-l-2 border-[#D4B483] pl-3 py-1">
-                      <div className="h-20 w-16 shrink-0 rounded-md overflow-hidden bg-white/5">
-                        <img src={b.bundle.image} alt={b.bundle.name} className="h-full w-full object-cover" />
+                  {lines.map((line) => {
+                    const { product, qty, isBundle, bundlePrice, giftPackaging } = line;
+                    const unitPrice = isBundle && bundlePrice ? bundlePrice : product.price;
+                    return (
+                      <div key={line.product.slug} className="flex gap-4">
+                        <div className="h-20 w-16 shrink-0 rounded-md overflow-hidden bg-white/5">
+                          <img src={line.product.image} alt={line.product.name} className="h-full w-full object-cover" />
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                          <p className="text-[#F8F4ED] font-display text-lg leading-tight">{line.product.name}</p>
+                          <p className="text-xs text-[#B8B5AC] mt-1">Qty: {line.qty}</p>
+                          {giftPackaging && (
+                            <p className="text-[11px] text-[#D4B483] mt-1">Gift packaging included</p>
+                          )}
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-[#F8F4ED] text-sm">PKR {(unitPrice * qty).toLocaleString()}</p>
+                        </div>
                       </div>
-                      <div className="flex-1 flex flex-col justify-center min-w-0">
-                        <p className="text-[#D4B483] font-display text-base leading-tight truncate">{b.bundle.name}</p>
-                        <p className="text-[11px] text-[#B8B5AC] mt-1 line-clamp-1">
-                          {b.selectedProducts.map((p) => p.name).join(" + ")}
-                        </p>
-                        <p className="text-xs text-[#B8B5AC] mt-1">Qty: {b.qty}</p>
-                      </div>
-                      <div className="flex items-center shrink-0">
-                        <p className="text-[#F8F4ED] text-sm font-semibold">PKR {(b.bundle.finalPrice * b.qty).toLocaleString()}</p>
-                      </div>
-                    </div>
-                  ))}
-
-                  {lines.map((line) => (
-                    <div key={line.product.slug} className="flex gap-4 py-1">
-                      <div className="h-20 w-16 shrink-0 rounded-md overflow-hidden bg-white/5">
-                        <img src={line.product.image} alt={line.product.name} className="h-full w-full object-cover" />
-                      </div>
-                      <div className="flex-1 flex flex-col justify-center min-w-0">
-                        <p className="text-[#F8F4ED] font-display text-base leading-tight truncate">{line.product.name}</p>
-                        <p className="text-xs text-[#B8B5AC] mt-1">Qty: {line.qty}</p>
-                      </div>
-                      <div className="flex items-center shrink-0">
-                        <p className="text-[#F8F4ED] text-sm font-semibold">PKR {(line.product.price * line.qty).toLocaleString()}</p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* Coupon Box */}
@@ -356,12 +329,12 @@ export default function CheckoutPage() {
                     <span>Free</span>
                   </div>
                   <div className="flex justify-between text-sm text-[#B8B5AC]">
-                    <span>Tax (10%)</span>
-                    <span>PKR {tax.toLocaleString()}</span>
+                    <span>Tax</span>
+                    <span>Free</span>
                   </div>
-                  <div className="flex justify-between text-lg text-[#D4B483] font-display pt-3 border-t border-white/10 mt-3 font-semibold">
+                  <div className="flex justify-between text-lg text-[#D4B483] font-display pt-3 border-t border-white/10 mt-3">
                     <span>Total</span>
-                    <span>PKR {grandTotal.toLocaleString()}</span>
+                    <span>PKR {subtotal.toLocaleString()}</span>
                   </div>
                 </div>
 

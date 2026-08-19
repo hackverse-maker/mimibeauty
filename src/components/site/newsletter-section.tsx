@@ -73,16 +73,15 @@ export function NewsletterSection() {
 
   return (
     <section className="relative w-full overflow-hidden bg-[#111A15] py-20 md:py-32">
-      {/* Background image — DEW serum bottle */}
       <div className="absolute inset-0 z-0">
-        {/* Base image — positioned right */}
         <img
           src="/dew-serum-hero.jpg"
           alt="Mimi Beauty DEW Radiant Glow Facial Serum"
           className="h-full w-full object-cover object-center"
           style={{ filter: "brightness(0.75) saturate(0.85) sepia(0.18)" }}
+          loading="lazy"
+          decoding="async"
         />
-        {/* Solid dark block on the far left — ensures text area is pitch dark */}
         <div
           className="absolute inset-0 z-10"
           style={{
@@ -90,7 +89,6 @@ export function NewsletterSection() {
               "linear-gradient(to right, #08100b 0%, #08100b 30%, rgba(8,16,11,0.82) 48%, rgba(8,16,11,0.3) 65%, rgba(8,16,11,0.0) 80%)",
           }}
         />
-        {/* Top vignette */}
         <div
           className="absolute inset-0 z-10"
           style={{
@@ -98,7 +96,6 @@ export function NewsletterSection() {
               "linear-gradient(to bottom, rgba(8,16,11,0.7) 0%, transparent 25%, transparent 70%, rgba(8,16,11,0.75) 100%)",
           }}
         />
-        {/* Warm amber glow around bottle area (right center) */}
         <div
           className="absolute inset-0 z-10"
           style={{
@@ -140,10 +137,10 @@ export function NewsletterSection() {
           </p>
 
           <form
-            className="mt-10 flex w-full max-w-md items-center gap-4 overflow-hidden rounded-[8px] border border-white/10 bg-[#0C120E]/60 p-2 backdrop-blur-sm transition-colors focus-within:border-[#C9A86A]/40"
+            className="mt-10 flex flex-col sm:flex-row w-full max-w-md gap-3 sm:gap-0 sm:items-center sm:overflow-hidden sm:rounded-[8px] sm:border sm:border-white/10 sm:bg-[#0C120E]/60 sm:p-2 sm:backdrop-blur-sm sm:transition-colors sm:focus-within:border-[#C9A86A]/40"
             onSubmit={handleSubscribe}
           >
-            <div className="flex flex-1 items-center gap-3 pl-3">
+            <div className="flex flex-1 items-center gap-3 pl-3 rounded-[8px] border border-white/10 bg-[#0C120E]/60 p-2 backdrop-blur-sm sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
               <Mail className="h-4 w-4 text-[#C9A86A]/70" />
               <input
                 required
@@ -152,45 +149,45 @@ export function NewsletterSection() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 disabled={joined}
-                className="w-full min-w-0 bg-transparent text-[13px] text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A]"
+                className="w-full min-w-0 bg-transparent text-[13px] text-[#F5F2EC] outline-none placeholder:text-[#F5F2EC]/40 disabled:text-[#C9A86A] py-2 sm:py-0"
                 aria-label="Email"
               />
             </div>
             <button
               type="submit"
               disabled={joined}
-              className="shrink-0 rounded-[6px] bg-[#C9A86A] px-4 sm:px-6 py-2.5 text-[12px] font-medium text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
+              className="w-full sm:w-auto shrink-0 rounded-[6px] bg-[#C9A86A] px-4 sm:px-6 py-3 sm:py-2.5 text-[12px] font-medium text-[#0A100C] transition-colors hover:bg-[#F5F2EC]"
             >
               {joined ? "Subscribed" : "Subscribe"}
             </button>
           </form>
 
           {/* Features */}
-          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-6 border-t border-white/10 pt-10">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-[#C9A86A]">
-                <LeafIcon className="h-4 w-4" />
+          <div className="mt-12 grid grid-cols-1 gap-10 border-t border-white/10 pt-10 sm:grid-cols-3 sm:gap-8">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C9A86A]/50 text-[#C9A86A]">
+                <LeafIcon className="h-5 w-5" />
               </div>
-              <span className="text-[12px] leading-tight text-[#D8D2C8] opacity-80">
+              <span className="mt-4 text-[12px] leading-tight text-[#D8D2C8] opacity-80">
                 Ingredient
                 <br />
                 Insights
               </span>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-[#C9A86A]">
-                <BottleIcon className="h-4 w-4" />
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C9A86A]/50 text-[#C9A86A]">
+                <BottleIcon className="h-5 w-5" />
               </div>
-              <span className="text-[12px] leading-tight text-[#D8D2C8] opacity-80">
+              <span className="mt-4 text-[12px] leading-tight text-[#D8D2C8] opacity-80">
                 New Arrivals &<br />
                 Updates
               </span>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-[#C9A86A]">
-                <Heart className="h-4 w-4" strokeWidth={1.5} />
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C9A86A]/50 text-[#C9A86A]">
+                <Heart className="h-5 w-5" strokeWidth={1.5} />
               </div>
-              <span className="text-[12px] leading-tight text-[#D8D2C8] opacity-80">
+              <span className="mt-4 text-[12px] leading-tight text-[#D8D2C8] opacity-80">
                 Made with
                 <br />
                 Intent

@@ -20,7 +20,7 @@ export default function Page() { return (
         {posts.map((p, i) => (
           <motion.article key={p.title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }} className="group overflow-hidden rounded-3xl border border-border bg-background hover-lift">
             <div className="aspect-[16/10] overflow-hidden">
-              <img src={p.img} alt="" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <img src={p.img} alt="" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
             </div>
             <div className="p-5 md:p-8">
               <p className="text-[11px] uppercase tracking-[0.3em] text-gold">{p.tag}</p>

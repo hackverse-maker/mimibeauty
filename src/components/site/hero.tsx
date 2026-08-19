@@ -50,6 +50,7 @@ function useMagnetic() {
   const springY = useSpring(y, { stiffness: 260, damping: 24, mass: 0.35 });
 
   const onMove = (e: MouseEvent) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
@@ -153,7 +154,10 @@ function HeroVideo({
 
   useEffect(() => {
     if (!active) return;
-    const t = setInterval(() => setScene((s) => (s + 1) % FILM.length), 4200);
+    const t = setInterval(() => {
+      if (document.hidden) return;
+      setScene((s) => (s + 1) % FILM.length);
+    }, 4200);
     return () => clearInterval(t);
   }, [active]);
 
@@ -303,11 +307,11 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[1400px] grid-cols-1 items-center gap-10 px-6 pb-16 pt-28 md:gap-14 md:px-8 lg:grid-cols-2 lg:gap-16 lg:pb-20 lg:pt-32">
-        <div className="order-1 lg:order-2">
+        <div className="order-2 lg:order-2">
           <HeroVideo parallaxX={parallaxX} parallaxY={parallaxY} />
         </div>
 
-        <div className="order-2 flex flex-col items-start text-left lg:order-1">
+        <div className="order-1 flex flex-col items-start text-left lg:order-1">
           <motion.span
             {...fadeUp(0.05)}
             className="inline-flex items-center rounded-full border border-gold/40 bg-transparent px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold"

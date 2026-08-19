@@ -35,9 +35,9 @@
   --color-gold-soft: var(--gold-soft);
   --color-forest: var(--forest);
 
-  --font-display: "Cormorant Garamond", "Playfair Display", "Cinzel", Georgia, serif;
-  --font-cormorant: "Cormorant Garamond", "Playfair Display", "Cinzel", Georgia, serif;
-  --font-script: "Cormorant Garamond", "Playfair Display", "Cinzel", Georgia, serif;
+  --font-display: "Cinzel", ui-serif, Georgia, serif;
+  --font-cormorant: "Cinzel", ui-serif, Georgia, serif;
+  --font-script: "Cinzel", ui-serif, Georgia, serif;
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
   --shadow-luxe: 0 30px 80px -30px color-mix(in oklab, var(--gold) 35%, transparent);
@@ -234,8 +234,10 @@
   animation: float-y 5.5s ease-in-out infinite;
   will-change: transform;
 }
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce), (max-width: 768px) {
   .hero-float { animation: none; }
+  .hero-particles::before,
+  .hero-particles::after { animation: none; }
 }
 
 /* CSS particle field — 12 dots, transform/opacity only */

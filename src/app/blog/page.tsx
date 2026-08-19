@@ -53,6 +53,8 @@ export default function Blog() {
                 src={p.img}
                 alt=""
                 className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="p-5 md:p-8">

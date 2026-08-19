@@ -31,8 +31,8 @@ const CONTACT_ITEMS = [
         <circle cx="12" cy="10" r="3" />
       </svg>
     ),
-    label: "Our Studio",
-    value: "12 Rue de Sévigné\nParis 75004, France",
+    label: "Location",
+    value: "Islamabad, Pakistan",
   },
   {
     icon: (
@@ -41,8 +41,9 @@ const CONTACT_ITEMS = [
         <polyline points="22,6 12,13 2,6" />
       </svg>
     ),
-    label: "Concierge Email",
-    value: "concierge@mimibeauty.com",
+    label: "Email",
+    value: "rainamalik@mimibeauty.com.pk",
+    href: "mailto:rainamalik@mimibeauty.com.pk",
   },
   {
     icon: (
@@ -50,8 +51,9 @@ const CONTACT_ITEMS = [
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l1.27-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
       </svg>
     ),
-    label: "Direct Care Line",
-    value: "+33 1 45 67 89 00",
+    label: "Phone",
+    value: "03239847938",
+    href: "tel:03239847938",
   },
   {
     icon: (
@@ -61,7 +63,7 @@ const CONTACT_ITEMS = [
       </svg>
     ),
     label: "Working Hours",
-    value: "Mon – Fri  ·  9:00 – 18:00 CET\nSaturday  ·  10:00 – 15:00 CET",
+    value: "24/7",
   },
 ];
 
@@ -223,7 +225,7 @@ export default function ContactPage() {
             }}
             className="contact-grid"
           >
-            {/* ══════════ LEFT COLUMN ══════════ */}
+            {/* ══════════ LEFT COLUMN - TEXT FIRST ON MOBILE ══════════ */}
             <motion.div
               variants={fadeUp}
               custom={0}
@@ -326,17 +328,33 @@ export default function ContactPage() {
                       >
                         {item.label}
                       </p>
-                      <p
-                        style={{
-                          fontSize: 14,
-                          lineHeight: 1.65,
-                          color: "rgba(237,229,216,0.82)",
-                          fontWeight: 300,
-                          whiteSpace: "pre-line",
-                        }}
-                      >
-                        {item.value}
-                      </p>
+                      {item.href ? (
+                        <a
+                          href={item.href}
+                          style={{
+                            fontSize: 14,
+                            lineHeight: 1.65,
+                            color: "rgba(237,229,216,0.82)",
+                            fontWeight: 300,
+                            whiteSpace: "pre-line",
+                            textDecoration: "none",
+                          }}
+                        >
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p
+                          style={{
+                            fontSize: 14,
+                            lineHeight: 1.65,
+                            color: "rgba(237,229,216,0.82)",
+                            fontWeight: 300,
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {item.value}
+                        </p>
+                      )}
                     </div>
                   </motion.div>
                 ))}

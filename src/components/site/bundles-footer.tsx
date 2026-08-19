@@ -1,190 +1,142 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Instagram, Check } from "lucide-react";
+import { Facebook, Instagram, Mail, ArrowUpRight } from "lucide-react";
+
+const columns = [
+  { 
+    title: "SHOP", 
+    links: [
+      ["All products", "/shop"], 
+      ["Mimi Sets", "/bundles"], 
+      ["New arrivals", "/shop"]
+    ] 
+  },
+  { 
+    title: "ABOUT", 
+    links: [
+      ["Our story", "/about"], 
+      ["Ingredients", "/about"], 
+      ["Journal", "/blog"]
+    ] 
+  },
+  { 
+    title: "HELP", 
+    links: [
+      ["Contact us", "/contact"], 
+      ["Shipping", "/contact"], 
+      ["FAQs", "/contact"]
+    ] 
+  },
+];
 
 export function BundlesFooter() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail("");
-    }
-  };
-
   return (
-    <footer className="w-full bg-[#FAF7F2] text-[#0C1810] border-t border-[#0C1810]/15 pt-16 pb-12 font-sans">
-      <div className="mx-auto max-w-[1400px] px-6">
-        {/* Desktop 5-Column Grid / Mobile Vertical Stack */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-16 border-b border-[#0C1810]/10">
-          {/* COLUMN 1 — BRAND */}
-          <div className="space-y-4 lg:col-span-1">
-            <Link href="/" className="inline-block">
-              <span className="font-display text-2xl font-bold tracking-[0.2em] text-[#0C1810] uppercase">
-                MIMI BEAUTY
-              </span>
+    <footer className="border-t border-[#C9A86A]/10 bg-background text-[#D8D2C8] transition-colors duration-300">
+      <div className="mx-auto max-w-[1400px] px-6 py-16 md:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr_1.4fr] lg:gap-16">
+          {/* Left Column: Brand Area */}
+          <div className="max-w-xs">
+            <Link href="/bundles" className="font-serif text-3xl tracking-[0.25em] text-[#FAF6F0] transition-colors hover:text-[#C9A86A]" style={{ fontFamily: "Cinzel", fontWeight: "500" }}>
+              MIMI
             </Link>
-            <p className="text-xs text-[#0C1810]/70 leading-relaxed max-w-xs">
-              Skincare and haircare, made with naturally derived ingredients.
+            <p className="mt-6 text-xs leading-relaxed text-[#D8D2C8] opacity-80 font-light" style={{ fontFamily: "Montserrat" }}>
+              Thoughtful beauty for skin, hair, and body. Made to bring you back to yourself.
             </p>
           </div>
 
-          {/* COLUMN 2 — SHOP */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0C1810]">
-              SHOP
-            </h4>
-            <ul className="space-y-2.5 text-xs text-[#0C1810]/75">
-              <li>
-                <Link href="/shop" className="hover:text-[#0C1810] transition-colors">
-                  All Products
-                </Link>
-              </li>
-              <li>
-                <Link href="/bundles" className="hover:text-[#0C1810] transition-colors font-medium">
-                  Mimi Sets
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?cat=HAIR" className="hover:text-[#0C1810] transition-colors">
-                  Hair Collection
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?cat=BODY" className="hover:text-[#0C1810] transition-colors">
-                  Body Collection
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* COLUMN 3 — ABOUT */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0C1810]">
-              ABOUT
-            </h4>
-            <ul className="space-y-2.5 text-xs text-[#0C1810]/75">
-              <li>
-                <Link href="/about" className="hover:text-[#0C1810] transition-colors">
-                  Our Story
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-[#0C1810] transition-colors">
-                  Sustainability
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-[#0C1810] transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* COLUMN 4 — HELP */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0C1810]">
-              HELP
-            </h4>
-            <ul className="space-y-2.5 text-xs text-[#0C1810]/75">
-              <li>
-                <Link href="/about" className="hover:text-[#0C1810] transition-colors">
-                  FAQs
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-[#0C1810] transition-colors">
-                  Shipping & Delivery
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-[#0C1810] transition-colors">
-                  Returns & Refunds
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-[#0C1810] transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* COLUMN 5 — STAY CONNECTED */}
-          <div className="space-y-4 lg:col-span-1">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#0C1810]">
-              STAY CONNECTED
-            </h4>
-            <p className="text-xs text-[#0C1810]/70 leading-relaxed">
-              Be the first to know about new launches and offers.
-            </p>
-
-            {subscribed ? (
-              <div className="p-3 bg-[#0C1810]/5 border border-[#0C1810]/20 rounded-xl text-xs text-[#0C1810] flex items-center gap-2">
-                <Check className="h-4 w-4 text-emerald-700 shrink-0" />
-                <span>Thank you for subscribing!</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="space-y-2">
-                <div className="relative flex items-center">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                    className="w-full rounded-full border border-[#0C1810]/25 bg-transparent px-4 py-2.5 text-xs text-[#0C1810] placeholder:text-[#0C1810]/40 focus:border-[#0C1810] focus:outline-none pr-10"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-1.5 p-1.5 rounded-full bg-[#0C1810] text-[#FAF7F2] hover:bg-[#1A2E20] transition-colors"
-                    aria-label="Subscribe"
-                  >
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
+          {/* Center Column: Navigation links */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6">
+            {columns.map((column) => (
+              <div key={column.title} className="flex flex-col gap-5">
+                <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A86A]" style={{ fontFamily: "Montserrat" }}>
+                  {column.title}
+                </h2>
+                <div className="flex flex-col gap-3">
+                  {column.links.map(([label, href]) => (
+                    <Link 
+                      key={label} 
+                      href={href} 
+                      className="text-xs text-[#D8D2C8]/80 transition-colors duration-300 hover:text-[#FAF6F0]"
+                      style={{ fontFamily: "Montserrat", fontWeight: "300" }}
+                    >
+                      {label}
+                    </Link>
+                  ))}
                 </div>
-              </form>
-            )}
+              </div>
+            ))}
+          </div>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-3 pt-2">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="grid h-8 w-8 place-items-center rounded-full border border-[#0C1810]/20 text-[#0C1810]/80 hover:border-[#0C1810] hover:text-[#0C1810] transition-all"
-                aria-label="Instagram"
+          {/* Right Column: Newsletter & Socials */}
+          <div>
+            <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C9A86A]" style={{ fontFamily: "Montserrat" }}>
+              STAY CONNECTED
+            </h2>
+            <p className="mt-4 text-xs leading-relaxed text-[#D8D2C8] opacity-80 font-light" style={{ fontFamily: "Montserrat" }}>
+              Notes on beauty and the little things that make a difference.
+            </p>
+            <form className="mt-6 flex border-b border-[#C9A86A]/25 pb-1" onSubmit={(event) => event.preventDefault()}>
+              <label htmlFor="bundles-email" className="sr-only">Email address</label>
+              <input 
+                id="bundles-email" 
+                type="email" 
+                placeholder="Your email address" 
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-xs text-[#FAF6F0] outline-none placeholder:text-[#FAF6F0]/30 font-light"
+                style={{ fontFamily: "Montserrat" }}
+                required 
+              />
+              <button 
+                type="submit" 
+                aria-label="Subscribe to newsletter" 
+                className="text-[#C9A86A] transition-all duration-300 hover:text-[#FAF6F0] hover:translate-x-0.5 hover:-translate-y-0.5"
               >
-                <Instagram className="h-4 w-4" />
+                <ArrowUpRight className="size-4" />
+              </button>
+            </form>
+            <div className="mt-6 flex items-center gap-5">
+              <a 
+                href="https://instagram.com" 
+                target="_blank" 
+                rel="noreferrer" 
+                aria-label="Instagram" 
+                className="text-[#D8D2C8]/80 hover:text-[#C9A86A] transition-colors duration-300"
+              >
+                <Instagram className="size-4" />
               </a>
-              <a
-                href="https://tiktok.com"
-                target="_blank"
-                rel="noreferrer"
-                className="grid h-8 w-8 place-items-center rounded-full border border-[#0C1810]/20 text-[#0C1810]/80 hover:border-[#0C1810] hover:text-[#0C1810] transition-all"
-                aria-label="TikTok"
+              <a 
+                href="https://facebook.com" 
+                target="_blank" 
+                rel="noreferrer" 
+                aria-label="Facebook" 
+                className="text-[#D8D2C8]/80 hover:text-[#C9A86A] transition-colors duration-300"
               >
-                <span className="text-[11px] font-bold font-mono">TT</span>
+                <Facebook className="size-4" />
+              </a>
+              <a 
+                href="mailto:rainamalik@mimibeauty.com.pk" 
+                aria-label="Email Mimi Beauty" 
+                className="text-[#D8D2C8]/80 hover:text-[#C9A86A] transition-colors duration-300"
+              >
+                <Mail className="size-4" />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#0C1810]/60">
-          <p>© 2025 Mimi Beauty. All rights reserved.</p>
-          <div className="flex gap-6 text-[11px]">
-            <Link href="/about" className="hover:text-[#0C1810]">Terms</Link>
-            <Link href="/about" className="hover:text-[#0C1810]">Privacy</Link>
-            <Link href="/about" className="hover:text-[#0C1810]">Cookies</Link>
+        {/* Bottom Bar: Copyright area with subtle contrast */}
+        <div className="mt-16 border-t border-[#C9A86A]/10 pt-8 bg-black/10 -mx-6 px-6 sm:-mx-8 sm:px-8">
+          <div className="flex flex-col gap-4 text-[10px] tracking-wider text-[#D8D2C8]/50 md:flex-row md:items-center md:justify-between" style={{ fontFamily: "Montserrat", fontWeight: "300" }}>
+            <div className="flex items-center gap-3">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#C9A86A]/20 bg-background text-[8px] font-semibold text-[#C9A86A] shadow-inner select-none">
+                N
+              </div>
+              <p>© {new Date().getFullYear()} MIMI Beauty. All rights reserved.</p>
+            </div>
+            <p className="font-light italic text-[#C9A86A]/70 tracking-normal">Made with care, for your everyday.</p>
           </div>
         </div>
       </div>
     </footer>
   );
 }
+
+export default BundlesFooter;

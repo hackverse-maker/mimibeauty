@@ -1,20 +1,11 @@
-import dewAsset from "@/assets/dew.asset.json";
-import veilAsset from "@/assets/veil.asset.json";
-import herbeAsset from "@/assets/herbe.asset.json";
-import haloAsset from "@/assets/halo.asset.json";
-import lineupAsset from "@/assets/lineup.asset.json";
-import waterAsset from "@/assets/water.asset.json";
-import stoneAsset from "@/assets/stone.asset.json";
-import logoAsset from "@/assets/logo.asset.json";
-
 export const assets = {
   dew: "/media__1784439730149.png",
   veil: "/media__1784439730152.png",
   herbe: "/media__1784439730167.png",
   halo: "/media__1784439730231.png",
-  lineup: lineupAsset.url,
-  water: waterAsset.url,
-  stone: stoneAsset.url,
+  lineup: "/hero_dew_collection.jpg",
+  water: "/hero_dew_girl_left.jpg",
+  stone: "/contact_organic_bg.jpg",
   logo: "/logo.png",
 };
 
@@ -81,9 +72,15 @@ export const products: Product[] = [
       "Suitable for daily morning and evening use",
       "Crafted with carefully selected botanical ingredients"
     ],
-    ingredients: ["Niacinamide 5%", "Hyaluronic Acid", "Ceramides", "Squalane"],
-    directions: "Apply 3–4 drops to clean skin, morning and night. Follow with moisturizer.",
-    storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
+    ingredients: [
+      "Cyprus Rotundus Root Oil",
+      "Simmondsia Chinensis Seed Oil",
+      "Argania Spinosa Seed Oil",
+      "Rosa Canina Seed Oil",
+      "Tocopherol"
+    ],
+    directions: "After washing your face, apply 2–3 drops to clean, damp skin. Gently spread evenly over the face and neck until fully absorbed. Use morning and night for best results.",
+    storageCaution: "Store in cool, dry place.\nFor external use only.\nAvoid direct eye contact.",
     skinType: ["All", "Dry", "Sensitive"],
     description:
       "A lightweight face serum that restores moisture, repairs skin barrier, leaves your skin soft, smooth, naturally radiant and blemish free.",
@@ -119,9 +116,15 @@ export const products: Product[] = [
       "Designed for all hair types and textures",
       "Crafted with carefully selected botanical ingredients"
     ],
-    ingredients: ["Argan Oil", "Silk Proteins", "Vitamin E", "Camellia"],
-    directions: "Warm 2–3 drops between palms and glide through damp or dry lengths.",
-    storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
+    ingredients: [
+      "Caprylic/Capric Triglyceride",
+      "Simmondsia Chinensis Seed Oil",
+      "Nutgrass Tuber Oil",
+      "Argania Spinosa Seed Oil",
+      "Fragrance/Parfum"
+    ],
+    directions: "Apply 2–3 drops to wet hair after washing. Spread evenly through the mid-length to ends. For curly/wavy hair, use a comb for even distribution. Do not rinse. Towel dry only, then style as desired.",
+    storageCaution: "Store in cool, dry place.\nFor external use only.\nAvoid direct eye contact.",
     skinType: ["All hair types"],
     description:
       "A lightweight glossy finish serum that smooths cuticles, softens hair, enhances natural shine and keeps frizz under control without weighing hair down.\nSuitable for straight/wavy and curly hair.",
@@ -203,9 +206,18 @@ export const products: Product[] = [
       "Suitable for everyday use",
       "Crafted with carefully selected botanical ingredients"
     ],
-    ingredients: ["Rosehip", "Vitamin C", "Jojoba", "Rose Absolute"],
-    directions: "Mist onto damp skin after bathing. Massage in circular motions.",
-    storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
+    ingredients: [
+      "Caprylic/Capric Triglyceride",
+      "Simmondsia Chinensis Seed Oil",
+      "Argania Spinosa Seed Oil",
+      "Rosa Canina Seed Oil",
+      "Cyperus Rotundus Root Oil",
+      "Tocopherol",
+      "Fragrance/Parfum",
+      "Mica"
+    ],
+    directions: "For best results, apply to clean, wet/damp skin for best absorption. If applying to dry skin, use a few pumps and massage well until fully absorbed. Use daily for soft, radiant and nourished skin.",
+    storageCaution: "Store in cool, dry place.\nFor external use only.\nAvoid direct eye contact.",
     skinType: ["All"],
     description:
       "A nourishing body oil that melts into the skin, it deeply moisturises, reduces hair growth, leaves skin silky-smooth, and naturally luminous without a greasy finish.",
@@ -213,147 +225,174 @@ export const products: Product[] = [
   {
     slug: "pearl",
     name: "Pearl",
-    tagline: "Illuminating Body Oil",
+    tagline: "Satin Glow Body Oil",
     category: "BODY",
     collection: "Glow",
     price: 5000,
     originalPrice: 6500,
     size: "100ml",
-    image: assets.dew,
+    image: "/Pearl.png",
     hoverImage: assets.water,
-    gallery: [assets.dew, assets.water, assets.lineup, assets.stone],
-    rating: 4.9,
-    reviews: 428,
+    gallery: ["/Pearl.png", assets.water, assets.lineup, assets.stone],
+    rating: 5.0,
+    reviews: 328,
     theme: {
-      bg: "#1A1518",
-      accent: "#D4B5A0",
-      accentMuted: "rgba(212,181,160,0.15)",
-      surface: "rgba(212,181,160,0.04)",
-      glow: "rgba(212,181,160,0.08)",
+      bg: "#151515",
+      accent: "#E8E8E8",
+      accentMuted: "rgba(232,232,232,0.15)",
+      surface: "rgba(232,232,232,0.04)",
+      glow: "rgba(232,232,232,0.08)",
     },
     benefits: [
-      "Lightweight shimmering formula",
-      "Illuminates skin with subtle glow",
-      "Deeply hydrates without greasiness",
-      "Enhances natural skin radiance",
-      "Perfect for special occasions",
-      "Suitable for all skin tones",
-      "Crafted with illuminating botanicals"
+      "Lightweight, fast-absorbing dry oil formula",
+      "Deeply nourishes without feeling greasy",
+      "Helps support the skin's natural moisture barrier",
+      "Leaves skin soft, smooth, and naturally radiant",
+      "Comforts skin after shaving or waxing",
+      "Suitable for everyday use",
+      "Crafted with carefully selected botanical ingredients"
     ],
-    ingredients: ["Pearl Extract", "Mica", "Jojoba", "Vitamin E"],
-    directions: "Apply to skin and blend in circular motions for a luminous finish.",
+    ingredients: [
+      "Caprylic/Capric Triglyceride",
+      "Simmondsia Chinensis Seed Oil",
+      "Argania Spinosa Seed Oil",
+      "Rosa Canina Seed Oil",
+      "Cyperus Rotundus Root Oil",
+      "Tocopherol",
+      "Fragrance/Parfum",
+      "Mica"
+    ],
+    directions: "For best results, apply to clean, wet/damp skin for best absorption. If applying to dry skin, use a few pumps and massage well until fully absorbed. Use daily for soft, radiant and nourished skin.",
     storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
     skinType: ["All"],
     description:
-      "An illuminating body oil that adds a subtle, sophisticated glow to skin while deeply moisturizing and enhancing natural radiance.",
-  },
-  {
-    slug: "santorini",
-    name: "Santorini",
-    tagline: "Mediterranean Body Oil",
-    category: "BODY",
-    collection: "Glow",
-    price: 5000,
-    originalPrice: 6500,
-    size: "100ml",
-    image: assets.dew,
-    hoverImage: assets.water,
-    gallery: [assets.dew, assets.water, assets.lineup, assets.stone],
-    rating: 4.8,
-    reviews: 389,
-    theme: {
-      bg: "#151218",
-      accent: "#A8C8B8",
-      accentMuted: "rgba(168,200,184,0.15)",
-      surface: "rgba(168,200,184,0.04)",
-      glow: "rgba(168,200,184,0.08)",
-    },
-    benefits: [
-      "Mediterranean botanical blend",
-      "Deeply nourishing formula",
-      "Leaves skin feeling refreshed",
-      "Calming and rejuvenating",
-      "Perfect for after-sun care",
-      "Suitable for daily use",
-      "Crafted with Mediterranean ingredients"
-    ],
-    ingredients: ["Olive Oil", "Sea Fennel", "Algae Extract", "Aloe"],
-    directions: "Massage onto skin after bathing for deep hydration and Mediterranean radiance.",
-    storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
-    skinType: ["All"],
-    description:
-      "A Mediterranean-inspired body oil that nourishes and rejuvenates skin with a blend of sea botanicals and olive derivatives.",
+      "A luminous pearl body oil that melts into the skin, it deeply moisturises, reduces hair growth, leaves skin silky-smooth, and naturally luminous without a greasy finish.",
   },
   {
     slug: "amalfi",
     name: "Amalfi",
-    tagline: "Citrus Body Oil",
+    tagline: "Satin Glow Body Oil",
     category: "BODY",
     collection: "Glow",
     price: 5000,
     originalPrice: 6500,
     size: "100ml",
-    image: assets.dew,
+    image: "/Amalfi.png",
     hoverImage: assets.water,
-    gallery: [assets.dew, assets.water, assets.lineup, assets.stone],
+    gallery: ["/Amalfi.png", assets.water, assets.lineup, assets.stone],
     rating: 4.9,
-    reviews: 456,
+    reviews: 256,
     theme: {
-      bg: "#1A1612",
-      accent: "#E8C87A",
-      accentMuted: "rgba(232,200,122,0.15)",
-      surface: "rgba(232,200,122,0.04)",
-      glow: "rgba(232,200,122,0.08)",
+      bg: "#1A1810",
+      accent: "#D4A574",
+      accentMuted: "rgba(212,165,116,0.15)",
+      surface: "rgba(212,165,116,0.04)",
+      glow: "rgba(212,165,116,0.08)",
     },
     benefits: [
-      "Refreshing citrus blend",
-      "Energizing aromatherapy",
-      "Deeply moisturizing",
-      "Brightens skin appearance",
-      "Uplifting citrus scent",
-      "Suitable for all skin types",
-      "Crafted with citrus botanicals"
+      "Lightweight, fast-absorbing dry oil formula",
+      "Deeply nourishes without feeling greasy",
+      "Helps support the skin's natural moisture barrier",
+      "Leaves skin soft, smooth, and naturally radiant",
+      "Comforts skin after shaving or waxing",
+      "Suitable for everyday use",
+      "Crafted with carefully selected botanical ingredients"
     ],
-    ingredients: ["Lemon Extract", "Orange Oil", "Grapefruit", "Vitamin C"],
-    directions: "Apply to skin with gentle massage for energizing hydration and citrus radiance.",
+    ingredients: [
+      "Caprylic/Capric Triglyceride",
+      "Simmondsia Chinensis Seed Oil",
+      "Argania Spinosa Seed Oil",
+      "Rosa Canina Seed Oil",
+      "Cyperus Rotundus Root Oil",
+      "Tocopherol",
+      "Fragrance/Parfum",
+      "Mica"
+    ],
+    directions: "For best results, apply to clean, wet/damp skin for best absorption. If applying to dry skin, use a few pumps and massage well until fully absorbed. Use daily for soft, radiant and nourished skin.",
     storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
     skinType: ["All"],
     description:
-      "A refreshing citrus body oil that energizes and brightens skin while providing deep hydration with an uplifting Mediterranean citrus blend.",
+      "A warm golden body oil that melts into the skin, it deeply moisturises, reduces hair growth, leaves skin silky-smooth, and naturally luminous without a greasy finish.",
+  },
+  {
+    slug: "santorini",
+    name: "Santorini",
+    tagline: "Satin Glow Body Oil",
+    category: "BODY",
+    collection: "Glow",
+    price: 5000,
+    originalPrice: 6500,
+    size: "100ml",
+    image: "/Santorini.png",
+    hoverImage: assets.water,
+    gallery: ["/Santorini.png", assets.water, assets.lineup, assets.stone],
+    rating: 4.9,
+    reviews: 189,
+    theme: {
+      bg: "#14181C",
+      accent: "#7FB3D5",
+      accentMuted: "rgba(127,179,213,0.15)",
+      surface: "rgba(127,179,213,0.04)",
+      glow: "rgba(127,179,213,0.08)",
+    },
+    benefits: [
+      "Lightweight, fast-absorbing dry oil formula",
+      "Deeply nourishes without feeling greasy",
+      "Helps support the skin's natural moisture barrier",
+      "Leaves skin soft, smooth, and naturally radiant",
+      "Comforts skin after shaving or waxing",
+      "Suitable for everyday use",
+      "Crafted with carefully selected botanical ingredients"
+    ],
+    ingredients: [
+      "Caprylic/Capric Triglyceride",
+      "Simmondsia Chinensis Seed Oil",
+      "Argania Spinosa Seed Oil",
+      "Rosa Canina Seed Oil",
+      "Cyperus Rotundus Root Oil",
+      "Tocopherol",
+      "Fragrance/Parfum",
+      "Mica"
+    ],
+    directions: "For best results, apply to clean, wet/damp skin for best absorption. If applying to dry skin, use a few pumps and massage well until fully absorbed. Use daily for soft, radiant and nourished skin.",
+    storageCaution: "Store in cool, dry place. For external use only. Avoid direct eye contact.",
+    skinType: ["All"],
+    description:
+      "A cool blue body oil that melts into the skin, it deeply moisturises, reduces hair growth, leaves skin silky-smooth, and naturally luminous without a greasy finish.",
   },
 ];
 
 export const ingredientsShowcase = [
   {
-    name: "Rosehip Oil",
+    name: "Trans-Retinoic Acid",
     note: "Nature’s retinol, rich in antioxidants and essential fatty acids to support smoother, brighter, healthier-looking skin.",
   },
   {
-    name: "Cyperus Rotundus Oil",
+    name: "Alpha Cyperone",
     note: "An antioxidant-rich botanical that helps calm, strengthen, and support the skin’s natural barrier for a balanced complexion.",
   },
   {
-    name: "Argan Oil",
+    name: "Endogenous Squalene",
     note: "Rich in vitamin E and essential fatty acids to deeply nourish, soften, and strengthen the skin for a smooth, healthy-looking glow.",
   },
   {
-    name: "Castor Oil",
+    name: "Ricinoleic Acid",
     note: "Rich in essential fatty acids to deeply condition the scalp and hair while supporting softer, stronger, healthier-looking strands.",
   },
   {
-    name: "Jojoba Oil",
-    note: "Lightweight and fast-absorbing, Jojoba Oil helps smooth, soften, and protect hair while locking in lasting moisture without weighing it down.",
+    name: "Gadoleic Acid",
+    note: "Lightweight and fast-absorbing, Gadoleic Acid helps smooth, soften, and protect hair while locking in lasting moisture without weighing it down.",
   },
   {
-    name: "Vitamin E",
+    name: "Tocotrienols",
     note: "An antioxidant-rich vitamin that helps protect, condition, and strengthen hair while enhancing softness, moisture, and natural shine.",
   },
   {
-    name: "Jaborandi Root Extract",
+    name: "Pilocarpine",
     note: "Traditionally valued in botanical hair care to help nourish the scalp and support stronger, healthier-looking hair.",
   },
   {
-    name: "Lemongrass Botanical Infusion",
+    name: "Citral",
     note: "An invigorating botanical infusion that helps refresh, rebalance, and purify the scalp for a clean, revitalised feel.",
   },
   {
@@ -382,9 +421,5 @@ export const collections = [
 ];
 
 export function findProduct(slug: string) {
-  const norm = slug.toLowerCase();
-  if (norm === "herba" || norm === "herbe") {
-    return products.find((p) => p.slug === "herbe");
-  }
-  return products.find((p) => p.slug === norm);
+  return products.find((p) => p.slug === slug);
 }

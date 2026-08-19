@@ -1,8 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
 import { assets } from "@/lib/products";
-import { ArrowRight, Sparkles, Shield, Leaf, Heart } from "lucide-react";
-import { WhoWeAreCard } from "@/components/site/who-we-are-card";
 
 
 
@@ -46,10 +44,10 @@ export default function About() {
             <motion.p
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-foreground/70"
+              transition={{ duration: 1, delay: 0.55 }}
+              className="mt-5 max-w-xl text-lg md:text-xl leading-relaxed text-foreground/70"
             >
-              We design slow, intentional skincare formulated to integrate seamlessly into your daily space. Crafting botanically-infused, clinically-proven formulas in small batches.
+              We design skincare that feels, repairs, and is intentional. It integrates seamlessly into your daily space.
             </motion.p>
           </div>
         </div>
@@ -65,12 +63,9 @@ export default function About() {
         </div>
       </section>
 
-      {/* Who We Are Editorial Card */}
-      <WhoWeAreCard />
-
       {/* Philosophy Statement */}
       <section className="relative z-10 mx-auto max-w-[1800px] px-6 lg:px-12 xl:px-20 py-24 md:py-36 border-t border-white/5">
-        <div className="grid gap-16 lg:grid-cols-[1.2fr_1fr] items-start">
+        <div className="grid gap-16 lg:grid-cols-[1.2fr_1fr] items-start lg:items-start">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -81,12 +76,13 @@ export default function About() {
               <span className="h-[1px] w-8 bg-gold" />
               <p className="text-[11px] font-medium uppercase tracking-[0.4em] text-gold">About Us</p>
             </div>
-            <h2 className="font-display text-3xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight">
-              At Mimi Beauty, we believe skincare should feel effortless, luxurious, and inspired by nature.
+            <h2 className="font-display text-4xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.15] tracking-tight">
+              At Mimi Beauty,<br />
+              we believe skincare should feel effortless, luxurious, and inspired by nature.
             </h2>
           </motion.div>
           
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -94,10 +90,15 @@ export default function About() {
             className="space-y-8 text-lg md:text-xl text-foreground/80 leading-relaxed font-light"
           >
             <p>
+              We design healing skincare that heals, repairs<br className="hidden md:block" />
+              and is intentional. It integrates seamlessly<br className="hidden md:block" />
+              into your daily space.
+            </p>
+            <p>
               Created in Pakistan, our collection is thoughtfully formulated with naturally derived ingredients to nourish your skin with lightweight, fast-absorbing care. Every product is designed to fit seamlessly into your daily collection while delivering effective, uncompromising results.
             </p>
             <p className="text-foreground/60 text-base md:text-lg">
-              As one of the first local brands to introduce a complete head-to-toe range of specialized dry oils, we’re redefining modern skincare with formulas crafted for face, body, hair, and intimate areas.
+              As one of the first local brands to introduce a complete head-to-toe range of specialized dry oils, we're redefining modern skincare with formulas crafted for face, body, hair, and intimate areas.
             </p>
             <p className="text-foreground/60 text-base md:text-lg">
               Our products are free from sulphates, parabens, silicones, and harsh synthetic additives because we believe what you leave out is just as important as what you put in.
